@@ -1,0 +1,18 @@
+URL-APPENDIX: REQUEST FOR CURRENT PRICE OF INSTRUMENT(S), e. g. for EUR-USD and USD-CAD:
+/v3/accounts/<ACCOUNT>/pricing?instruments=EUR_USD%2CUSD_CAD
+
+URL-APPENDIX: REQUEST FOR PRICE STREAM OF INSTRUMENT(S),  e. g. for EUR-USD and USD-CAD:
+/v3/accounts/<ACCOUNT>/pricing/stream?instruments=EUR_USD%2CUSD_CAD
+
+URL-APPENDIX: REQUEST FOR CURRENT PRICE OF INSTRUMENT(S), e. g. for EUR-USD and USD-CAD:
+/v3/accounts/<ACCOUNT>/pricing?instruments=EUR_USD%2CUSD_CAD
+
+URL-APPENDIX: REQUEST FOR ACCOUNT SUMMARY (incl. Balance, available margin, opentradecount etc.)
+/v3/accounts/<ACCOUNT>/summary
+
+
+
+
+AUTHORIZATION FOR EVERY REQUEST:
+INCLUDE FOLLOWING HEADER (e. g.):
+Authorization: Bearer 12345678900987654321-abc34135acde13f13530
