@@ -3,6 +3,18 @@ from backtesting._util import _Array
 import numpy as np
 
 
+def trans_list_to_BT_array(list, name):
+   list = np.array(list, dtype='float64')
+   list = _Array(list, name=name)
+   return list
+
+
+def fill_inclomplete_data(data, ref, name):
+   while len(data) < len(ref):
+      data.append(data[-1])
+      print(f"AMOUNT OF DATA ERROR: FILLED UP '{name}' WITH IT'S LAST VALUE TILL END!")
+
+
 def PSAR(PSARl, PSARs, close):
    PSAR = []
    for idx in range(len(close)):
@@ -12,8 +24,7 @@ def PSAR(PSARl, PSARs, close):
          PSAR.append(PSARl[idx])
       elif np.isnan(PSARl[idx]):
          PSAR.append(PSARs[idx])
-   PSAR = np.array(PSAR, dtype='float64')
-   PSAR = _Array(PSAR, name='PSAR')
+   PSAR = trans_list_to_BT_array(PSAR, 'PSAR')
    return PSAR
 
 
@@ -38,8 +49,7 @@ def trend(Close, upper_RSI, lower_RSI, RSI):
          trend.append(0)
       else:
          trend.append(trend[-1])
-   trend = np.array(trend, dtype='float64')
-   trend = _Array(trend, name='trend')
+   trend = trans_list_to_BT_array(trend, 'trend')
    return trend
 
 
@@ -71,8 +81,7 @@ def last_swing(Open, Close):
             last_swing.append(last_swing[-1])
          else:
             last_swing.append(Open[idx])
-   last_swing = np.array(last_swing, dtype='float64')
-   last_swing = _Array(last_swing, name='last swing')
+   last_swing = trans_list_to_BT_array(last_swing, 'last swing')
    return last_swing
 
 
@@ -84,6 +93,5 @@ def seclast_swing(Close, last_swing):
          seclast_swing.append(last_swing[idx-1])
       else:
          seclast_swing.append(seclast_swing[-1])
-   seclast_swing = np.array(seclast_swing, dtype='float64')
-   seclast_swing = _Array(seclast_swing, name='seclast swing')
+   seclast_swing = trans_list_to_BT_array(seclast_swing, 'seclast swing')
    return seclast_swing

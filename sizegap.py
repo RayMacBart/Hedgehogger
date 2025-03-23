@@ -1,16 +1,6 @@
 from backtesting._util import _Array
+import helpers
 import numpy as np
-
-
-def fill_inclomplete_data(data, ref, name):
-   while len(data) < len(ref):
-      data.append(data[-1])
-      print(f"AMOUNT OF DATA ERROR: FILLED UP '{name}' WITH IT'S LAST VALUE TILL END!")
-
-def trans_list_to_BT_array(list, name):
-   list = np.array(list, dtype='float64')
-   list = _Array(list, name=name)
-   return list
 
 
 def get_gapmid(swidata, gran):
@@ -64,8 +54,8 @@ def move_sizegaps(last, seclast, win, gran):
          upgap, downgap = get_current_sizegaps(last[win*(-1):], seclast[win*(-1):], gran)
          upgaps.append(upgap)
          downgaps.append(downgap)
-   fill_inclomplete_data(upgaps, last, "upgaps")
-   fill_inclomplete_data(downgaps, last, "downgaps")
-   trans_list_to_BT_array(upgaps, "upgaps")
-   trans_list_to_BT_array(downgaps, "downgaps")
+   helpers.fill_inclomplete_data(upgaps, last, "upgaps")
+   helpers.fill_inclomplete_data(downgaps, last, "downgaps")
+   helpers.trans_list_to_BT_array(upgaps, "upgaps")
+   helpers.trans_list_to_BT_array(downgaps, "downgaps")
    return upgaps, downgaps
