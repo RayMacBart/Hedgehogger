@@ -15,45 +15,6 @@ def fill_inclomplete_data(data, ref, name):
       print(f"AMOUNT OF DATA ERROR: FILLED UP '{name}' WITH IT'S LAST VALUE TILL END!")
 
 
-def PSAR(PSARl, PSARs, close):
-   PSAR = []
-   for idx in range(len(close)):
-      if np.isnan(PSARs[idx]) and np.isnan(PSARl[idx]):
-         PSAR.append(np.nan)
-      elif np.isnan(PSARs[idx]):
-         PSAR.append(PSARl[idx])
-      elif np.isnan(PSARl[idx]):
-         PSAR.append(PSARs[idx])
-   PSAR = trans_list_to_BT_array(PSAR, 'PSAR')
-   return PSAR
-
-
-def lowerband(band):
-   return band
-def upperband(band):
-   return band
-def middleband(band):
-   return band
-def bandwidth(band):
-   return band
-
-
-def trend(Close, upper_RSI, lower_RSI, RSI):
-   trend = [0,]
-   for idx in range(1, len(Close)):
-      if lower_RSI > RSI[idx]:
-         trend.append(1)
-      elif RSI[idx] > upper_RSI:
-         trend.append(-1)
-      elif 47 < RSI[idx] < 53:
-         trend.append(0)
-      else:
-         trend.append(trend[-1])
-   trend = trans_list_to_BT_array(trend, 'trend')
-   return trend
-
-
-
 def remove_nocomma_anomaly(x):
    if x > 1000:
       return x/1000

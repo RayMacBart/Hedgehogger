@@ -1,6 +1,4 @@
-import numpy as np
 import helpers
-from backtesting._util import _Array
 
 
 def fibo_pricerange(Close, last, seclast, trend):

@@ -1,6 +1,4 @@
-import numpy as np
 import helpers
-from backtesting._util import _Array
 
 
 def get_hourly_HLCs(time, High, Low, Close, start_idx, length):

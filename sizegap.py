@@ -22,40 +22,46 @@ def get_gapmid(swidata, gran):
    return swimin+swistep*(minlevel)+swistep/2
 
 
-def get_current_sizegaps(last, seclast, gran):
+def get_current_upgap(last, seclast, gran):
    ups = []
-   downs = []
    currentup = 0
-   currentdown = 0
    for idx in range(len(last)):
       if last[idx] >= seclast[idx]:
          if not (last[idx] - seclast[idx]) == currentup:
             ups.append(last[idx] - seclast[idx])
             currentup = ups[-1]
-      elif last[idx] < seclast[idx]:
+   upgap = get_gapmid(ups, gran)
+   return upgap
+
+
+def get_current_downgap(last, seclast, gran):
+   downs = []
+   currentdown = 0
+   for idx in range(len(last)):
+      if last[idx] < seclast[idx]:
          if not (seclast[idx] - last[idx]) == currentdown:
             downs.append(seclast[idx] - last[idx])
             currentdown = downs[-1]
-   # print(ups[2:5])
-   # print(downs[2:5])
-   upgap = get_gapmid(ups, gran)
    downgap = get_gapmid(downs, gran)
-   return upgap, downgap
+   return downgap
 
 
-def move_sizegaps(last, seclast, win, gran):
-   upgaps = []
-   downgaps = []
+def get_move_sizegap(last, seclast, win, gran, current_gapfunc, name):
+   gaps = []
    for idx in range(len(last)):
       if idx < win:
-         upgaps.append(np.nan)
-         downgaps.append(np.nan)
+         gaps.append(np.nan)
       else:
-         upgap, downgap = get_current_sizegaps(last[win*(-1):], seclast[win*(-1):], gran)
-         upgaps.append(upgap)
-         downgaps.append(downgap)
-   helpers.fill_inclomplete_data(upgaps, last, "upgaps")
-   helpers.fill_inclomplete_data(downgaps, last, "downgaps")
-   helpers.trans_list_to_BT_array(upgaps, "upgaps")
-   helpers.trans_list_to_BT_array(downgaps, "downgaps")
-   return upgaps, downgaps
+         gap = current_gapfunc(last[idx-win:idx], seclast[idx-win:idx], gran)
+         gaps.append(gap)
+   helpers.fill_inclomplete_data(gaps, last, "gaps")
+   helpers.trans_list_to_BT_array(gaps, name)
+   return gaps
+
+
+def sizegap_up(last, seclast, win, gran):
+   return get_move_sizegap(last, seclast, win, gran, get_current_upgap, "upgaps")
+
+
+def sizegap_down(last, seclast, win, gran):
+   return get_move_sizegap(last, seclast, win, gran, get_current_downgap, "downgaps")
