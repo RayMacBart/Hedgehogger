@@ -10,7 +10,7 @@ def radar(Close, ti):
 
       if ti['RSI']['low'] > ti['RSI']['rsi'][i]:
          trend.append(1)
-      elif ti['RSI']['rsi'][i] > ti['RSI']['up']:
+      elif ti['RSI']['rsi'][i] > ti['RSI']['high']:
          trend.append(-1)
       elif 47 < ti['RSI']['rsi'][i] < 53:
          trend.append(0)

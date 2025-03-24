@@ -6,8 +6,11 @@ import indicator_setups
 import camafuncs
 import fibofuncs
 import sizegap
+import reaction
 from backtesting import Backtest, Strategy
 from radar import radar
+from backtesting.lib import crossover
+
 
 
 df = pd.read_csv(".\data\EURUSD_M1_90-100k.csv", sep="\t", parse_dates=['Timestamp'], index_col='Timestamp')
@@ -31,10 +34,10 @@ class Hedgehog(Strategy):
    adx_win = 14
    sizegap_win = 100
    sizegap_granularity = 10
+   ordersize = 0.5
    
 
    def init(self):
-      self.n = 0
       self.PSAR_df = ta.psar(self.data.High.s, self.data.Low.s, self.data.Close.s)
       self.PSAR = self.I(indicator_setups.PSAR, self.PSAR_df[f'PSARl_{self.psar_af0}_{self.psar_max_af}'], 
                          self.PSAR_df[f'PSARs_{self.psar_af0}_{self.psar_max_af}'], self.data.Close, name='PSAR')
@@ -52,7 +55,6 @@ class Hedgehog(Strategy):
       self.bandwidth = self.I(indicator_setups.bandwidth, self.bbands_df[f'BBB_{self.bbands_win}_2.0'], name='bband width')
       self.atr = self.I(ta.atr, self.data.High.s, self.data.Low.s, self.data.Close.s, self.atr_win, name='atr')
       self.adx_df = ta.adx(self.data.High.s, self.data.Low.s, self.data.Close.s, self.adx_win)
-      print(self.adx_df)
       self.adx_adx = self.I(indicator_setups.get_adx, self.adx_df[f'ADX_{self.adx_win}'], name='ADX')
       self.adx_DM_pos = self.I(indicator_setups.get_dmp, self.adx_df[f'DMP_{self.adx_win}'], name='DM+')
       self.adx_DM_neg = self.I(indicator_setups.get_dmn, self.adx_df[f'DMN_{self.adx_win}'], name='DM-')
@@ -66,33 +68,34 @@ class Hedgehog(Strategy):
                                                   self.sizegap_win, self.sizegap_granularity, name='GAP+') 
       self.sizegap_down = self.I(sizegap.sizegap_down, self.last_swing, self.seclast_swing, 
                                                   self.sizegap_win, self.sizegap_granularity, name='GAP-')
-      self.ti = {'PSAR': self.PSAR, 'VWAP': self.vwap, 'ATR': self.atr, 
-                 'ADX': {'adx': self.adx_adx, 'DM+': self.adx_DM_pos, 'DM-': self.adx_DM_neg},
-                 'RSI': {'rsi': self.RSI, 'low': self.RSI_lower_bound, 'up': self.RSI_upper_bound},
-                 'MACD': {'macd': self.macd_macd, 'histo': self.macd_histogram, 'signal': self.macd_signalline},
-                 'BB': {'low': self.lowerband, 'high': self.upperband,'mid': self.middleband, 'width': self.bandwidth},
-                 'CAMA': {'R4': self.cama_R4, 'R3': self.cama_R3, 'S3': self.cama_S3, 'S4': self.cama_S4},
-                 'GAP': {'up': self.sizegap_up, 'down': self.sizegap_down}}
-      self.trend = self.I(radar, self.data.Close, self.ti)
+      self.indicators = {'PSAR': self.PSAR, 'VWAP': self.vwap, 'ATR': self.atr, 
+                         'ADX': {'adx': self.adx_adx, 'DM+': self.adx_DM_pos, 'DM-': self.adx_DM_neg},
+                         'RSI': {'rsi': self.RSI, 'low': self.RSI_lower_bound, 'high': self.RSI_upper_bound},
+                         'MACD': {'macd': self.macd_macd, 'histo': self.macd_histogram, 'signal': self.macd_signalline},
+                         'BB': {'low': self.lowerband, 'high': self.upperband,'mid': self.middleband, 'width': self.bandwidth},
+                         'CAMA': {'R4': self.cama_R4, 'R3': self.cama_R3, 'S3': self.cama_S3, 'S4': self.cama_S4},
+                         'GAP': {'+': self.sizegap_up, '-': self.sizegap_down}}
+      self.trend = self.I(radar, self.data.Close, self.indicators)
       self.fibo_pricerange = self.I(fibofuncs.fibo_pricerange, self.data.Close,
                                     self.last_swing, self.seclast_swing, self.trend)
       self.fibo_strongretrace = self.I(fibofuncs.fibo_strongretrace, self.trend, self.fibo_pricerange, self.last_swing)
       self.fibo_weakretrace = self.I(fibofuncs.fibo_weakretrace, self.trend, self.fibo_pricerange, self.last_swing)
       self.fibo_weakend = self.I(fibofuncs.fibo_weakend, self.trend, self.fibo_pricerange, self.last_swing)
       self.fibo_strongend = self.I(fibofuncs.fibo_strongend, self.trend, self.fibo_pricerange, self.last_swing)
-      self.ti['FIBO'] = {'2': self.fibo_strongretrace, '4': self.fibo_weakretrace,
-                         '6': self.fibo_weakend, '8': self.fibo_strongend}
+      self.indicators['FIBO'] = {2: self.fibo_strongretrace, 4: self.fibo_weakretrace,
+                                 6: self.fibo_weakend, 8: self.fibo_strongend}
+
 
    def next(self):
-      self.n += 1
-      ti = self.ti
+      T = helpers.get_current_indicator_data(self.indicators)
+      dir = helpers.get_dir(self.data.Close[-1], self.last_swing[-1], self.seclast_swing[-1])
+      reaction.react(self.buy, self.sell, self.ordersize, self.trades, T, self.trend[-1], self.last_swing[-1], self.seclast_swing[-1], dir)
       # if crossover(self.RSI, self.RSI_upper_bound):
       #    self.position.close()
       #    self.buy()
       # elif crossover(self.RSI_lower_bound, self.RSI):
       #    self.position.close()
       #    self.sell()
-
 
 bt = Backtest(df, Hedgehog, cash=1000, commission=0.005)
 
@@ -110,7 +113,7 @@ stats = bt.run()
 # print('_______________________________')
 
 print('____________________________________________________________')
-# print(stats)
+print(stats)
 print('____________________________________________________________')
 
 # print('trades:', stats._trades)
