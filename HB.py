@@ -34,7 +34,8 @@ class Hedgehog(Strategy):
    adx_win = 14
    sizegap_win = 100
    sizegap_granularity = 10
-   ordersize = 0.5
+   size = 0.5
+   cc = -1
    
 
    def init(self):
@@ -87,9 +88,12 @@ class Hedgehog(Strategy):
 
 
    def next(self):
-      T = helpers.get_current_indicator_data(self.indicators)
+      self.cc += 1
+      T = helpers.get_current_indicator_data(self.indicators, self.cc)
       dir = helpers.get_dir(self.data.Close[-1], self.last_swing[-1], self.seclast_swing[-1])
-      reaction.react(self.buy, self.sell, self.ordersize, self.trades, T, self.trend[-1], self.last_swing[-1], self.seclast_swing[-1], dir)
+      reaction.react(self.buy, self.sell, self.size, self.trades, T, self.trend[-1], self.last_swing[-1], self.seclast_swing[-1], dir)
+
+
       # if crossover(self.RSI, self.RSI_upper_bound):
       #    self.position.close()
       #    self.buy()

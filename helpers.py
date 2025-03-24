@@ -80,39 +80,39 @@ def get_tradetypes(trades):
    return longs, shorts
 
 
-def get_current_indicator_data(ti):
+def get_current_indicator_data(ti, cc):
    T = {}
-   T['PSAR'] = ti['PSAR'][-1]
-   T['VWAP'] = ti['VWAP'][-1]
-   T['ATR'] = ti['ATR'][-1]
+   T['PSAR'] = ti['PSAR'][cc]
+   T['VWAP'] = ti['VWAP'][cc]
+   T['ATR'] = ti['ATR'][cc]
    T['ADX'] = {}
-   T['ADX']['adx'] = ti['ADX']['adx'][-1]
-   T['ADX']['DM+'] = ti['ADX']['DM+'][-1]
-   T['ADX']['DM-'] = ti['ADX']['DM-'][-1]
+   T['ADX']['adx'] = ti['ADX']['adx'][cc]
+   T['ADX']['DM+'] = ti['ADX']['DM+'][cc]
+   T['ADX']['DM-'] = ti['ADX']['DM-'][cc]
    T['RSI'] = {}
-   T['RSI']['rsi'] = ti['RSI']['rsi'][-1]
+   T['RSI']['rsi'] = ti['RSI']['rsi'][cc]
    T['RSI']['low'] = ti['RSI']['low']
    T['RSI']['high'] = ti['RSI']['high']
    T['MACD'] = {}
-   T['MACD']['macd'] = ti['MACD']['macd'][-1]
-   T['MACD']['histo'] = ti['MACD']['histo'][-1]
-   T['MACD']['signal'] = ti['MACD']['signal'][-1]
+   T['MACD']['macd'] = ti['MACD']['macd'][cc]
+   T['MACD']['histo'] = ti['MACD']['histo'][cc]
+   T['MACD']['signal'] = ti['MACD']['signal'][cc]
    T['BB'] = {}
-   T['BB']['low'] = ti['BB']['low'][-1]
-   T['BB']['high'] = ti['BB']['high'][-1]
-   T['BB']['mid'] = ti['BB']['mid'][-1]
-   T['BB']['width'] = ti['BB']['width'][-1]
+   T['BB']['low'] = ti['BB']['low'][cc]
+   T['BB']['high'] = ti['BB']['high'][cc]
+   T['BB']['mid'] = ti['BB']['mid'][cc]
+   T['BB']['width'] = ti['BB']['width'][cc]
    T['CAMA'] = {}
-   T['CAMA']['R4'] = ti['CAMA']['R4'][-1]
-   T['CAMA']['R3'] = ti['CAMA']['R3'][-1]
-   T['CAMA']['S3'] = ti['CAMA']['S3'][-1]
-   T['CAMA']['S4'] = ti['CAMA']['S4'][-1]
+   T['CAMA']['R4'] = ti['CAMA']['R4'][cc]
+   T['CAMA']['R3'] = ti['CAMA']['R3'][cc]
+   T['CAMA']['S3'] = ti['CAMA']['S3'][cc]
+   T['CAMA']['S4'] = ti['CAMA']['S4'][cc]
    T['GAP'] = {}
-   T['GAP']['+'] = ti['GAP']['+'][-1]
-   T['GAP']['-'] = ti['GAP']['-'][-1]
+   T['GAP']['+'] = ti['GAP']['+'][cc]
+   T['GAP']['-'] = ti['GAP']['-'][cc]
    T['FIBO'] = {}
-   T['FIBO'][2] = ti['FIBO'][2][-1]
-   T['FIBO'][4] = ti['FIBO'][4][-1]
-   T['FIBO'][6] = ti['FIBO'][6][-1]
-   T['FIBO'][8] = ti['FIBO'][8][-1]
+   T['FIBO'][2] = ti['FIBO'][2][cc]
+   T['FIBO'][4] = ti['FIBO'][4][cc]
+   T['FIBO'][6] = ti['FIBO'][6][cc]
+   T['FIBO'][8] = ti['FIBO'][8][cc]
    return T
