@@ -6,6 +6,7 @@ import indicator_setups
 import camafuncs
 import fibofuncs
 import sizegap
+import sizepeak
 import reaction
 from power import powers
 import TSL
@@ -37,6 +38,9 @@ class Hedgehog(Strategy):
    adx_win = 14
    sizegap_win = 100
    sizegap_granularity = 10
+   sizepeak_win = 100
+   sizepeak_granularity = 10
+   peak_accuracy = 3  # in % - the less, the more accurate
 
    volume_weight = 1
    adx_weight = 1
@@ -50,6 +54,7 @@ class Hedgehog(Strategy):
    vwap_weight = 1
    atr_weight = 1
    gap_weight = 1
+   peak_weight = 1
    fibo_weight = 1
 
    size = 0.33
@@ -96,6 +101,10 @@ class Hedgehog(Strategy):
                                                   self.sizegap_win, self.sizegap_granularity, name='GAP+') 
       self.sizegap_down = self.I(sizegap.sizegap_down, self.last_swing, self.seclast_swing, 
                                                   self.sizegap_win, self.sizegap_granularity, name='GAP-')
+      self.sizepeak_up = self.I(sizepeak.sizepeak_up, self.last_swing, self.seclast_swing, 
+                                                  self.sizepeak_win, self.sizepeak_granularity, name='PEAK+') 
+      self.sizepeak_down = self.I(sizepeak.sizepeak_down, self.last_swing, self.seclast_swing, 
+                                                  self.sizepeak_win, self.sizepeak_granularity, name='PEAK-')
       self.fibo_dist2 = self.I(fibofuncs.fibo_dist2, self.data.Close, self.last_swing, self.seclast_swing)
       self.fibo_dist4 = self.I(fibofuncs.fibo_dist4, self.data.Close, self.last_swing, self.seclast_swing)
       self.fibo_dist6 = self.I(fibofuncs.fibo_dist6, self.data.Close, self.last_swing, self.seclast_swing)
@@ -118,10 +127,13 @@ class Hedgehog(Strategy):
                          'CAMA': {'R4': self.cama_R4, 'R3': self.cama_R3, 'S3': self.cama_S3,
                                   'S4': self.cama_S4, '3weight': self.cama3_weight, '4weight': self.cama4_weight},
                          'GAP': {'+': self.sizegap_up, '-': self.sizegap_down, 'weight': self.gap_weight},
+                         'PEAK': {'+': self.sizepeak_up, '-': self.sizepeak_down, 
+                                  'accuracy': self.peak_accuracy, 'weight': self.peak_weight},
                          'FIBO': {2: self.fibo_dist2, 4: self.fibo_dist4, 6: self.fibo_dist6,
                                   8: self.fibo_dist8, 'weight': self.fibo_weight}
                         }
-      # self.powers = self.I(powers, self.data.Close, self.indicators)
+      self.powers = self.I(powers, self.data.Close, self.indicators, self.last_swing)
+      # indis for stopdist calc: PSAR, ATR, BB width, GAP
 
 
       # self.trend = self.I(radar, self.data.Close, self.indicators)
