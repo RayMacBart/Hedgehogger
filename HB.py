@@ -18,13 +18,6 @@ candlesize = 'M15'
 df = pd.read_csv(".\data\EURUSD_"+candlesize+"_0-10k.csv", sep="\t", parse_dates=['Timestamp'], index_col='Timestamp')
 df = df.map(helpers.remove_nocomma_anomaly)
 
-print(df)
-print('CCI value test:')
-cci_values = ta.cci(df['High'], df['Low'], df['Close'], length=20)
-print(cci_values)
-print('type CCI output:')
-print(type(cci_values))
-print('__________')
 
 class Hedgehog(Strategy):
 
@@ -35,7 +28,7 @@ class Hedgehog(Strategy):
    MACD_shortwin = 12
    MACD_longwin = 26
    MACD_signalwin = 9
-   cama_length = 11 # in minutes
+   # cama_length = 11 # in minutes
    psar_af0 = 0.02
    psar_af = 0.02
    psar_max_af = 0.2
@@ -69,7 +62,7 @@ class Hedgehog(Strategy):
       self.PSAR = self.I(indicator_setups.PSAR, self.PSAR_df[f'PSARl_{self.psar_af0}_{self.psar_max_af}'], 
                          self.PSAR_df[f'PSARs_{self.psar_af0}_{self.psar_max_af}'], self.data.Close, name='PSAR')
       self.RSI = self.I(ta.rsi, self.data.Close.s, self.RSI_win)
-      self.CCI = self.I(ta.cci, self.data.High, self.data.Low, self.data.Close, self.CCI_win)
+      self.CCI = self.I(ta.cci, self.data.High.s, self.data.Low.s, self.data.Close.s, self.CCI_win)
       self.MACD_df = ta.macd(self.data.Close.s, self.MACD_shortwin, self.MACD_longwin, self.MACD_signalwin)
       self.macd_macd = self.I(lambda: self.MACD_df[f'MACD_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='MACD')
       self.macd_histogram = self.I(lambda: self.MACD_df[f'MACDh_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Histogram')
