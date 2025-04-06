@@ -36,12 +36,12 @@ def last_swing(Open, Close):
       if idx in [0,1]:
          last_swing.append(Close[0])
       else:
-         swing_dedected = ((Close[idx] > Open[idx] and Close[idx-1] <= Open[idx-1]) or 
-                           (Close[idx] < Open[idx] and Close[idx-1] >= Open[idx-1]))
+         swing_dedected = ((Close[idx-1] > Open[idx-1] and Close[idx-2] <= Open[idx-2]) or 
+                           (Close[idx-1] < Open[idx-1] and Close[idx-2] >= Open[idx-2]))
          if not swing_dedected:
             last_swing.append(last_swing[-1])
          else:
-            last_swing.append(Open[idx])
+            last_swing.append(Open[idx-1])
    last_swing = trans_list_to_BT_array(last_swing, 'last swing')
    return last_swing
 
@@ -58,15 +58,31 @@ def seclast_swing(Close, last_swing):
    return seclast_swing
 
 
-def get_dir(Close, last, seclast):
-   dir = 0
-   if last <= seclast:
-      if Close > last:
-         dir = 1
-   elif last > seclast:
-      if Close < last:
-         dir = -1
-   return dir
+def dir(Close, last, seclast):
+   dirs = []
+   for idx in range(len(Close)):
+      if idx >= 1:
+         if last[idx] <= seclast[idx]:
+            if Close[idx-1] > last[idx]:
+               # dirs.append(Close[idx]*1.0015)
+               dirs.append(1)
+            elif Close[idx-1] < last[idx]:
+               dirs.append(dirs[-1])
+            else:
+               dirs.append(dirs[0])
+         elif last[idx] > seclast[idx]:
+            if Close[idx-1] < last[idx]:
+               # dirs.append(Close[idx]*0.9985)
+               dirs.append(-1)
+            elif Close[idx-1] > last[idx]:
+               dirs.append(dirs[-1])
+            else:
+               dirs.append(dirs[0])
+      else:
+         dirs.append(Close[0])
+   print(len(dirs))
+   dirs = trans_list_to_BT_array(dirs, 'dirs')
+   return dirs
 
 
 def get_tradetypes(trades):

@@ -1,0 +1,60 @@
+IN UTC/GMT:
+(for backtesting with historical data)
+
+WINTER TIME (without DST):
+8:00-9:00     London opens, Tokyo overlap
+13:00-17:00   NY opens, London overlap
+15:00         liquidity peak
+15:30-16:00   "London fix" preparation flurry
+22:00         NY session end ( = end of forex trading day )
+
+SUMMER TIME (with DST):
+7:00-9:00     London opens, Tokyo overlap (EXTENDED)
+12:00-16:00   NY opens, London overlap
+14:00         liquidity peak
+14:30-15:00   "London fix" preparation flurry
+21:00         NY session end ( = end of forex trading day )
+
+TRANSITION PERIODS (2nd SUN March - last SUN March / last SUN Oct - first SUN Nov):
+8:00-9:00     London opens, Tokyo overlap
+12:00-17:00   NY opens, London overlap (EXTENDED)
+14:30         liquidity peak
+15:30-16:00   "London fix" preparation flurry
+21:00         NY session end ( = end of forex trading day )
+
+
+
+IN AUSTRIAN TIME ( = London Time +1 hour ) with Austrian DST shifts already included/considered
+(for demo/live trading in Austria)
+
+WINTER TIME:
+9:00-10:00    London opens, Tokyo overlap
+14:00-18:00   NY opens, London overlap
+16:00         liquidity peak
+16:30-17:00   "London fix" preparation flurry
+23:00         NY session end ( = end of forex trading day )
+
+SUMMER TIME:
+9:00-11:00    London opens, Tokyo overlap (EXTENDED)
+14:00-18:00   NY opens, London overlap
+16:00         liquidity peak
+16:30-17:00   "London fix" preparation flurry
+23:00         NY session end ( = end of forex trading day )
+
+TRANSITION PERIODS (2nd SUN March - last SUN March / last SUN Oct - first SUN Nov):
+9:00-10:00    London opens, Tokyo overlap
+13:00-18:00   NY opens, London overlap (EXTENDED)
+15:30         liquidity peak
+16:30-17:00   "London fix" preparation flurry
+22:00         NY session end ( = end of forex trading day )
+
+
+
+Explanation of Transition Periods:
+1. Extended overlaps of Japan/London are due to Japan not applying DST shifts.
+2. Austria switches DST at the same dates like London.
+   --> no transition periods to consider here.
+3. During both Transition periods, the time difference between Austria and NY
+   shrinks from 6 hours to 5 hours. 
+   This is because NY has DST applied earlier in spring and later in fall
+   --> resulting in only NY having DST applied (but Austria not) in both cases.

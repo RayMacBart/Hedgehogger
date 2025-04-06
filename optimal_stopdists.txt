@@ -1,0 +1,7 @@
+optimal stopdists (0-10k each):
+
+M1: 0.0003
+M5: 0.00062
+M15: 0.00085
+M30: 
+H1: 
