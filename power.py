@@ -1,6 +1,6 @@
 import helpers
-from helpers import is_rising_above as rises
-from helpers import is_falling_below as falls
+from moves import is_rising_above as rises
+from moves import is_falling_below as falls
 
 
 def MACD_calcpower(macd, histo, 
@@ -66,11 +66,11 @@ def CAMA_calcpower(pow, close_val, R4, R3, S3, S4, w3, w4):
    return factor
 
 
-def PEAK_calcpower(pow, dir, uppeak, downpeak, acc, weight, last):
+def PEAK_calcpower(pow, dir, uppeak, downpeak, acc, weight, last, swingdist):
    factor = 1
-   if ((pow < 0 and dir[-1] < 0 and dir[-3] > 0 and  # "dir[-3]" because: swing must have been recently
+   if ((pow < 0 and dir[-1] < 0 and dir[-swingdist] > 0 and  # "dir[-swingdist]" implements distance of last swing
         (uppeak - uppeak*(acc/200) <= last <= uppeak + uppeak*(acc/200))) or
-       (pow > 0 and dir[-1] > 0 and dir[-3] < 0 and 
+       (pow > 0 and dir[-1] > 0 and dir[-swingdist] < 0 and 
         (downpeak - downpeak*(acc/200) <= last <= downpeak + downpeak*(acc/200)))):
          factor += weight/5
    # implement power minimizing factors for nearing peaks (after more than 3 candles into same dir).
@@ -84,11 +84,13 @@ def powers(Close, T, last):
       power = 0
       # if using Close for calculation, don't forget to use -1 or lower index than current.
       if idx > 15:
-         power += MACD_calcpower(T['MACD']['macd'][idx-4:idx+1], T['MACD']['histo'][idx-4:idx+1], T['MACD']['signal'][idx-4:idx+1], 
+         power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['macd_chwin']-1):idx+1], 
+                                 T['MACD']['histo'][idx-(T['MACD']['histo_chwin']-1):idx+1], 
+                                 # T['MACD']['signal'][idx-(T['MACD']['signal_chwin']-1):idx+1], # not used (yet?)
                                  T['MACD']['zeroweight'], T['MACD']['histoweight'])
-         power += VWAP_calcpower(Close[idx-1], T['VWAP']['vwap'][idx-4:idx+1], T['VWAP']['weight'])  # --> vwap misuse?
+         power += VWAP_calcpower(Close[idx-1], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1], T['VWAP']['weight'])  # --> vwap misuse?
          # I 'misuse' the fibonacci points in a unconventional way as breakthrough indicator. 
-         power += FIBO_calcpower(Close[idx-5:idx], T['DIR'][idx], T['FIBO'][2][idx], T['FIBO'][4][idx],
+         power += FIBO_calcpower(Close[idx-(T['FIBO']['chwin']):idx], T['DIR'][idx], T['FIBO'][2][idx], T['FIBO'][4][idx],
                                       T['FIBO'][6][idx], T['FIBO'][8][idx], T['FIBO']['weight'])
          #RSI
          #CCI: over 100 buy signal, under -100 sell signal
@@ -104,7 +106,7 @@ def powers(Close, T, last):
          power *= CAMA_calcpower(power, Close[idx-1], T['CAMA']['R4'][idx], T['CAMA']['R3'][idx], T['CAMA']['S3'][idx],
                                  T['CAMA']['S4'][idx], T['CAMA']['3weight'], T['CAMA']['4weight'])
          power *= PEAK_calcpower(power, T['DIR'][idx-2:idx+1], T['PEAK']['+'], T['PEAK']['-'],
-                                 T['PEAK']['accuracy'], T['PEAK']['weight'], last)
+                                 T['PEAK']['accuracy'], T['PEAK']['weight'], last, T['PEAK']['swingdist'])
       else:
          powers.append(0)
    powers = helpers.trans_list_to_BT_array(powers, 'powers')

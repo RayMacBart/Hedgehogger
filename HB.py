@@ -41,6 +41,10 @@ class Hedgehog(Strategy):
    sizepeak_win = 100
    sizepeak_granularity = 10
    peak_accuracy = 3  # in % - the less, the more accurate
+   macd_chwin = 5 # 3-8
+   histo_chwin = 5 # 3-8
+   vwap_chwin = 5 # 3-8
+   fibo_chwin = 5 # 3-8
 
    volume_weight = 1
    adx_weight = 1
@@ -71,7 +75,7 @@ class Hedgehog(Strategy):
       self.MACD_df = ta.macd(self.data.Close.s, self.MACD_shortwin, self.MACD_longwin, self.MACD_signalwin)
       self.macd_macd = self.I(lambda: self.MACD_df[f'MACD_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='MACD')
       self.macd_histogram = self.I(lambda: self.MACD_df[f'MACDh_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Histogram')
-      self.macd_signalline = self.I(lambda: self.MACD_df[f'MACDs_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Signalline')
+      # self.macd_signalline = self.I(lambda: self.MACD_df[f'MACDs_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Signalline')
       helpers.adjust_volume_data(self.data.Volume)
       self.vwap = self.I(ta.vwap, self.data.High.s, self.data.Low.s, self.data.Close.s, self.data.Volume.s, name='VWAP')
       self.bbands_df = ta.bbands(self.data.Close.s, self.bbands_win)
@@ -113,14 +117,16 @@ class Hedgehog(Strategy):
       self.dirs = self.I(helpers.dir, self.data.Close, self.last_swing, self.seclast_swing)
       self.indicators = {'PSAR': self.PSAR, 'DIR': self.dirs,
                          'VOL': {'volume': self.data.Volume, 'volume_weight': self.volume_weight},
-                         'VWAP': {'vwap': self.vwap, 'weight': self.vwap_weight}, 
+                         'VWAP': {'vwap': self.vwap, 'chwin': self.vwap_chwin, 'weight': self.vwap_weight}, 
                          'ATR': {'atr': self.atr,  'weight': self.atr_weight},
                          'ADX': {'adx': self.adx_adx, 'DM+': self.adx_DM_pos, 
                                  'DM-': self.adx_DM_neg, 'weight': self.adx_weight},
                          'RSI': {'rsi': self.RSI, 'low': self.RSI_lower_bound, 
                                  'high': self.RSI_upper_bound, 'weight': self.rsi_weight},
                          'CCI': {'cci': self.CCI, 'weight': self.cci_weight},
-                         'MACD': {'macd': self.macd_macd, 'histo': self.macd_histogram, 'signal': self.macd_signalline,
+                         'MACD': {'macd': self.macd_macd, 'histo': self.macd_histogram,
+                                  #'signal': self.macd_signalline, # not used (yet?)
+                                  'macd_chwin': self.macd_chwin, 'histo_chwin': self.histo_chwin,
                                   'zeroweight': self.macd_zeroweight, 'histoweight': self.macd_histoweight},
                          'BB': {'low': self.lowerband, 'high': self.upperband,'mid': self.middleband,
                                 'width': self.bandwidth, 'weight': self.bb_weight},
@@ -130,7 +136,7 @@ class Hedgehog(Strategy):
                          'PEAK': {'+': self.sizepeak_up, '-': self.sizepeak_down, 
                                   'accuracy': self.peak_accuracy, 'weight': self.peak_weight},
                          'FIBO': {2: self.fibo_dist2, 4: self.fibo_dist4, 6: self.fibo_dist6,
-                                  8: self.fibo_dist8, 'weight': self.fibo_weight}
+                                  8: self.fibo_dist8, 'chwin': self.fibo_chwin, 'weight': self.fibo_weight}
                         }
       self.powers = self.I(powers, self.data.Close, self.indicators, self.last_swing)
       # indis for stopdist calc: PSAR, ATR, BB width, GAP

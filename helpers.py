@@ -84,27 +84,6 @@ def dir(Close, last, seclast):
    return dirs
 
 
-def is_falling_below(S, B): # S=Series with 5 Values, B=Boundary
-   if ((S[-1]<=B and 
-        (((S[-2]>B or S[-2]<=B) and S[-3]>B and S[-4]>B) or 
-         ((S[-2]<=B) and (S[-3]>B or S[-3]<=B) and S[-4]>B) or
-         ((S[-2]<=B) and (S[-3]<=B) and (S[-4]>B or S[-4]<=B))) and 
-         S[-5]>B) and 
-         (B-S[-1] >= B-S[-2] >= B-S[-3] >= B-S[-4] >= B-S[-5])):
-      return True
-   return False
-
-def is_rising_above(S, B): # S=Series with 5 Values, B=Boundary
-   if ((S[-1]>=B and 
-        (((S[-2]<B or S[-2]>=B) and S[-3]<B and S[-4]<B) or 
-         ((S[-2]>=B) and (S[-3]<B or S[-3]>=B) and S[-4]<B) or
-         ((S[-2]>=B) and (S[-3]>=B) and (S[-4]<B or S[-4]>=B))) and 
-         S[-5]<B) and 
-         (B-S[-1] <= B-S[-2] <= B-S[-3] <= B-S[-4] <= B-S[-5])):
-      return True
-   return False
-
-
 def get_tradetypes(trades):
    longs = []
    shorts = []
