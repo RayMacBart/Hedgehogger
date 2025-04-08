@@ -50,6 +50,35 @@ def FIBO_calcpower(Close, dir, f2, f4, f6, f8, weight):
    return shift
 
 
+def RSI_calcpower(rsi, low, high, weight):
+   shift = 0
+   # static absolute impacts:
+   if rsi > high: 
+      shift -= weight
+   elif rsi < low:
+      shift += weight
+   # dynamic movement impacts:
+   if falls(rsi) and (rsi > (low + (50-low)/2)):
+      shift -= weight
+   elif rises(rsi) and (rsi < (50 + (high-50)/2)):
+      shift += weight
+   return shift
+
+
+def CCI_calcpower(cci, low, high, weight):
+   # static absolute impacts:
+   if cci > high: 
+      shift += weight
+   elif cci < low:
+      shift -= weight
+   # dynamic movement impacts:
+   if falls(cci) and (cci < low/2):
+      shift -= weight
+   elif rises(cci) and (cci > high/2):
+      shift += weight
+   return shift
+
+
 def CAMA_calcpower(pow, close_val, R4, R3, S3, S4, w3, w4):
    factor = 1
    if (pow < 0 and close_val > R4) or (pow > 0 and close_val < S4):
@@ -66,14 +95,18 @@ def CAMA_calcpower(pow, close_val, R4, R3, S3, S4, w3, w4):
    return factor
 
 
-def PEAK_calcpower(pow, dir, uppeak, downpeak, acc, weight, last, swingdist):
+def PEAK_calcpower(pow, dir, uppeak, downpeak, acc, weight, last, close_val, swingdist):
    factor = 1
    if ((pow < 0 and dir[-1] < 0 and dir[-swingdist] > 0 and  # "dir[-swingdist]" implements distance of last swing
         (uppeak - uppeak*(acc/200) <= last <= uppeak + uppeak*(acc/200))) or
-       (pow > 0 and dir[-1] > 0 and dir[-swingdist] < 0 and 
-        (downpeak - downpeak*(acc/200) <= last <= downpeak + downpeak*(acc/200)))):
-         factor += weight/5
-   # implement power minimizing factors for nearing peaks (after more than 3 candles into same dir).
+        (pow > 0 and dir[-1] > 0 and dir[-swingdist] < 0 and 
+         (downpeak - downpeak*(acc/200) <= last <= downpeak + downpeak*(acc/200)))):
+      factor += weight/5
+   elif ((pow < 0 and all(d < 0 for d in dir[-swingdist:]) and # "after more than 'swingdist' candles into same dir"
+         (downpeak - downpeak*(acc/200) <= (last - close_val) <= downpeak + downpeak*(acc/200))) or
+         (pow > 0 and all(d > 0 for d in dir[-swingdist:]) and 
+          (uppeak - uppeak*(acc/200) <= (close_val - last) <= uppeak + uppeak*(acc/200)))):
+      factor -= weight/5
    return factor
 
 
@@ -92,11 +125,13 @@ def powers(Close, T, last):
          # I 'misuse' the fibonacci points in a unconventional way as breakthrough indicator. 
          power += FIBO_calcpower(Close[idx-(T['FIBO']['chwin']):idx], T['DIR'][idx], T['FIBO'][2][idx], T['FIBO'][4][idx],
                                       T['FIBO'][6][idx], T['FIBO'][8][idx], T['FIBO']['weight'])
-         #RSI
-         #CCI: over 100 buy signal, under -100 sell signal
-         # IDEA for RSI and CCI: use their value as direct relational influence of weight (RSI inverted)
+         power += RSI_calcpower(T['RSI']['rsi'][idx-(T['RSI']['chwin']-1):idx+1], T['RSI']['low'],
+                                T['RSI']['high'], T['RSI']['weight'])
+         power += CCI_calcpower(T['CCI']['cci'][idx-(T['CCI']['chwin']-1):idx+1], T['CCI']['low'],
+                                T['CCI']['high'], T['CCI']['weight'])
 
-         # use VOL risings and falls also as power factor, but adjust them for high traffic periods 
+         # use VOL risings and falls also as power factor, but adjust them for high traffic periods
+         # make just about 50-100% of volume value decrease just in a curve on hour around the liquidity peak! 
          # by analyzing historical data of multiple past days
          # idea for ADX: also calc after VOL but before BB as confirming factor -
          # but only do this if (power<0 and DM- > DM+ ) or (power>0 and DM+ > DM- ) --> for verification.
@@ -105,8 +140,8 @@ def powers(Close, T, last):
 
          power *= CAMA_calcpower(power, Close[idx-1], T['CAMA']['R4'][idx], T['CAMA']['R3'][idx], T['CAMA']['S3'][idx],
                                  T['CAMA']['S4'][idx], T['CAMA']['3weight'], T['CAMA']['4weight'])
-         power *= PEAK_calcpower(power, T['DIR'][idx-2:idx+1], T['PEAK']['+'], T['PEAK']['-'],
-                                 T['PEAK']['accuracy'], T['PEAK']['weight'], last, T['PEAK']['swingdist'])
+         power *= PEAK_calcpower(power, T['DIR'][idx-(T['PEAK']['swingdist']-1):idx+1], T['PEAK']['+'], T['PEAK']['-'],
+                                 T['PEAK']['accuracy'], T['PEAK']['weight'], last, Close[idx-1], T['PEAK']['swingdist'])
       else:
          powers.append(0)
    powers = helpers.trans_list_to_BT_array(powers, 'powers')

@@ -24,6 +24,9 @@ class Hedgehog(Strategy):
 
    RSI_upper_bound = 60
    RSI_lower_bound = 40
+   CCI_upper_treshold = 100
+   CCI_lower_treshold = -100
+
    RSI_win = 90
    CCI_win = 20
    MACD_shortwin = 12
@@ -41,10 +44,13 @@ class Hedgehog(Strategy):
    sizepeak_win = 100
    sizepeak_granularity = 10
    peak_accuracy = 3  # in % - the less, the more accurate
-   macd_chwin = 5 # 3-8
+   macd_chwin = 5 # 3-8 'change measure window'
    histo_chwin = 5 # 3-8
    vwap_chwin = 5 # 3-8
    fibo_chwin = 5 # 3-8
+   rsi_chwin = 5
+   cci_chwin = 5
+   peak_swingdist = 3 # 2-?
 
    volume_weight = 1
    adx_weight = 1
@@ -121,9 +127,10 @@ class Hedgehog(Strategy):
                          'ATR': {'atr': self.atr,  'weight': self.atr_weight},
                          'ADX': {'adx': self.adx_adx, 'DM+': self.adx_DM_pos, 
                                  'DM-': self.adx_DM_neg, 'weight': self.adx_weight},
-                         'RSI': {'rsi': self.RSI, 'low': self.RSI_lower_bound, 
-                                 'high': self.RSI_upper_bound, 'weight': self.rsi_weight},
-                         'CCI': {'cci': self.CCI, 'weight': self.cci_weight},
+                         'RSI': {'rsi': self.RSI, 'low': self.RSI_lower_bound, 'high': self.RSI_upper_bound,
+                                 'chwin': self.rsi_chwin, 'weight': self.rsi_weight},
+                         'CCI': {'cci': self.CCI, 'low': self.CCI_lower_treshold, 'high': self.CCI_upper_treshold,
+                                 'chwin': self.cci_chwin, 'weight': self.cci_weight},
                          'MACD': {'macd': self.macd_macd, 'histo': self.macd_histogram,
                                   #'signal': self.macd_signalline, # not used (yet?)
                                   'macd_chwin': self.macd_chwin, 'histo_chwin': self.histo_chwin,
@@ -133,14 +140,14 @@ class Hedgehog(Strategy):
                          'CAMA': {'R4': self.cama_R4, 'R3': self.cama_R3, 'S3': self.cama_S3,
                                   'S4': self.cama_S4, '3weight': self.cama3_weight, '4weight': self.cama4_weight},
                          'GAP': {'+': self.sizegap_up, '-': self.sizegap_down, 'weight': self.gap_weight},
-                         'PEAK': {'+': self.sizepeak_up, '-': self.sizepeak_down, 
-                                  'accuracy': self.peak_accuracy, 'weight': self.peak_weight},
+                         'PEAK': {'+': self.sizepeak_up, '-': self.sizepeak_down, 'accuracy': self.peak_accuracy, 
+                                  'swingdist': self.peak_swingdist, 'weight': self.peak_weight},
                          'FIBO': {2: self.fibo_dist2, 4: self.fibo_dist4, 6: self.fibo_dist6,
                                   8: self.fibo_dist8, 'chwin': self.fibo_chwin, 'weight': self.fibo_weight}
                         }
-      self.powers = self.I(powers, self.data.Close, self.indicators, self.last_swing)
-      # indis for stopdist calc: PSAR, ATR, BB width, GAP
+      # self.powers = self.I(powers, self.data.Close, self.indicators, self.last_swing)
 
+      # indis for stopdist calc: PSAR, ATR, BB width, GAP
 
       # self.trend = self.I(radar, self.data.Close, self.indicators)
       # self.fibo_pricerange = self.I(fibofuncs.fibo_pricerange, self.data.Close,
