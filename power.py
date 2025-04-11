@@ -1,6 +1,7 @@
 import helpers
 from moves import is_rising_above as rises
 from moves import is_falling_below as falls
+from DST_timehelper import get_volume_peak_defusing_factor
 
 
 def MACD_calcpower(macd, histo, 
@@ -79,6 +80,22 @@ def CCI_calcpower(cci, low, high, weight):
    return shift
 
 
+def VOL_down_calcpower(vol, weight, mtcp):
+   shift = 0
+   if falls(vol, vol[0]-(vol[0]*(mtcp/100))):
+      shift -= weight
+   return shift
+
+
+def VOL_up_calcpower(vol, weight, mtcp, TS):
+   factor = 1
+   vpdf = get_volume_peak_defusing_factor(TS)
+   if rises(vol, vol[0]+(vol[0]*(mtcp/100))):
+      grown_to_percentage = vol[-1]/(vol[0]/100)
+      factor *= ((grown_to_percentage/100)/5)*weight*vpdf
+   return factor
+
+
 def CAMA_calcpower(pow, close_val, R4, R3, S3, S4, w3, w4):
    factor = 1
    if (pow < 0 and close_val > R4) or (pow > 0 and close_val < S4):
@@ -111,7 +128,7 @@ def PEAK_calcpower(pow, dir, uppeak, downpeak, acc, weight, last, close_val, swi
 
 
 
-def powers(Close, T, last):
+def powers(Close, T, last, timestamps):
    powers = []
    for idx in range(len(Close)):
       power = 0
@@ -129,10 +146,10 @@ def powers(Close, T, last):
                                 T['RSI']['high'], T['RSI']['weight'])
          power += CCI_calcpower(T['CCI']['cci'][idx-(T['CCI']['chwin']-1):idx+1], T['CCI']['low'],
                                 T['CCI']['high'], T['CCI']['weight'])
-
-         # use VOL risings and falls also as power factor, but adjust them for high traffic periods
-         # make just about 50-100% of volume value decrease just in a curve on hour around the liquidity peak! 
-         # by analyzing historical data of multiple past days
+         power += VOL_down_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['downweight'], T['VOL']['triggerminchange%'])
+         power *= VOL_up_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['upweight'], 
+                                T['VOL']['triggerminchange%'], timestamps[idx-1])
+         # VOL: analyze historical data of multiple past days and adjust DST_timehelper.get_volume_peak_defusing_factor()
          # idea for ADX: also calc after VOL but before BB as confirming factor -
          # but only do this if (power<0 and DM- > DM+ ) or (power>0 and DM+ > DM- ) --> for verification.
          # - use BB outer bands like camas (!) ( --> resistance/support focusses more on absolute values)

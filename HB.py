@@ -14,7 +14,7 @@ from backtesting import Backtest, Strategy
 from radar import radar
 from backtesting.lib import crossover
 
-candlesize = 'M15'
+candlesize = 'M5'
 
 df = pd.read_csv(".\data\EURUSD_"+candlesize+"_0-10k.csv", sep="\t", parse_dates=['Timestamp'], index_col='Timestamp')
 df = df.map(helpers.remove_nocomma_anomaly)
@@ -50,9 +50,12 @@ class Hedgehog(Strategy):
    fibo_chwin = 5 # 3-8
    rsi_chwin = 5
    cci_chwin = 5
+   vol_chwin = 5
    peak_swingdist = 3 # 2-?
+   volume_trigger_min_change_percent = 20
 
-   volume_weight = 1
+   volume_up_weight = 1
+   volume_down_weight = 1
    adx_weight = 1
    rsi_weight = 1
    cci_weight = 1
@@ -101,10 +104,6 @@ class Hedgehog(Strategy):
       self.cama_R3 = self.I(camafuncs.cama_R3, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
       self.cama_S3 = self.I(camafuncs.cama_S3, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
       self.cama_S4 = self.I(camafuncs.cama_S4, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
-      # self.cama_R4 = self.I(camafuncs.get_cama_R4, self.data.index, self.data.High, self.data.Low, self.data.Close, self.cama_length)
-      # self.cama_R3 = self.I(camafuncs.get_cama_R3, self.data.index, self.data.High, self.data.Low, self.data.Close, self.cama_length)
-      # self.cama_S3 = self.I(camafuncs.get_cama_S3, self.data.index, self.data.High, self.data.Low, self.data.Close, self.cama_length)
-      # self.cama_S4 = self.I(camafuncs.get_cama_S4, self.data.index, self.data.High, self.data.Low, self.data.Close, self.cama_length)
       self.last_swing = self.I(helpers.last_swing, self.data.Open, self.data.Close)
       self.seclast_swing = self.I(helpers.seclast_swing, self.data.Close, self.last_swing)
       self.sizegap_up = self.I(sizegap.sizegap_up, self.last_swing, self.seclast_swing, 
@@ -122,7 +121,9 @@ class Hedgehog(Strategy):
       # DISCOVERY: Breaking these fibos indicates overall trend in that direction where it broke through!
       self.dirs = self.I(helpers.dir, self.data.Close, self.last_swing, self.seclast_swing)
       self.indicators = {'PSAR': self.PSAR, 'DIR': self.dirs,
-                         'VOL': {'volume': self.data.Volume, 'volume_weight': self.volume_weight},
+                         'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin,
+                                 'triggerminchange%': self.volume_trigger_min_change_percent,
+                                 'upweight': self.volume_up_weight, 'downweight': self.volume_down_weight},
                          'VWAP': {'vwap': self.vwap, 'chwin': self.vwap_chwin, 'weight': self.vwap_weight}, 
                          'ATR': {'atr': self.atr,  'weight': self.atr_weight},
                          'ADX': {'adx': self.adx_adx, 'DM+': self.adx_DM_pos, 
@@ -145,21 +146,11 @@ class Hedgehog(Strategy):
                          'FIBO': {2: self.fibo_dist2, 4: self.fibo_dist4, 6: self.fibo_dist6,
                                   8: self.fibo_dist8, 'chwin': self.fibo_chwin, 'weight': self.fibo_weight}
                         }
-      # self.powers = self.I(powers, self.data.Close, self.indicators, self.last_swing)
+      # self.powers = self.I(powers, self.data.Close, self.indicators, self.last_swing, self.data.index)
 
       # indis for stopdist calc: PSAR, ATR, BB width, GAP
 
       # self.trend = self.I(radar, self.data.Close, self.indicators)
-      # self.fibo_pricerange = self.I(fibofuncs.fibo_pricerange, self.data.Close,
-      #                               self.last_swing, self.seclast_swing, self.trend)
-      # self.fibo_strongretrace = self.I(fibofuncs.fibo_strongretrace, self.data.Close, self.trend, self.dirs, self.fibo_pricerange)
-      # self.fibo_weakretrace = self.I(fibofuncs.fibo_weakretrace, self.data.Close, self.trend, self.dirs, self.fibo_pricerange)
-      # self.fibo_weakend = self.I(fibofuncs.fibo_weakend, self.data.Close, self.trend, self.dirs, self.fibo_pricerange)
-      # self.fibo_strongend = self.I(fibofuncs.fibo_strongend, self.data.Close, self.trend, self.dirs, self.fibo_pricerange)
-      # self.indicators['FIBO'] = {2: self.fibo_strongretrace, 4: self.fibo_weakretrace,
-      #                            6: self.fibo_weakend, 8: self.fibo_strongend}
-      # self.indicators['FIBO'] = {2: self.fibo_dist2, 4: self.fibo_dist4,
-      #                            6: self.fibo_dist6, 8: self.fibo_dist8}
       # self.TSL_distance = self.I(TSL.get_distance, self.data.Close, self.indicators) 
       # self.decisions = self.I(action.decisions, self.data.Close, self.orderscore)
 
@@ -202,8 +193,6 @@ class Hedgehog(Strategy):
       #    if not sold  and self.dirs[-1] < 0:
       #       self.sell(size=self.size, sl=self.data.Close[-1] + psar_distance)
 
-
-
       # if self.scores > 100:
       #    bought = 0
       #    for t in self.trades:
@@ -222,8 +211,6 @@ class Hedgehog(Strategy):
       #       self.sell(size=self.size)
             # --> set calculated trailing stop loss distance here!
 
-
-
       # self.cc += 1
       # T = helpers.get_current_indicator_data(self.indicators, self.cc)
       # dir = helpers.get_dir(self.data.Close[-1], self.last_swing[-1], self.seclast_swing[-1])
@@ -231,18 +218,19 @@ class Hedgehog(Strategy):
 
 
 
-      # if crossover(self.RSI, self.RSI_upper_bound):
-      #    self.position.close()
-      #    self.buy()
-      # elif crossover(self.RSI_lower_bound, self.RSI):
-      #    self.position.close()
-      #    self.sell()
-
 bt = Backtest(df, Hedgehog, cash=1000, 
               commission=0.0001, 
               margin=0.033)
 
 stats = bt.run()
+
+# for optimization, include the objectives return%, profit factor, sharpe ratio, sortino ratio and calmar ratio
+# and give each the same weight resulting into one single value to be optimized. This is done by calculating the
+# z score - normalization of 30 optimization results of each objective. Then, the mean of all z scores (of every
+# objective) is the final result to be used for the optimization functions.
+# try your best regarding optimization of every objective when collecting the 30 needed results, but use the same
+# inputs in the optimize() functions for every objective - this ensures a cross-objective consistent normalization 
+# on a high, fastidious niveau.
 
 # stats = bt.optimize(
 #    stopdist = [

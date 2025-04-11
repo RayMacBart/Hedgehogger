@@ -54,6 +54,8 @@ def is_falling_below(S, B=None): # S=Series, B=Boundary
       else:
          raise ValueError(f'ERROR: invalid Series length given to function "is_falling_below": must be between 3 and 8 (given: {len(S)})')
    else: # if no B given
+      if (len(S) < 3) or (len(S) > 10):
+         raise ValueError(f'ERROR: invalid Series length given to function "is_falling_below": must be between 3 and 10 (without "B" specified) (given: {len(S)})')
       testlist = []
       for s in S:
          if not testlist:
@@ -137,6 +139,9 @@ def is_rising_above(S, B=None): # S=Series, B=Boundary
       else:
          raise ValueError(f'ERROR: invalid Series length given to function "is_rising_above": must be between 3 and 8 (given: {len(S)})')
    else: # if no B given
+      if (len(S) < 3) or (len(S) > 10):
+         raise ValueError(f'ERROR: invalid Series length given to function "is_rising_above": must be between 3 and 10 (without "B" specified) (given: {len(S)})')
+      testlist = []
       testlist = []
       for s in S:
          if not testlist:
