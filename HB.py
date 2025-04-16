@@ -3,6 +3,8 @@ import pandas as pd
 import pandas_ta as ta
 import helpers
 import indicator_setups
+from mean_volume_moves import get_volmean_movetimes as get_VMMTs
+   
 import camafuncs
 import fibofuncs
 import sizegap
@@ -73,6 +75,8 @@ class Hedgehog(Strategy):
    size = 0.33
    cc = -1
    stopdist = 0.0003
+
+   EURUSD_M5_vmmts = get_VMMTs('EURUSD', 'M5') # vmmts = Volume Mean Move Times
    
 
    def init(self):
@@ -85,7 +89,7 @@ class Hedgehog(Strategy):
       self.macd_macd = self.I(lambda: self.MACD_df[f'MACD_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='MACD')
       self.macd_histogram = self.I(lambda: self.MACD_df[f'MACDh_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Histogram')
       # self.macd_signalline = self.I(lambda: self.MACD_df[f'MACDs_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Signalline')
-      helpers.adjust_volume_data(self.data.Volume)
+      self.data.Volume = helpers.adjust_volume_data(self.data.Volume)
       self.vwap = self.I(ta.vwap, self.data.High.s, self.data.Low.s, self.data.Close.s, self.data.Volume.s, name='VWAP')
       self.bbands_df = ta.bbands(self.data.Close.s, self.bbands_win)
       self.lowerband = self.I(indicator_setups.lowerband, self.bbands_df[f'BBL_{self.bbands_win}_2.0'], name='lower bband')

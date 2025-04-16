@@ -96,10 +96,13 @@ def cama_R4(Close, dailydata, starts, initday_usable):
 class Hedgehog(Strategy):
 
    def init(self):
-      cama_start_idxs, initday_usable = get_cama_startidx(self.data.index, candlesize)
-      cama_dailydata = get_cama_dailydata(self.data.index, self.data.High, self.data.Low,
-                                            self.data.Close, cama_start_idxs, initday_usable)
-      self.cama_R4 = self.I(cama_R4, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
+      # cama_start_idxs, initday_usable = get_cama_startidx(self.data.index, candlesize)
+      # cama_dailydata = get_cama_dailydata(self.data.index, self.data.High, self.data.Low,
+      #                                       self.data.Close, cama_start_idxs, initday_usable)
+      # self.cama_R4 = self.I(cama_R4, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
+      print(self.data.Volume)
+      print(type(self.data.Volume))
+
       
 
 
@@ -113,4 +116,4 @@ bt = Backtest(df, Hedgehog, cash=1000,
               margin=0.033)
 
 stats = bt.run()
-bt.plot()
+# bt.plot()
