@@ -11,7 +11,7 @@ def generate_fibo_dists(Close, last, seclast, factor):
 
 def calc_fibo_dist(Close, last, seclast, factor, name):
    dist = list(generate_fibo_dists(Close, last, seclast, factor))
-   helpers.fill_inclomplete_data(dist, Close, name)
+   dist = list(helpers.fill_inclomplete_data(dist, Close, name))
    dist = helpers.trans_list_to_BT_array(dist, name)
    return dist
 

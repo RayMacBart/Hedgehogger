@@ -2,9 +2,9 @@ import numpy as np
 import helpers
 
 
-def PSAR(PSARl, PSARs, close):
+def PSAR(PSARl, PSARs, Close):
    PSAR = []
-   for idx in range(len(close)):
+   for idx in PSARl.index:
       if np.isnan(PSARs[idx]) and np.isnan(PSARl[idx]):
          PSAR.append(np.nan)
       elif np.isnan(PSARs[idx]):

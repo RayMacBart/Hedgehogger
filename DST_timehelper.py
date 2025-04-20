@@ -58,50 +58,76 @@ def get_DST_switch_startdays(year):
 
 
 
-def get_volume_peak_defusing_factor(TS):
-   vpdf = 1
+def calc_pdfm(meanlist, voldiff, span, TS, clims):
+   meanidx = None
+   for i in meanlist:
+      if (i*clims <= TS.hour*60+TS.minute < (i+1)*clims):
+         meanidx = i
+   first_diffmean = meanlist[(meanidx-span)+1] # works also over list end/begin
+   # +1 because otherwise it would result in 1 more than span included item!
+   voldiffmean = meanlist[meanidx]/(first_diffmean/100)-100
+   return voldiff - voldiffmean
+
+
+def get_volume_peak_defusing_factor(voldiff, span, TS, VMMTs, clims):
+   PDFM = 0 # Procentual Deviation From Mean
    gsd = get_DST_switch_startdays
    if (((TS.month <= 3) and (TS.day < gsd(TS.year)[0])) or 
       ((TS.month >= 11) and (TS.day >= gsd(TS.year)[3]))):
-      # liquidity peak in winter time is 15:00 UTC
-      if (TS.hour in [14,15]) and (25 <= TS.minute < 35):
-         vpdf = 0.9
-      elif (((TS.hour == 14) and (35 <= TS.minute < 45)) or 
-            ((TS.hour == 15) and (15 <= TS.minute < 25))):
-         vpdf = 0.8
-      elif (((TS.hour == 14) and (45 <= TS.minute < 55)) or 
-            ((TS.hour == 15) and (5 <= TS.minute < 15))):
-         vpdf = 0.7
-      elif ((TS.hour == 14) and (55 <= TS.minute) or 
-            ((TS.hour == 15) and (TS.minute < 5))):
-         vpdf = 0.6
+      PDFM = calc_pdfm(VMMTs['winter'], voldiff, span, TS, clims)
    elif (((TS.month == 3) and (gsd(TS.year)[0] <= TS.day < gsd(TS.year)[1])) or
          (((TS.month == 10) and (gsd(TS.year)[2] <= TS.day)) or
             ((TS.month == 11) and (TS.day < gsd(TS.year)[3])))):
-      # liquidity peak in transition periods is 14:30 UTC
-      if (((TS.hour == 13) and (55 <= TS.minute)) or
-            ((TS.hour == 14) and ((TS.minute < 5) or (55 <= TS.minute))) or
-            ((TS.hour == 15) and (TS.minute < 5))):
-         vpdf = 0.9
-      elif ((TS.hour == 14) and ((5 <= TS.minute < 15) or (45 <= TS.minute < 55))):
-         vpdf = 0.8
-      elif ((TS.hour == 14) and ((15 <= TS.minute < 25) or (35 <= TS.minute < 45))):
-         vpdf = 0.7
-      elif ((TS.hour == 14) and (25 <= TS.minute < 35)):
-         vpdf = 0.6
+      PDFM = calc_pdfm(VMMTs['trans'], voldiff, span, TS, clims)
    elif (((TS.month == 3) and (TS.day >= gsd(TS.year)[1])) or
          ((TS.month == 10) and (TS.day < gsd(TS.year)[2])) or
          (3 < TS.month < 10)):
-      # liquidity peak in summer time is 14:00 UTC
-      if (TS.hour in [13,14]) and (25 <= TS.minute < 35):
-         vpdf = 0.9
-      elif (((TS.hour == 13) and (35 <= TS.minute < 45)) or 
-            ((TS.hour == 14) and (15 <= TS.minute < 25))):
-         vpdf = 0.8
-      elif (((TS.hour == 13) and (45 <= TS.minute < 55)) or 
-            ((TS.hour == 14) and (5 <= TS.minute < 15))):
-         vpdf = 0.7
-      elif ((TS.hour == 13) and (55 <= TS.minute) or 
-            ((TS.hour == 14) and (TS.minute < 5))):
-         vpdf = 0.6
-   return vpdf
+      PDFM = calc_pdfm(VMMTs['summer'], voldiff, span, TS, clims)
+   return PDFM
+
+
+
+   # if (((TS.month <= 3) and (TS.day < gsd(TS.year)[0])) or 
+   #    ((TS.month >= 11) and (TS.day >= gsd(TS.year)[3]))):
+   #    # liquidity peak in winter time is 15:00 UTC
+   #    if (TS.hour in [14,15]) and (25 <= TS.minute < 35):
+   #       vpdf = 0.9
+   #    elif (((TS.hour == 14) and (35 <= TS.minute < 45)) or 
+   #          ((TS.hour == 15) and (15 <= TS.minute < 25))):
+   #       vpdf = 0.8
+   #    elif (((TS.hour == 14) and (45 <= TS.minute < 55)) or 
+   #          ((TS.hour == 15) and (5 <= TS.minute < 15))):
+   #       vpdf = 0.7
+   #    elif ((TS.hour == 14) and (55 <= TS.minute) or 
+   #          ((TS.hour == 15) and (TS.minute < 5))):
+   #       vpdf = 0.6
+   # elif (((TS.month == 3) and (gsd(TS.year)[0] <= TS.day < gsd(TS.year)[1])) or
+   #       (((TS.month == 10) and (gsd(TS.year)[2] <= TS.day)) or
+   #          ((TS.month == 11) and (TS.day < gsd(TS.year)[3])))):
+   #    # liquidity peak in transition periods is 14:30 UTC
+   #    if (((TS.hour == 13) and (55 <= TS.minute)) or
+   #          ((TS.hour == 14) and ((TS.minute < 5) or (55 <= TS.minute))) or
+   #          ((TS.hour == 15) and (TS.minute < 5))):
+   #       vpdf = 0.9
+   #    elif ((TS.hour == 14) and ((5 <= TS.minute < 15) or (45 <= TS.minute < 55))):
+   #       vpdf = 0.8
+   #    elif ((TS.hour == 14) and ((15 <= TS.minute < 25) or (35 <= TS.minute < 45))):
+   #       vpdf = 0.7
+   #    elif ((TS.hour == 14) and (25 <= TS.minute < 35)):
+   #       vpdf = 0.6
+   # elif (((TS.month == 3) and (TS.day >= gsd(TS.year)[1])) or
+   #       ((TS.month == 10) and (TS.day < gsd(TS.year)[2])) or
+   #       (3 < TS.month < 10)):
+   #    # liquidity peak in summer time is 14:00 UTC
+   #    if (TS.hour in [13,14]) and (25 <= TS.minute < 35):
+   #       vpdf = 0.9
+   #    elif (((TS.hour == 13) and (35 <= TS.minute < 45)) or 
+   #          ((TS.hour == 14) and (15 <= TS.minute < 25))):
+   #       vpdf = 0.8
+   #    elif (((TS.hour == 13) and (45 <= TS.minute < 55)) or 
+   #          ((TS.hour == 14) and (5 <= TS.minute < 15))):
+   #       vpdf = 0.7
+   #    elif ((TS.hour == 13) and (55 <= TS.minute) or 
+   #          ((TS.hour == 14) and (TS.minute < 5))):
+   #       vpdf = 0.6
+   # return vpdf

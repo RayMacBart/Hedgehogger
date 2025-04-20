@@ -80,20 +80,25 @@ def CCI_calcpower(cci, low, high, weight):
    return shift
 
 
-def VOL_down_calcpower(vol, weight, mtcp):
+def VOL_down_calcpower(vols, weight, mtcp):
    shift = 0
-   if falls(vol, vol[0]-(vol[0]*(mtcp/100))):
+   if falls(vols, vols[0]-(vols[0]*(mtcp/100))):
       shift -= weight
    return shift
 
 
-def VOL_up_calcpower(vol, weight, mtcp, TS):
+def VOL_up_calcpower(vols, weight, mtcp, TS, VMMTs, clims):
+   voldiff = vols[-1]/(vols[0]/100)-100
    factor = 1
-   vpdf = get_volume_peak_defusing_factor(TS)
-   if rises(vol, vol[0]+(vol[0]*(mtcp/100))):
-      grown_to_percentage = vol[-1]/(vol[0]/100)
-      factor *= ((grown_to_percentage/100)/5)*weight*vpdf
-   return factor
+   PDFM = get_volume_peak_defusing_factor(voldiff, len(vols), TS, VMMTs, clims)
+   # --> here I would react upon this Procentual Deviation From Mean
+
+
+   # vpdf = get_volume_peak_defusing_factor(TS)
+   # if rises(vols, vols[0]+(vols[0]*(mtcp/100))):
+   #    grown_to_percentage = vols[-1]/(vols[0]/100)
+   #    factor *= ((grown_to_percentage/100)/5)*weight*vpdf
+   # return factor
 
 
 def CAMA_calcpower(pow, close_val, R4, R3, S3, S4, w3, w4):
@@ -128,7 +133,7 @@ def PEAK_calcpower(pow, dir, uppeak, downpeak, acc, weight, last, close_val, swi
 
 
 
-def powers(Close, T, last, timestamps):
+def powers(Close, T, last, timestamps, VMMTs, clims):
    powers = []
    for idx in range(len(Close)):
       power = 0
@@ -148,7 +153,7 @@ def powers(Close, T, last, timestamps):
                                 T['CCI']['high'], T['CCI']['weight'])
          power += VOL_down_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['downweight'], T['VOL']['triggerminchange%'])
          power *= VOL_up_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['upweight'], 
-                                T['VOL']['triggerminchange%'], timestamps[idx-1])
+                                T['VOL']['triggerminchange%'], timestamps[idx-1], VMMTs, clims)
          # VOL: analyze historical data of multiple past days and adjust DST_timehelper.get_volume_peak_defusing_factor()
          # idea for ADX: also calc after VOL but before BB as confirming factor -
          # but only do this if (power<0 and DM- > DM+ ) or (power>0 and DM+ > DM- ) --> for verification.

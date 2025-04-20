@@ -3,8 +3,7 @@ import pandas as pd
 import pandas_ta as ta
 import helpers
 import indicator_setups
-from mean_volume_moves import get_volmean_movetimes as get_VMMTs
-   
+from mean_volume_moves import get_volmean_movetimes
 import camafuncs
 import fibofuncs
 import sizegap
@@ -18,8 +17,12 @@ from backtesting.lib import crossover
 
 candlesize = 'M5'
 
+clims = 60 if candlesize == 'H1' else int(candlesize[1:])
+
 df = pd.read_csv(".\data\EURUSD_"+candlesize+"_0-10k.csv", sep="\t", parse_dates=['Timestamp'], index_col='Timestamp')
 df = df.map(helpers.remove_nocomma_anomaly)
+df['Volume'] = helpers.adjust_volume_data(df['Volume'], 'Volume')
+
 
 
 class Hedgehog(Strategy):
@@ -34,7 +37,6 @@ class Hedgehog(Strategy):
    MACD_shortwin = 12
    MACD_longwin = 26
    MACD_signalwin = 9
-   # cama_length = 11 # in minutes
    psar_af0 = 0.02
    psar_af = 0.02
    psar_max_af = 0.2
@@ -76,7 +78,7 @@ class Hedgehog(Strategy):
    cc = -1
    stopdist = 0.0003
 
-   EURUSD_M5_vmmts = get_VMMTs('EURUSD', 'M5') # vmmts = Volume Mean Move Times
+   volmean_movetimes = get_volmean_movetimes(df.itertuples(), clims)
    
 
    def init(self):
@@ -89,7 +91,6 @@ class Hedgehog(Strategy):
       self.macd_macd = self.I(lambda: self.MACD_df[f'MACD_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='MACD')
       self.macd_histogram = self.I(lambda: self.MACD_df[f'MACDh_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Histogram')
       # self.macd_signalline = self.I(lambda: self.MACD_df[f'MACDs_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Signalline')
-      self.data.Volume = helpers.adjust_volume_data(self.data.Volume)
       self.vwap = self.I(ta.vwap, self.data.High.s, self.data.Low.s, self.data.Close.s, self.data.Volume.s, name='VWAP')
       self.bbands_df = ta.bbands(self.data.Close.s, self.bbands_win)
       self.lowerband = self.I(indicator_setups.lowerband, self.bbands_df[f'BBL_{self.bbands_win}_2.0'], name='lower bband')
@@ -150,7 +151,7 @@ class Hedgehog(Strategy):
                          'FIBO': {2: self.fibo_dist2, 4: self.fibo_dist4, 6: self.fibo_dist6,
                                   8: self.fibo_dist8, 'chwin': self.fibo_chwin, 'weight': self.fibo_weight}
                         }
-      # self.powers = self.I(powers, self.data.Close, self.indicators, self.last_swing, self.data.index)
+      self.powers = self.I(powers, self.data.Close, self.indicators, self.last_swing, self.data.index, self.volmean_movetimes, clims)
 
       # indis for stopdist calc: PSAR, ATR, BB width, GAP
 
@@ -238,19 +239,19 @@ stats = bt.run()
 
 # stats = bt.optimize(
 #    stopdist = [
-#       0.00001, 0.00002, 0.00003, 0.00004, 0.00005, 0.00006, 0.00007, 0.00008, 0.00009, 0.0001, 
-#                0.00011, 0.00012, 0.00013, 0.00014, 0.00015, 0.00016, 0.00017, 0.00018, 0.00019, 0.0002,
-#                0.00021, 0.00022, 0.00023, 0.00024, 0.00025, 0.00026, 0.00027, 0.00028, 0.00029, 0.0003,
-#                0.00031, 0.00032, 0.00033, 0.00034, 0.00035, 0.00036, 0.00037, 0.00038, 0.00039, 0.0004,
-#                0.00041, 0.00042, 0.00043, 0.00044, 0.00045, 0.00046, 0.00047, 0.00048, 0.00049, 0.0005,
-#                0.00051, 0.00052, 0.00053, 0.00054, 0.00055, 0.00056, 0.00057, 0.00058, 0.00059, 0.0006,
-#                0.00061, 0.00062, 0.00063, 0.00064, 0.00065, 0.00066, 0.00067, 0.00068, 0.00069, 0.0007,
-#                0.00071, 0.00072, 0.00073, 0.00074, 0.00075, 0.00076, 0.00077, 0.00078, 0.00079, 0.0008,
-#                0.00081, 0.00082, 0.00083, 0.00084, 0.00085, 0.00086, 0.00087, 0.00088, 0.00089, 0.0009
-#                ],
-#    RSI_upper_bound = range(55, 85, 5),
-#    RSI_lower_bound = range(15, 45, 5),
-#    RSI_win = range(10, 100, 4),
+      # 0.00001, 0.00002, 0.00003, 0.00004, 0.00005, 0.00006, 0.00007, 0.00008, 0.00009, 0.0001, 
+      #          0.00011, 0.00012, 0.00013, 0.00014, 0.00015, 0.00016, 0.00017, 0.00018, 0.00019, 0.0002,
+      #          0.00021, 0.00022, 0.00023, 0.00024, 0.00025, 0.00026, 0.00027, 0.00028, 0.00029, 0.0003,
+               # 0.00031, 0.00032, 0.00033, 0.00034, 0.00035, 0.00036, 0.00037, 0.00038, 0.00039, 0.0004,
+               # 0.00041, 0.00042, 0.00043, 0.00044, 0.00045, 0.00046, 0.00047, 0.00048, 0.00049, 0.0005,
+               # 0.00051, 0.00052, 0.00053, 0.00054, 0.00055, 0.00056, 0.00057, 0.00058, 0.00059, 0.0006,
+               # 0.00061, 0.00062, 0.00063, 0.00064, 0.00065, 0.00066, 0.00067, 0.00068, 0.00069, 0.0007,
+               # 0.00071, 0.00072, 0.00073, 0.00074, 0.00075, 0.00076, 0.00077, 0.00078, 0.00079, 0.0008,
+               # 0.00081, 0.00082, 0.00083, 0.00084, 0.00085, 0.00086, 0.00087, 0.00088, 0.00089, 0.0009
+               # ],
+   # RSI_upper_bound = range(55, 85, 10),
+   # RSI_lower_bound = range(15, 45, 10),
+   # RSI_win = range(10, 100, 10),
    # maximize = 'Return [%]',
    # constraint = lambda x: x = x
 # )

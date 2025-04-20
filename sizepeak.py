@@ -54,8 +54,8 @@ def get_move_sizepeak(last, seclast, win, gran, current_peakfunc, name):
       else:
          peak = current_peakfunc(last[idx-win:idx], seclast[idx-win:idx], gran)
          peaks.append(peak)
-   helpers.fill_inclomplete_data(peaks, last, "peaks")
-   helpers.trans_list_to_BT_array(peaks, name)
+   peaks = list(helpers.fill_inclomplete_data(peaks, last, "peaks"))
+   peaks = helpers.trans_list_to_BT_array(peaks, name)
    return peaks
 
 

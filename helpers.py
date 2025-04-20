@@ -12,10 +12,11 @@ def trans_list_to_BT_array(data, name):
 def fill_inclomplete_data(data, ref, name):
    for i in data:
       yield i
-   while len(data) < len(ref):
-      yield data[-1]
-      if len(data) == len(ref)-1:
-         print(f"AMOUNT OF DATA ERROR: FILLED UP '{name}' WITH IT'S LAST VALUE TILL END!")
+   if len(data) < len(ref):
+      for i in range(len(ref) - len(data)):
+         yield data[-1]
+         if i == len(ref) - len(data) - 1:
+            print(f"FILLED UP DATA OF COLUMN '{name}' WITH IT'S LAST VALUE UNTIL THE END!")
 
 
 def remove_nocomma_anomaly(x):
@@ -26,9 +27,9 @@ def remove_nocomma_anomaly(x):
 
    
 
-def adjust_volume_data(vol_list):
-   adj_voldata = [(vol if vol.is_integer() else vol*1000) for vol in vol_list]
-   return trans_list_to_BT_array(adj_voldata)
+def adjust_volume_data(vol_series, name):
+   adj_voldata = [(vol if np.isnan(vol) or vol.is_integer() else vol*1000) for vol in vol_series]
+   return trans_list_to_BT_array(adj_voldata, name)
 # NON-FUNCTIONAL BUT PERHAPS NEEDED VERSION:
 # def adjust_volume_data(vol_list):
 #    n = 0
@@ -38,7 +39,8 @@ def adjust_volume_data(vol_list):
 #       n += 1
 
 
-def generate_last_swings(Open, Close):
+
+def last_swings_generator(Open, Close):
    last_swing_value = Close[0]
    for idx in range(len(Close)):
       if idx in [0,1]:
@@ -49,11 +51,11 @@ def generate_last_swings(Open, Close):
          if not swing_dedected:
             yield last_swing_value
          else:
-            last_swing_value = Open[idx-1]
+            last_swing_value = Open[idx-1]  # still pure because only local variable is mutated
             yield last_swing_value
 
 def last_swing(Open, Close):
-   last_swing = list(generate_last_swings(Open, Close))
+   last_swing = list(last_swings_generator(Open, Close))
    last_swing = trans_list_to_BT_array(last_swing, 'last swing')
    return last_swing
 
@@ -63,7 +65,7 @@ def seclast_swing_generator(Close, last_swing):
    yield Close[0]
    for idx in range(1, len(last_swing)):
       if last_swing[idx] != last_swing[idx-1]:
-         last_seclast_swing_value = last_swing[idx-1]
+         last_seclast_swing_value = last_swing[idx-1] # still pure because only local variable is mutated
          yield last_seclast_swing_value
       else:
          yield last_seclast_swing_value

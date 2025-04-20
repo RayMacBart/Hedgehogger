@@ -54,8 +54,8 @@ def get_move_sizegap(last, seclast, win, gran, current_gapfunc, name):
       else:
          gap = current_gapfunc(last[idx-win:idx], seclast[idx-win:idx], gran)
          gaps.append(gap)
-   helpers.fill_inclomplete_data(gaps, last, "gaps")
-   helpers.trans_list_to_BT_array(gaps, name)
+   gaps = list(helpers.fill_inclomplete_data(gaps, last, "gaps"))
+   gaps = helpers.trans_list_to_BT_array(gaps, name)
    return gaps
 
 

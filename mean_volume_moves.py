@@ -1,75 +1,54 @@
-import pandas as pd
 import numpy as np
 from DST_timehelper import get_DST_switch_startdays as gsd
+from copy import deepcopy
+from itertools import chain
 
 
-def get_daytime_structured_dict():
-   return { h: { m: [] for m in range(0,60,5)} for h in range(24) }
+
+def get_daytime_minute_dict(clims):
+   assert 1440 % clims == 0, "clims must be a valid divisor of 1440 (minutes in a day)."
+   return [ [] for m in range(0, 1440/clims) ]
 
 
-def fill_appropriate_vols(dfrows, timetemplate):
+def fill_appropriate_vols(dfrows, timetemplate, clims):
    '''fills the times with every occuring volume on all days, splitted up by filling each dict 
    only with data from the associated periods'''
-   wintervols = timetemplate.deepcopy()
-   transvols = timetemplate.deepcopy()
-   summervols = timetemplate.deepcopy()
+   wintervols = deepcopy(timetemplate)
+   transvols = deepcopy(timetemplate)
+   summervols = deepcopy(timetemplate)
    for row in dfrows:
       if (((row.Index.month <= 3) and (row.Index.day < gsd(row.Index.year)[0])) or 
           ((row.Index.month >= 11) and (row.Index.day >= gsd(row.Index.year)[3]))):
-         wintervols[row.Index.hour][row.Index.minute].append(row.Volume)
+         wintervols[(row.Index.hour*60+row.Index.minute)//clims].append(row.Volume)
       elif (((row.Index.month == 3) and (gsd(row.Index.year)[0] <= row.Index.day < gsd(row.Index.year)[1])) or
             (((row.Index.month == 10) and (gsd(row.Index.year)[2] <= row.Index.day)) or
              ((row.Index.month == 11) and (row.Index.day < gsd(row.Index.year)[3])))):
-         transvols[row.Index.hour][row.Index.minute].append(row.Volume)
+         transvols[(row.Index.hour*60+row.Index.minute)//clims].append(row.Volume)
       elif (((row.Index.month == 3) and (row.Index.day >= gsd(row.Index.year)[1])) or
          ((row.Index.month == 10) and (row.Index.day < gsd(row.Index.year)[2])) or
          (3 < row.Index.month < 10)):
-         summervols[row.Index.hour][row.Index.minute].append(row.Volume)
+         summervols[(row.Index.hour*60+row.Index.minute)//clims].append(row.Volume)
    return wintervols, transvols, summervols
 
-   # FUNCTIONAL TRY WHICH WORKS, BUT SADLY, IT'S BAD FOR PERFORMANCE (because it causes 288 iterations per day instead of doing it with 1):
-   # wintervols = { h: { m: [row.Volume for row in dfrows if row.Index.hour == h and row.Index.minute == m and (((row.Index.month <= 3) and (row.Index.day < gsd(row.Index.year)[0])) or 
-   #        ((row.Index.month >= 11) and (row.Index.day >= gsd(row.Index.year)[3])))] for m in range(0,60,5)} for h in range(24)}
-   # transvols = { h: { m: [row.Volume for row in dfrows if row.Index.hour == h and row.Index.minute == m and (((row.Index.month == 3) and (gsd(row.Index.year)[0] <= row.Index.day < gsd(row.Index.year)[1])) or
-   #          (((row.Index.month == 10) and (gsd(row.Index.year)[2] <= row.Index.day)) or ((row.Index.month == 11) and (row.Index.day < gsd(row.Index.year)[3]))))] for m in range(0,60,5)} for h in range(24)}
-   # summervols = { h: { m: [row.Volume for row in dfrows if row.Index.hour == h and row.Index.minute == m and (((row.Index.month == 3) and (row.Index.day >= gsd(row.Index.year)[1])) or
-   #       ((row.Index.month == 10) and (row.Index.day < gsd(row.Index.year)[2])) or (3 < row.Index.month < 10))] for m in range(0,60,5)} for h in range(24)}
-   # return wintervols, transvols, summervols
 
-
-def reduce2day_means(VT): # Volumedata Timedictionary
-   return { h: { m: np.mean(VT[h][m]) for m in VT[h] } for h in VT }
+def reduce2day_means(VT): # Volumedata Timelist
+   return [ np.nan if not VT[m] else np.nanmean(VT[m]) for m in range(len(VT)) ]
 
 
 def change_to_diffs2prior(vmmts):
-   return {h:{m:(lambda p: p[1]/(p[0]/100)-100)((vmmts[(h-1 if h!=0 else 23) if m==0 else h][m-5 if m!=0 else 55], vmmts[h][m])) for m in vmmts[h]} for h in vmmts}
-# old way:
-# def change_to_diffs2prior(vmmts):
-#    diffs2prior = {}
-#    for h in range(24):
-#       diffs2prior[h] = {}
-#    former = vmmts[23][55]
-#    for h in range(24):
-#       for m in range(0,60,5):
-#          diffs2prior[h][m] = vmmts[h][m]/(former/100)-100  #procentual difference to former
-#          former = vmmts[h][m]
-#    return diffs2prior
+   return [ (lambda prior, current: current/(prior/100)-100)(vmmts[(m-1) if (m > 0) else len(vmmts)-1], vmmts[m]) for m in range(len(vmmts)) ]
 
 
-def get_volmean_movetimes(asset, candlelength):
-   df = pd.read_csv(f".\data\{asset}_{candlelength}.csv", sep="\t", parse_dates=['Timestamp'], index_col='Timestamp')
-   timetemplate = get_daytime_structured_dict()
-   wintervols, transvols, summervols = fill_appropriate_vols(df.itertuples(), timetemplate)
+def get_volmean_movetimes(dfrows, clims): # clims = candle length in minutes
+   timetemplate = get_daytime_minute_dict(clims)
+   wintervols, transvols, summervols = fill_appropriate_vols(dfrows, timetemplate, clims)
    winterdaymeans, transdaymeans, summerdaymeans = map(reduce2day_means, [wintervols, transvols, summervols])
+   volmean = np.nanmean(chain(winterdaymeans, transdaymeans, summerdaymeans))
    wintervmmts, transvmmts, summervmmts = map(change_to_diffs2prior, [winterdaymeans, transdaymeans, summerdaymeans])
-   return {'winter': wintervmmts, 'trans': transvmmts, 'summer': summervmmts}
+   return {'winter': wintervmmts, 'trans': transvmmts, 'summer': summervmmts, 'volmean': volmean}
 
 
 
-
-
-
-# daytimemean_dict = calc_daytimemeans('EURUSD', 'M5')
 
 # hourly_list = {}
 # hourly_averages = {}
