@@ -1,7 +1,7 @@
 import helpers
 from moves import is_rising_above as rises
 from moves import is_falling_below as falls
-from DST_timehelper import get_volume_peak_defusing_factor
+from DST_timehelper import get_procentual_deviation_from_mean
 
 
 def MACD_calcpower(macd, histo, 
@@ -80,20 +80,13 @@ def CCI_calcpower(cci, low, high, weight):
    return shift
 
 
-def VOL_down_calcpower(vols, weight, mtcp):
-   shift = 0
-   if falls(vols, vols[0]-(vols[0]*(mtcp/100))):
-      shift -= weight
-   return shift
-
-
-def VOL_up_calcpower(vols, weight, mtcp, TS, VMMTs, clims):
+def VOL_calcpower(vols, weight, TS, VMMTs, clims):
    voldiff = vols[-1]/(vols[0]/100)-100
-   factor = 1
-   PDFM = get_volume_peak_defusing_factor(voldiff, len(vols), TS, VMMTs, clims)
-   # --> here I would react upon this Procentual Deviation From Mean
-
-
+   PDFM = get_procentual_deviation_from_mean(voldiff, len(vols), TS, VMMTs, clims)
+   factor = 1 + weight * PDFM
+   return factor
+    
+   # old idea with surpass treshold:
    # vpdf = get_volume_peak_defusing_factor(TS)
    # if rises(vols, vols[0]+(vols[0]*(mtcp/100))):
    #    grown_to_percentage = vols[-1]/(vols[0]/100)
@@ -133,6 +126,10 @@ def PEAK_calcpower(pow, dir, uppeak, downpeak, acc, weight, last, close_val, swi
 
 
 
+# FUTURE TEST FOR EFFECTIVENESS: NOT RELY ON ACTUAL DEDECTED MOVEMENTS (VIA DIR), BUT ACTUALLY GUESS/FORESEE REVERSALS
+# FUTURE TEST FOR EFFECTIVENESS: define range-bound phases: they occur if "power" is near 0 or
+# if a variable that measures the 'power' of trend indicators only is near 0.
+# in such a range-bound phase, e.g. touching cama-points, fibo-points or outer BBs could be a reversal signal.
 def powers(Close, T, last, timestamps, VMMTs, clims):
    powers = []
    for idx in range(len(Close)):
@@ -151,10 +148,8 @@ def powers(Close, T, last, timestamps, VMMTs, clims):
                                 T['RSI']['high'], T['RSI']['weight'])
          power += CCI_calcpower(T['CCI']['cci'][idx-(T['CCI']['chwin']-1):idx+1], T['CCI']['low'],
                                 T['CCI']['high'], T['CCI']['weight'])
-         power += VOL_down_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['downweight'], T['VOL']['triggerminchange%'])
-         power *= VOL_up_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['upweight'], 
-                                T['VOL']['triggerminchange%'], timestamps[idx-1], VMMTs, clims)
-         # VOL: analyze historical data of multiple past days and adjust DST_timehelper.get_volume_peak_defusing_factor()
+         power *= VOL_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], 
+                                   T['VOL']['upweight'], timestamps[idx-1], VMMTs, clims)
          # idea for ADX: also calc after VOL but before BB as confirming factor -
          # but only do this if (power<0 and DM- > DM+ ) or (power>0 and DM+ > DM- ) --> for verification.
          # - use BB outer bands like camas (!) ( --> resistance/support focusses more on absolute values)

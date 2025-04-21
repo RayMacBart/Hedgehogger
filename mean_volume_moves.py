@@ -1,7 +1,6 @@
 import numpy as np
 from DST_timehelper import get_DST_switch_startdays as gsd
 from copy import deepcopy
-from itertools import chain
 
 
 
@@ -36,16 +35,16 @@ def reduce2day_means(VT): # Volumedata Timelist
 
 
 def change_to_diffs2prior(vmmts):
-   return [ (lambda prior, current: current/(prior/100)-100)(vmmts[(m-1) if (m > 0) else len(vmmts)-1], vmmts[m]) for m in range(len(vmmts)) ]
+   return [ (lambda prior, current: (current/(prior/100)-100) if not (np.isnan(current) or np.isnan(prior)) else 0)\
+           (vmmts[(m-1) if (m > 0) else len(vmmts)-1], vmmts[m]) for m in range(len(vmmts)) ]
 
 
 def get_volmean_movetimes(dfrows, clims): # clims = candle length in minutes
    timetemplate = get_daytime_minute_dict(clims)
    wintervols, transvols, summervols = fill_appropriate_vols(dfrows, timetemplate, clims)
    winterdaymeans, transdaymeans, summerdaymeans = map(reduce2day_means, [wintervols, transvols, summervols])
-   volmean = np.nanmean(chain(winterdaymeans, transdaymeans, summerdaymeans))
    wintervmmts, transvmmts, summervmmts = map(change_to_diffs2prior, [winterdaymeans, transdaymeans, summerdaymeans])
-   return {'winter': wintervmmts, 'trans': transvmmts, 'summer': summervmmts, 'volmean': volmean}
+   return {'winter': wintervmmts, 'trans': transvmmts, 'summer': summervmmts}
 
 
 

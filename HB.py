@@ -1,3 +1,5 @@
+import sys
+import os
 import numpy as np
 import pandas as pd
 import pandas_ta as ta
@@ -15,11 +17,22 @@ from backtesting import Backtest, Strategy
 from radar import radar
 from backtesting.lib import crossover
 
-candlesize = 'M5'
+asset = 'EURUSD' if not sys.argv[1] else sys.argv[1]
+candlesize = 'M5' if not sys.argv[2] else sys.argv[2]
+dataspan = '0-10k' if not sys.argv[3] else sys.argv[3]
+
+try:
+    file_path = f".\\data\\{asset}_{candlesize}_{dataspan}.csv"
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"File not found: {file_path}")
+    
+    df = pd.read_csv(file_path, sep="\t", parse_dates=['Timestamp'], index_col='Timestamp')
+    print("Data successfully loaded!")
+except Exception as e:
+    print(e)
 
 clims = 60 if candlesize == 'H1' else int(candlesize[1:])
 
-df = pd.read_csv(".\data\EURUSD_"+candlesize+"_0-10k.csv", sep="\t", parse_dates=['Timestamp'], index_col='Timestamp')
 df = df.map(helpers.remove_nocomma_anomaly)
 df['Volume'] = helpers.adjust_volume_data(df['Volume'], 'Volume')
 
@@ -27,11 +40,13 @@ df['Volume'] = helpers.adjust_volume_data(df['Volume'], 'Volume')
 
 class Hedgehog(Strategy):
 
+   # boundaries:
    RSI_upper_bound = 60
    RSI_lower_bound = 40
    CCI_upper_treshold = 100
    CCI_lower_treshold = -100
 
+   # indicator windows
    RSI_win = 90
    CCI_win = 20
    MACD_shortwin = 12
@@ -44,22 +59,24 @@ class Hedgehog(Strategy):
    atr_win = 14
    adx_win = 14
    sizegap_win = 100
+
    sizegap_granularity = 10
    sizepeak_win = 100
    sizepeak_granularity = 10
    peak_accuracy = 3  # in % - the less, the more accurate
-   macd_chwin = 5 # 3-8 'change measure window'
+
+   # change measure windows:
+   macd_chwin = 5 # 3-8 
    histo_chwin = 5 # 3-8
    vwap_chwin = 5 # 3-8
    fibo_chwin = 5 # 3-8
-   rsi_chwin = 5
-   cci_chwin = 5
-   vol_chwin = 5
+   rsi_chwin = 5 # 3-10
+   cci_chwin = 5 # 3-10
+   vol_chwin = 5 # 2-?
    peak_swingdist = 3 # 2-?
-   volume_trigger_min_change_percent = 20
 
-   volume_up_weight = 1
-   volume_down_weight = 1
+   # indicator weights
+   volume_weight = 1
    adx_weight = 1
    rsi_weight = 1
    cci_weight = 1
@@ -74,8 +91,8 @@ class Hedgehog(Strategy):
    peak_weight = 1
    fibo_weight = 1
 
-   size = 0.33
-   cc = -1
+   size = 0.33  # of buy/sell orders
+   cc = -1  # candle counter
    stopdist = 0.0003
 
    volmean_movetimes = get_volmean_movetimes(df.itertuples(), clims)
@@ -126,9 +143,7 @@ class Hedgehog(Strategy):
       # DISCOVERY: Breaking these fibos indicates overall trend in that direction where it broke through!
       self.dirs = self.I(helpers.dir, self.data.Close, self.last_swing, self.seclast_swing)
       self.indicators = {'PSAR': self.PSAR, 'DIR': self.dirs,
-                         'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin,
-                                 'triggerminchange%': self.volume_trigger_min_change_percent,
-                                 'upweight': self.volume_up_weight, 'downweight': self.volume_down_weight},
+                         'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin, 'weight': self.volume_weight},
                          'VWAP': {'vwap': self.vwap, 'chwin': self.vwap_chwin, 'weight': self.vwap_weight}, 
                          'ATR': {'atr': self.atr,  'weight': self.atr_weight},
                          'ADX': {'adx': self.adx_adx, 'DM+': self.adx_DM_pos, 
@@ -224,7 +239,7 @@ class Hedgehog(Strategy):
 
 
 bt = Backtest(df, Hedgehog, cash=1000, 
-              commission=0.0001, 
+              commission=0.00015, 
               margin=0.033)
 
 stats = bt.run()

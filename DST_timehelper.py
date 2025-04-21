@@ -69,7 +69,7 @@ def calc_pdfm(meanlist, voldiff, span, TS, clims):
    return voldiff - voldiffmean
 
 
-def get_volume_peak_defusing_factor(voldiff, span, TS, VMMTs, clims):
+def get_procentual_deviation_from_mean(voldiff, span, TS, VMMTs, clims):
    PDFM = 0 # Procentual Deviation From Mean
    gsd = get_DST_switch_startdays
    if (((TS.month <= 3) and (TS.day < gsd(TS.year)[0])) or 
