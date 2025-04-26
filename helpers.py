@@ -1,6 +1,7 @@
 # from backtesting.lib import resample_apply as reapp, barssince
 from backtesting._util import _Array
 import numpy as np
+import pandas as pd
 
 
 def trans_list_to_BT_array(data, name):
@@ -20,24 +21,20 @@ def fill_inclomplete_data(data, ref, name):
 
 
 def remove_nocomma_anomaly(x):
-   if x > 1000:
-      return x/1000
-   else:
-      return x
+    if pd.isna(x) or not isinstance(x, (int, float)):
+        return x
+    return x / 1000 if x > 1000 else x
 
-   
 
-def adjust_volume_data(vol_series, name):
-   adj_voldata = [(vol if np.isnan(vol) or vol.is_integer() else vol*1000) for vol in vol_series]
-   return trans_list_to_BT_array(adj_voldata, name)
-# NON-FUNCTIONAL BUT PERHAPS NEEDED VERSION:
-# def adjust_volume_data(vol_list):
-#    n = 0
-#    for vol in vol_list:
-#       if not vol.is_integer():
-#          vol_list[n] = vol*1000
-#       n += 1
-
+def adjust_volume_data(vol_series):
+   adjusted_vols = [(round(vol) if not pd.isna(vol) and isinstance(vol, (int, float)) and not vol.is_integer()\
+                     and (round(vol)-0.001 < vol < round(vol)+0.001) else vol) for vol in vol_series]
+   for vol in adjusted_vols:
+      if not isinstance(vol, (int, float)):
+         print('CAUTION: NON-NUMERIC VOLUME DATA DEDECTED!!!')
+      elif not (round(vol)-0.001 < vol < round(vol)+0.001):
+         print('CAUTION: NOT NEAR INTEGER VOLUME DATA DEDECTED!!!')
+   return pd.Series(adjusted_vols)
 
 
 def last_swings_generator(Open, Close):

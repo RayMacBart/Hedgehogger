@@ -83,6 +83,8 @@ def CCI_calcpower(cci, low, high, weight):
 def VOL_calcpower(vols, weight, TS, VMMTs, clims):
    voldiff = vols[-1]/(vols[0]/100)-100
    PDFM = get_procentual_deviation_from_mean(voldiff, len(vols), TS, VMMTs, clims)
+   # consider to introduce a lighter influence of negative deviations
+   # --> by applying an additional factor: impact of positive vs impact of negative deviation! 
    factor = 1 + weight * PDFM
    return factor
     
@@ -94,19 +96,38 @@ def VOL_calcpower(vols, weight, TS, VMMTs, clims):
    # return factor
 
 
+def ADX_calcpower(pow, adx, dmp, dmn, treshold, abs_weight, dyn_weight):
+   factor = 1
+   if (pow > 0 and dmp > dmn) or (pow < 0 and dmp < dmn):
+      # static absolute impacts:
+      if adx >= treshold:
+         factor += ((adx - treshold)/100)*(abs_weight/2)
+      # dynamic movement impacts:
+      if (dmp > dmn and rises(adx)) or (dmp < dmn and falls(adx)):
+         prct_change = (adx[-1]/(adx[0]/100)-100)
+         factor = factor + (factor/100)*prct_change*(dyn_weight/2)
+      # if adx <= 20:
+      #    pass # here could be a 'confirmation of a beginning range-bound phase take place.
+   return factor
+
+
+def BB_calcpower(low, mid, high, weight):
+   factor = 1
+   # implement price reversal guessings upon outer band touches if reversal direction is confirmed by mid band rise/fall!
+   return factor
+
+
 def CAMA_calcpower(pow, close_val, R4, R3, S3, S4, w3, w4):
    factor = 1
    if (pow < 0 and close_val > R4) or (pow > 0 and close_val < S4):
       factor += w4/5
    elif (pow < 0 and close_val > R3) or (pow > 0 and close_val < S3):
       factor += w3/5
-   # maybe it's better to remove the following, since 
-   # camas could also act as confirmer of breakouts -
-   # in this case, also pow check can be removed here.
-   elif (pow < 0 and close_val < S4) or (pow > 0 and close_val > R4):
-      factor -= w4/5
-   elif (pow < 0 and close_val < S3) or (pow > 0 and close_val > R3):
-      factor -= w3/5
+   # THE FOLLOWING COULD BE USED FOR EVENTUALLY IMPLEMENTED RANGE-BOUND PHASES:
+   # elif (pow < 0 and close_val < S4) or (pow > 0 and close_val > R4):
+   #    factor -= w4/5
+   # elif (pow < 0 and close_val < S3) or (pow > 0 and close_val > R3):
+   #    factor -= w3/5
    return factor
 
 
@@ -150,8 +171,10 @@ def powers(Close, T, last, timestamps, VMMTs, clims):
                                 T['CCI']['high'], T['CCI']['weight'])
          power *= VOL_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], 
                                    T['VOL']['upweight'], timestamps[idx-1], VMMTs, clims)
-         # idea for ADX: also calc after VOL but before BB as confirming factor -
-         # but only do this if (power<0 and DM- > DM+ ) or (power>0 and DM+ > DM- ) --> for verification.
+         power *= ADX_calcpower(power, T['ADX']['adx'][idx-(T['ADX']['chwin']-1):idx+1], T['ADX']['DM+'][idx],
+                                T['ADX']['DM-'][idx], T['ADX']['treshold'], T['ADX']['abs_weight'], T['ADX']['dyn_weight'])
+         power *= BB_calcpower(T['BB']['low'][idx-(T['BB']['chwin']-1):idx+1], T['BB']['mid'][idx-(T['BB']['chwin']-1):idx+1],
+                                T['BB']['high'][idx-(T['BB']['chwin']-1):idx+1], T['BB']['weight'])
          # - use BB outer bands like camas (!) ( --> resistance/support focusses more on absolute values)
          # place BB outerband calc after ADX and before CAMA
 

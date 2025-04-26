@@ -1,12 +1,17 @@
 import numpy as np
+import pandas as pd
+import sys
+import os
+import helpers
 from DST_timehelper import get_DST_switch_startdays as gsd
 from copy import deepcopy
 
 
 
-def get_daytime_minute_dict(clims):
+def get_daytime_minute_list(clims):
+   print('clims:', clims)
    assert 1440 % clims == 0, "clims must be a valid divisor of 1440 (minutes in a day)."
-   return [ [] for m in range(0, 1440/clims) ]
+   return [ [] for m in range(0, 1440//clims) ]
 
 
 def fill_appropriate_vols(dfrows, timetemplate, clims):
@@ -39,13 +44,37 @@ def change_to_diffs2prior(vmmts):
            (vmmts[(m-1) if (m > 0) else len(vmmts)-1], vmmts[m]) for m in range(len(vmmts)) ]
 
 
-def get_volmean_movetimes(dfrows, clims): # clims = candle length in minutes
-   timetemplate = get_daytime_minute_dict(clims)
+def get_volmean_movetimes(asset, clims): # clims = candle length in minutes
+   candlesize = f"M{clims}" if clims != 60 else "H1"
+   # the DateFrame used for this volume mean calculation has 10x more rows than the df used in __main__
+   try:
+      file_path = os.path.join("data", f"{asset}_{candlesize}.csv") # full data with 100k rows
+      if not os.path.exists(file_path):
+         raise FileNotFoundError(f"File not found (in mean_volume_moves): {file_path}")
+      
+      df = pd.read_csv(file_path, sep="\t", parse_dates=['Timestamp'], index_col='Timestamp')
+      print("Data for volume mean calc successfully loaded!")
+   except Exception as e:
+      print(e)
+   # df = df.map(helpers.remove_nocomma_anomaly)   --> not needed here
+
+   df['Volume'] = helpers.adjust_volume_data(df['Volume']).set_axis(df.index)
+
+   dfrows = df.itertuples()
+
+   timetemplate = get_daytime_minute_list(clims)
    wintervols, transvols, summervols = fill_appropriate_vols(dfrows, timetemplate, clims)
    winterdaymeans, transdaymeans, summerdaymeans = map(reduce2day_means, [wintervols, transvols, summervols])
    wintervmmts, transvmmts, summervmmts = map(change_to_diffs2prior, [winterdaymeans, transdaymeans, summerdaymeans])
-   return {'winter': wintervmmts, 'trans': transvmmts, 'summer': summervmmts}
+   volmean_datadict = {'winter': wintervmmts, 'trans': transvmmts, 'summer': summervmmts}
+   return pd.DataFrame.from_dict(volmean_datadict)
 
+
+if __name__ == '__main__':
+   asset = sys.argv[1]
+   volmean_df = get_volmean_movetimes(asset, int(sys.argv[2]))
+   candle = f'M{sys.argv[2]}' if sys.argv[2] != 60 else 'H1'
+   volmean_df.to_csv(f'.\\volmean_data\\volmean_{asset}_{candle}.csv', sep='\t')
 
 
 

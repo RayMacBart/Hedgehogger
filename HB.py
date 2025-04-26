@@ -5,7 +5,7 @@ import pandas as pd
 import pandas_ta as ta
 import helpers
 import indicator_setups
-from mean_volume_moves import get_volmean_movetimes
+# from mean_volume_moves import get_volmean_movetimes
 import camafuncs
 import fibofuncs
 import sizegap
@@ -17,12 +17,12 @@ from backtesting import Backtest, Strategy
 from radar import radar
 from backtesting.lib import crossover
 
-asset = 'EURUSD' if not sys.argv[1] else sys.argv[1]
-candlesize = 'M5' if not sys.argv[2] else sys.argv[2]
-dataspan = '0-10k' if not sys.argv[3] else sys.argv[3]
+asset = sys.argv[1] if len(sys.argv) > 1 else "EURUSD"
+candlesize = sys.argv[2] if len(sys.argv) > 2 else "M5"
+dataspan = sys.argv[3] if len(sys.argv) > 3 else "0-10k"
 
 try:
-    file_path = f".\\data\\{asset}_{candlesize}_{dataspan}.csv"
+    file_path = os.path.join("data", f"{asset}_{candlesize}_{dataspan}.csv")
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"File not found: {file_path}")
     
@@ -33,31 +33,37 @@ except Exception as e:
 
 clims = 60 if candlesize == 'H1' else int(candlesize[1:])
 
-df = df.map(helpers.remove_nocomma_anomaly)
-df['Volume'] = helpers.adjust_volume_data(df['Volume'], 'Volume')
+# df = df.map(helpers.remove_nocomma_anomaly)   --> leads to false manipulation of Volume data
+df['Open'] = df['Open'].apply(helpers.remove_nocomma_anomaly)
+df['High'] = df['High'].apply(helpers.remove_nocomma_anomaly)
+df['Low'] = df['Low'].apply(helpers.remove_nocomma_anomaly)
+df['Close'] = df['Close'].apply(helpers.remove_nocomma_anomaly)
+
+df['Volume'] = helpers.adjust_volume_data(df['Volume']).set_axis(df.index)
 
 
 
 class Hedgehog(Strategy):
 
-   # boundaries:
+   # boundaries/tresholds:
    RSI_upper_bound = 60
    RSI_lower_bound = 40
    CCI_upper_treshold = 100
    CCI_lower_treshold = -100
+   ADX_treshold = 30
 
-   # indicator windows
+   # indicator calculation windows
    RSI_win = 90
    CCI_win = 20
    MACD_shortwin = 12
    MACD_longwin = 26
    MACD_signalwin = 9
-   psar_af0 = 0.02
-   psar_af = 0.02
-   psar_max_af = 0.2
+   PSAR_af0 = 0.02
+   PSAR_af = 0.02
+   PSAR_max_af = 0.2
    bbands_win = 20
-   atr_win = 14
-   adx_win = 14
+   ATR_win = 14
+   ADX_win = 14
    sizegap_win = 100
 
    sizegap_granularity = 10
@@ -66,59 +72,62 @@ class Hedgehog(Strategy):
    peak_accuracy = 3  # in % - the less, the more accurate
 
    # change measure windows:
-   macd_chwin = 5 # 3-8 
+   MACD_chwin = 5 # 3-8 
    histo_chwin = 5 # 3-8
-   vwap_chwin = 5 # 3-8
+   VWAP_chwin = 5 # 3-8
    fibo_chwin = 5 # 3-8
-   rsi_chwin = 5 # 3-10
-   cci_chwin = 5 # 3-10
+   RSI_chwin = 5 # 3-10
+   CCI_chwin = 5 # 3-10
    vol_chwin = 5 # 2-?
+   ADX_chwin = 5 #?
+   bbands_chwin = 5 #?
    peak_swingdist = 3 # 2-?
 
    # indicator weights
    volume_weight = 1
-   adx_weight = 1
-   rsi_weight = 1
-   cci_weight = 1
-   macd_zeroweight = 1
-   macd_histoweight = 1
-   bb_weight = 1
+   ADX_abs_weight = 1
+   ADX_dyn_weight = 1
+   RSI_weight = 1
+   CCI_weight = 1
+   MACD_zeroweight = 1
+   MACD_histoweight = 1
+   bbands_weight = 1
    cama3_weight = 1
    cama4_weight = 1
-   vwap_weight = 1
-   atr_weight = 1
+   VWAP_weight = 1
+   ATR_weight = 1
    gap_weight = 1
    peak_weight = 1
    fibo_weight = 1
 
-   size = 0.33  # of buy/sell orders
+   size = 0.1  # of buy/sell orders
    cc = -1  # candle counter
    stopdist = 0.0003
 
-   volmean_movetimes = get_volmean_movetimes(df.itertuples(), clims)
+   # volmean_movetimes = get_volmean_movetimes(asset, clims)
    
 
    def init(self):
       self.PSAR_df = ta.psar(self.data.High.s, self.data.Low.s, self.data.Close.s)
-      self.PSAR = self.I(indicator_setups.PSAR, self.PSAR_df[f'PSARl_{self.psar_af0}_{self.psar_max_af}'], 
-                         self.PSAR_df[f'PSARs_{self.psar_af0}_{self.psar_max_af}'], self.data.Close, name='PSAR')
+      self.PSAR = self.I(indicator_setups.PSAR, self.PSAR_df[f'PSARl_{self.PSAR_af0}_{self.PSAR_max_af}'], 
+                         self.PSAR_df[f'PSARs_{self.PSAR_af0}_{self.PSAR_max_af}'], self.data.Close, name='PSAR')
       self.RSI = self.I(ta.rsi, self.data.Close.s, self.RSI_win)
       self.CCI = self.I(ta.cci, self.data.High.s, self.data.Low.s, self.data.Close.s, self.CCI_win)
       self.MACD_df = ta.macd(self.data.Close.s, self.MACD_shortwin, self.MACD_longwin, self.MACD_signalwin)
-      self.macd_macd = self.I(lambda: self.MACD_df[f'MACD_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='MACD')
-      self.macd_histogram = self.I(lambda: self.MACD_df[f'MACDh_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Histogram')
-      # self.macd_signalline = self.I(lambda: self.MACD_df[f'MACDs_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Signalline')
-      self.vwap = self.I(ta.vwap, self.data.High.s, self.data.Low.s, self.data.Close.s, self.data.Volume.s, name='VWAP')
+      self.MACD_macd = self.I(lambda: self.MACD_df[f'MACD_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='MACD')
+      self.MACD_histogram = self.I(lambda: self.MACD_df[f'MACDh_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Histogram')
+      # self.MACD_signalline = self.I(lambda: self.MACD_df[f'MACDs_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Signalline')
+      self.VWAP = self.I(ta.vwap, self.data.High.s, self.data.Low.s, self.data.Close.s, self.data.Volume.s, name='VWAP')
       self.bbands_df = ta.bbands(self.data.Close.s, self.bbands_win)
       self.lowerband = self.I(indicator_setups.lowerband, self.bbands_df[f'BBL_{self.bbands_win}_2.0'], name='lower bband')
       self.upperband = self.I(indicator_setups.upperband, self.bbands_df[f'BBU_{self.bbands_win}_2.0'], name='upper bband')
       self.middleband = self.I(indicator_setups.middleband, self.bbands_df[f'BBM_{self.bbands_win}_2.0'], name='middle bband')
       self.bandwidth = self.I(indicator_setups.bandwidth, self.bbands_df[f'BBB_{self.bbands_win}_2.0'], name='bband width')
-      self.atr = self.I(ta.atr, self.data.High.s, self.data.Low.s, self.data.Close.s, self.atr_win, name='atr')
-      self.adx_df = ta.adx(self.data.High.s, self.data.Low.s, self.data.Close.s, self.adx_win)
-      self.adx_adx = self.I(indicator_setups.get_adx, self.adx_df[f'ADX_{self.adx_win}'], name='ADX')
-      self.adx_DM_pos = self.I(indicator_setups.get_dmp, self.adx_df[f'DMP_{self.adx_win}'], name='DM+')
-      self.adx_DM_neg = self.I(indicator_setups.get_dmn, self.adx_df[f'DMN_{self.adx_win}'], name='DM-')
+      self.ATR = self.I(ta.atr, self.data.High.s, self.data.Low.s, self.data.Close.s, self.ATR_win, name='ATR')
+      self.ADX_df = ta.adx(self.data.High.s, self.data.Low.s, self.data.Close.s, self.ADX_win)
+      self.ADX_adx = self.I(indicator_setups.get_adx, self.ADX_df[f'ADX_{self.ADX_win}'], name='ADX')
+      self.ADX_DM_pos = self.I(indicator_setups.get_dmp, self.ADX_df[f'DMP_{self.ADX_win}'], name='DM+')
+      self.ADX_DM_neg = self.I(indicator_setups.get_dmn, self.ADX_df[f'DMN_{self.ADX_win}'], name='DM-')
       cama_start_idxs, initday_usable = camafuncs.get_cama_startidx(self.data.index, candlesize)
       cama_dailydata = camafuncs.get_cama_dailydata(self.data.index, self.data.High, self.data.Low,
                                             self.data.Close, cama_start_idxs, initday_usable)
@@ -144,20 +153,20 @@ class Hedgehog(Strategy):
       self.dirs = self.I(helpers.dir, self.data.Close, self.last_swing, self.seclast_swing)
       self.indicators = {'PSAR': self.PSAR, 'DIR': self.dirs,
                          'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin, 'weight': self.volume_weight},
-                         'VWAP': {'vwap': self.vwap, 'chwin': self.vwap_chwin, 'weight': self.vwap_weight}, 
-                         'ATR': {'atr': self.atr,  'weight': self.atr_weight},
-                         'ADX': {'adx': self.adx_adx, 'DM+': self.adx_DM_pos, 
-                                 'DM-': self.adx_DM_neg, 'weight': self.adx_weight},
+                         'VWAP': {'vwap': self.VWAP, 'chwin': self.VWAP_chwin, 'weight': self.VWAP_weight}, 
+                         'ATR': {'atr': self.ATR,  'weight': self.ATR_weight},
+                         'ADX': {'adx': self.ADX_adx, 'DM+': self.ADX_DM_pos, 'DM-': self.ADX_DM_neg, 'chwin': self.ADX_chwin,
+                                 'treshold': self.ADX_treshold, 'abs_weight': self.ADX_abs_weight, 'dyn_weight': self.ADX_dyn_weight},
                          'RSI': {'rsi': self.RSI, 'low': self.RSI_lower_bound, 'high': self.RSI_upper_bound,
-                                 'chwin': self.rsi_chwin, 'weight': self.rsi_weight},
+                                 'chwin': self.RSI_chwin, 'weight': self.RSI_weight},
                          'CCI': {'cci': self.CCI, 'low': self.CCI_lower_treshold, 'high': self.CCI_upper_treshold,
-                                 'chwin': self.cci_chwin, 'weight': self.cci_weight},
-                         'MACD': {'macd': self.macd_macd, 'histo': self.macd_histogram,
-                                  #'signal': self.macd_signalline, # not used (yet?)
-                                  'macd_chwin': self.macd_chwin, 'histo_chwin': self.histo_chwin,
-                                  'zeroweight': self.macd_zeroweight, 'histoweight': self.macd_histoweight},
+                                 'chwin': self.CCI_chwin, 'weight': self.CCI_weight},
+                         'MACD': {'macd': self.MACD_macd, 'histo': self.MACD_histogram,
+                                  #'signal': self.MACD_signalline, # not used (yet?)
+                                  'macd_chwin': self.MACD_chwin, 'histo_chwin': self.histo_chwin,
+                                  'zeroweight': self.MACD_zeroweight, 'histoweight': self.MACD_histoweight},
                          'BB': {'low': self.lowerband, 'high': self.upperband,'mid': self.middleband,
-                                'width': self.bandwidth, 'weight': self.bb_weight},
+                                'width': self.bandwidth, 'chwin': self.bbands_chwin, 'weight': self.bbands_weight},
                          'CAMA': {'R4': self.cama_R4, 'R3': self.cama_R3, 'S3': self.cama_S3,
                                   'S4': self.cama_S4, '3weight': self.cama3_weight, '4weight': self.cama4_weight},
                          'GAP': {'+': self.sizegap_up, '-': self.sizegap_down, 'weight': self.gap_weight},
@@ -166,7 +175,7 @@ class Hedgehog(Strategy):
                          'FIBO': {2: self.fibo_dist2, 4: self.fibo_dist4, 6: self.fibo_dist6,
                                   8: self.fibo_dist8, 'chwin': self.fibo_chwin, 'weight': self.fibo_weight}
                         }
-      self.powers = self.I(powers, self.data.Close, self.indicators, self.last_swing, self.data.index, self.volmean_movetimes, clims)
+      # self.powers = self.I(powers, self.data.Close, self.indicators, self.last_swing, self.data.index, self.volmean_movetimes, clims)
 
       # indis for stopdist calc: PSAR, ATR, BB width, GAP
 

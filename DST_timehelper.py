@@ -86,7 +86,7 @@ def get_procentual_deviation_from_mean(voldiff, span, TS, VMMTs, clims):
    return PDFM
 
 
-
+   # old idea with surpass treshold:
    # if (((TS.month <= 3) and (TS.day < gsd(TS.year)[0])) or 
    #    ((TS.month >= 11) and (TS.day >= gsd(TS.year)[3]))):
    #    # liquidity peak in winter time is 15:00 UTC
