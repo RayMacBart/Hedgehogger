@@ -80,11 +80,11 @@ def CCI_calcpower(cci, low, high, weight):
    return shift
 
 
-def VOL_calcpower(vols, weight, TS, VMMTs, clims):
+def VOL_calcpower(vols, pos2neg_factor, weight, TS, VMMTs, clims):
    voldiff = vols[-1]/(vols[0]/100)-100
    PDFM = get_procentual_deviation_from_mean(voldiff, len(vols), TS, VMMTs, clims)
-   # consider to introduce a lighter influence of negative deviations
-   # --> by applying an additional factor: impact of positive vs impact of negative deviation! 
+   if PDFM < 0:
+      PDFM /= pos2neg_factor
    factor = 1 + weight * PDFM
    return factor
     
@@ -114,6 +114,8 @@ def ADX_calcpower(pow, adx, dmp, dmn, treshold, abs_weight, dyn_weight):
 def BB_calcpower(low, mid, high, weight):
    factor = 1
    # implement price reversal guessings upon outer band touches if reversal direction is confirmed by mid band rise/fall!
+   # observe wether this guessing or the confirming strategy works better and change other indicator to better strategy
+   # (and compare effectiveness with old version)
    return factor
 
 
@@ -169,8 +171,8 @@ def powers(Close, T, last, timestamps, VMMTs, clims):
                                 T['RSI']['high'], T['RSI']['weight'])
          power += CCI_calcpower(T['CCI']['cci'][idx-(T['CCI']['chwin']-1):idx+1], T['CCI']['low'],
                                 T['CCI']['high'], T['CCI']['weight'])
-         power *= VOL_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], 
-                                   T['VOL']['upweight'], timestamps[idx-1], VMMTs, clims)
+         power *= VOL_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['pos2neg_factor'],
+                                T['VOL']['upweight'], timestamps[idx-1], VMMTs, clims)
          power *= ADX_calcpower(power, T['ADX']['adx'][idx-(T['ADX']['chwin']-1):idx+1], T['ADX']['DM+'][idx],
                                 T['ADX']['DM-'][idx], T['ADX']['treshold'], T['ADX']['abs_weight'], T['ADX']['dyn_weight'])
          power *= BB_calcpower(T['BB']['low'][idx-(T['BB']['chwin']-1):idx+1], T['BB']['mid'][idx-(T['BB']['chwin']-1):idx+1],

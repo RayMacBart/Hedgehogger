@@ -37,6 +37,13 @@ def adjust_volume_data(vol_series):
    return pd.Series(adjusted_vols)
 
 
+def convert2VMMT_dict(volmean_df):
+    return {'winter': volmean_df['winter'].tolist(),
+            'trans': volmean_df['trans'].tolist(),
+            'summer': volmean_df['summer'].tolist()}
+
+
+
 def last_swings_generator(Open, Close):
    last_swing_value = Close[0]
    for idx in range(len(Close)):

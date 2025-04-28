@@ -29,7 +29,17 @@ try:
     df = pd.read_csv(file_path, sep="\t", parse_dates=['Timestamp'], index_col='Timestamp')
     print("Data successfully loaded!")
 except Exception as e:
-    print(e)
+    print('Error occured during loading MAIN PRICE CHART data:\n', e)
+
+try:
+    file_path2 = os.path.join("volmean_data", f"volmean_{asset}_{candlesize}.csv")
+    if not os.path.exists(file_path2):
+        raise FileNotFoundError(f"File not found: {file_path2}")
+    volmean_df = pd.read_csv(file_path2, sep="\t")
+    print("Volmean Data successfully loaded!")
+except Exception as e:
+    print('Error occured during loading VOLUME MEAN data:', e)
+
 
 clims = 60 if candlesize == 'H1' else int(candlesize[1:])
 
@@ -66,6 +76,7 @@ class Hedgehog(Strategy):
    ADX_win = 14
    sizegap_win = 100
 
+   vol_pos2neg_factor = 3
    sizegap_granularity = 10
    sizepeak_win = 100
    sizepeak_granularity = 10
@@ -104,8 +115,9 @@ class Hedgehog(Strategy):
    cc = -1  # candle counter
    stopdist = 0.0003
 
-   # volmean_movetimes = get_volmean_movetimes(asset, clims)
+   volmean_movetimes = helpers.convert2VMMT_dict(volmean_df)
    
+
 
    def init(self):
       self.PSAR_df = ta.psar(self.data.High.s, self.data.Low.s, self.data.Close.s)
@@ -152,7 +164,8 @@ class Hedgehog(Strategy):
       # DISCOVERY: Breaking these fibos indicates overall trend in that direction where it broke through!
       self.dirs = self.I(helpers.dir, self.data.Close, self.last_swing, self.seclast_swing)
       self.indicators = {'PSAR': self.PSAR, 'DIR': self.dirs,
-                         'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin, 'weight': self.volume_weight},
+                         'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin,
+                                 'pos2neg_factor': self.vol_pos2neg_factor, 'weight': self.volume_weight},
                          'VWAP': {'vwap': self.VWAP, 'chwin': self.VWAP_chwin, 'weight': self.VWAP_weight}, 
                          'ATR': {'atr': self.ATR,  'weight': self.ATR_weight},
                          'ADX': {'adx': self.ADX_adx, 'DM+': self.ADX_DM_pos, 'DM-': self.ADX_DM_neg, 'chwin': self.ADX_chwin,
