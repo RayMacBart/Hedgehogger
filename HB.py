@@ -51,7 +51,7 @@ df['Close'] = df['Close'].apply(helpers.remove_nocomma_anomaly)
 
 df['Volume'] = helpers.adjust_volume_data(df['Volume']).set_axis(df.index)
 
-
+impact_counter = {'MACD': 0, 'VWAP': 0, 'FIBO': 0, 'RSI': 0, 'CCI': 0, 'BB': 0, 'VOL': 0, 'ADX': 0, 'CAMA': 0, 'PEAK': 0}
 
 class Hedgehog(Strategy):
 
@@ -76,6 +76,7 @@ class Hedgehog(Strategy):
    ADX_win = 14
    sizegap_win = 100
 
+   vol_defuse_lvl = 2
    vol_pos2neg_factor = 3
    sizegap_granularity = 10
    sizepeak_win = 100
@@ -164,7 +165,7 @@ class Hedgehog(Strategy):
       # DISCOVERY: Breaking these fibos indicates overall trend in that direction where it broke through!
       self.dirs = self.I(helpers.dir, self.data.Close, self.last_swing, self.seclast_swing)
       self.indicators = {'PSAR': self.PSAR, 'DIR': self.dirs,
-                         'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin,
+                         'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin, 'defuse_lvl': self.vol_defuse_lvl,
                                  'pos2neg_factor': self.vol_pos2neg_factor, 'weight': self.volume_weight},
                          'VWAP': {'vwap': self.VWAP, 'chwin': self.VWAP_chwin, 'weight': self.VWAP_weight}, 
                          'ATR': {'atr': self.ATR,  'weight': self.ATR_weight},
@@ -188,7 +189,7 @@ class Hedgehog(Strategy):
                          'FIBO': {2: self.fibo_dist2, 4: self.fibo_dist4, 6: self.fibo_dist6,
                                   8: self.fibo_dist8, 'chwin': self.fibo_chwin, 'weight': self.fibo_weight}
                         }
-      # self.powers = self.I(powers, self.data.Close, self.indicators, self.last_swing, self.data.index, self.volmean_movetimes, clims)
+      self.powers = self.I(powers, self.data.Close, self.indicators, self.last_swing, self.data.index, self.volmean_movetimes, clims, impact_counter)
 
       # indis for stopdist calc: PSAR, ATR, BB width, GAP
 
@@ -306,5 +307,9 @@ print('____________________________________________________________')
 print('trades:', stats._trades)
 # print('____________________________________________________________')
 bt.plot()
+
+print('POWER IMPACT COUNTER:')
+for k, v in impact_counter.items():
+   print(f"{k}: {v}")
 
 

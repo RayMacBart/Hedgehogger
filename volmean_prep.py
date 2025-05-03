@@ -39,9 +39,25 @@ def reduce2day_means(VT): # Volumedata Timelist
    return [ np.nan if not VT[m] else np.nanmean(VT[m]) for m in range(len(VT)) ]
 
 
-def change_to_diffs2prior(vmmts):
-   return [ (lambda prior, current: (current/(prior/100)-100) if not (np.isnan(current) or np.isnan(prior)) else 0)\
-           (vmmts[(m-1) if (m > 0) else len(vmmts)-1], vmmts[m]) for m in range(len(vmmts)) ]
+def convert_daymeans2zscore_lists(winter, trans, summer):
+    full_data = pd.concat(winter, trans, summer, ignore_index=True)
+    mean_all = np.mean(full_data)
+    std_all = np.std(full_data)
+    zscores_winter = [((val-mean_all)/std_all) for val in winter]
+    zscores_trans = [((val-mean_all)/std_all) for val in trans]
+    zscores_summer = [((val-mean_all)/std_all) for val in summer]
+    return zscores_winter, zscores_trans, zscores_summer
+
+
+def change_to_diffs2prior(zdms):
+   return [ zdms[i] - (zdms[i-1] if i > 0 else 0) for i in range(len(zdms)) ]
+
+
+
+# procentual old way:
+# def change_to_diffs2prior(vmmts):
+#    return [ (lambda prior, current: (current/(prior/100)-100) if not (np.isnan(current) or np.isnan(prior)) else 0)\
+#            (vmmts[(m-1) if (m > 0) else len(vmmts)-1], vmmts[m]) for m in range(len(vmmts)) ]
 
 
 def get_volmean_movetimes(asset, clims): # clims = candle length in minutes
@@ -65,8 +81,9 @@ def get_volmean_movetimes(asset, clims): # clims = candle length in minutes
    timetemplate = get_daytime_minute_list(clims)
    wintervols, transvols, summervols = fill_appropriate_vols(dfrows, timetemplate, clims)
    winterdaymeans, transdaymeans, summerdaymeans = map(reduce2day_means, [wintervols, transvols, summervols])
-   wintervmmts, transvmmts, summervmmts = map(change_to_diffs2prior, [winterdaymeans, transdaymeans, summerdaymeans])
-   volmean_datadict = {'winter': wintervmmts, 'trans': transvmmts, 'summer': summervmmts}
+   winter_z_daymeans, trans_z_daymeans, summer_z_daymeans = convert_daymeans2zscore_lists(winterdaymeans, transdaymeans, summerdaymeans)
+   winter_z_vmmts, trans_z_vmmts, summer_z_vmmts = map(change_to_diffs2prior, [winter_z_daymeans, trans_z_daymeans, summer_z_daymeans])
+   volmean_datadict = {'winter': winter_z_vmmts, 'trans': trans_z_vmmts, 'summer': summer_z_vmmts}
    return pd.DataFrame.from_dict(volmean_datadict)
 
 

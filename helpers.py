@@ -40,7 +40,24 @@ def adjust_volume_data(vol_series):
 def convert2VMMT_dict(volmean_df):
     return {'winter': volmean_df['winter'].tolist(),
             'trans': volmean_df['trans'].tolist(),
-            'summer': volmean_df['summer'].tolist()}
+            'summer': volmean_df['summer'].tolist(),
+            'mean': np.mean(pd.concat([volmean_df['winter'], volmean_df['trans'], volmean_df['summer']], ignore_index=True)),
+            'std': np.std(pd.concat([volmean_df['winter'], volmean_df['trans'], volmean_df['summer']], ignore_index=True))}
+
+
+
+def defuse(val, lvl):
+    i_vals = np.arange(int(val) + 1)
+    results = 1 / ((1 + (lvl / 100)) ** i_vals)
+    results[-1] *= (val - int(val))  # Adjust fractional part
+    return np.sum(results)
+
+
+# def convert2VMMT_zscore_dict(volmean_df):
+#     full_data = pd.concat([volmean_df['winter'], volmean_df['trans'], volmean_df['summer']], ignore_index=True)
+#     mean_all = np.mean(full_data)
+#     std_all = np.std(full_data)
+#     return {col: ((volmean_df[col]-mean_all)/std_all).tolist() for col in ['winter', 'trans', 'summer']}
 
 
 

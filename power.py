@@ -67,6 +67,7 @@ def RSI_calcpower(rsi, low, high, weight):
 
 
 def CCI_calcpower(cci, low, high, weight):
+   shift = 0
    # static absolute impacts:
    if cci > high: 
       shift += weight
@@ -80,14 +81,49 @@ def CCI_calcpower(cci, low, high, weight):
    return shift
 
 
-def VOL_calcpower(vols, pos2neg_factor, weight, TS, VMMTs, clims):
-   voldiff = vols[-1]/(vols[0]/100)-100
-   PDFM = get_procentual_deviation_from_mean(voldiff, len(vols), TS, VMMTs, clims)
-   if PDFM < 0:
-      PDFM /= pos2neg_factor
-   factor = 1 + weight * PDFM
+def BB_calcpower(low, mid, high, Closes, weight):
+   shift = 0
+   if rises(Closes) and (Closes[-1] < ((mid[-1]*2 + low[-1]) / 3)): # one third below mid
+      touched = False
+      for i in range(len(Closes)):
+         if Closes[i] <= low[i]:
+            touched = True
+      if touched:
+         shift += weight
+   elif falls(Closes) and (Closes[-1] > ((mid[-1]*2 + high[-1]) / 3)): # one third above mid
+      touched = False
+      for i in range(len(Closes)):
+         if Closes[i] >= high[i]:
+            touched = True
+      if touched:
+         shift -= weight
+   return shift
+
+# pre-guessing version could work like:
+   # if rises(Closes) and (Closes[-1] >= high[-1]) and pow < trend_treshold:  (would need "pow" and "trend_treshold" args)
+   # implement price reversal guessings not only upon pow verification, but also only upon outer band touches if 
+   # reversal direction is confirmed by mid band rise/fall!
+   # observe wether this guessing or the confirming strategy works better and change other indicator to better strategy
+   # (and compare effectiveness with old version)
+
+
+def VOL_calcpower(vols, pos2neg_factor, defuse_lvl, weight, TS, VMMTs, clims):
+   # voldiff = vols[-1]/(vols[0]/100)-100
+   zscore_volstart = (vols[0]-VMMTs['mean'])/VMMTs['std']
+   zscore_volend = (vols[-1]-VMMTs['mean'])/VMMTs['std']
+   zvoldiff = zscore_volend - zscore_volstart
+   PDFM = get_procentual_deviation_from_mean(zvoldiff, len(vols), TS, VMMTs, clims)
+   factor = 1
+   dePDFM = helpers.defuse(abs(PDFM), defuse_lvl)
+   maxval = helpers.defuse(1000, defuse_lvl)
+   if PDFM > 0:
+      factor += 0.2*(dePDFM/maxval)*weight
+   elif PDFM < 0:
+      factor -= 0.16666*(dePDFM/maxval)*weight
+   print('VOL-FACTOR:', factor)
    return factor
-    
+   
+   #  normdev = (PDFM - VMMTs['mean']) / VMMTs['std'] # z score normalization --> nice, but not really helping here
    # old idea with surpass treshold:
    # vpdf = get_volume_peak_defusing_factor(TS)
    # if rises(vols, vols[0]+(vols[0]*(mtcp/100))):
@@ -100,22 +136,14 @@ def ADX_calcpower(pow, adx, dmp, dmn, treshold, abs_weight, dyn_weight):
    factor = 1
    if (pow > 0 and dmp > dmn) or (pow < 0 and dmp < dmn):
       # static absolute impacts:
-      if adx >= treshold:
-         factor += ((adx - treshold)/100)*(abs_weight/2)
+      if adx[-1] >= treshold:
+         factor += ((adx[-1] - treshold)/100)*(abs_weight/2)
       # dynamic movement impacts:
       if (dmp > dmn and rises(adx)) or (dmp < dmn and falls(adx)):
          prct_change = (adx[-1]/(adx[0]/100)-100)
          factor = factor + (factor/100)*prct_change*(dyn_weight/2)
       # if adx <= 20:
       #    pass # here could be a 'confirmation of a beginning range-bound phase take place.
-   return factor
-
-
-def BB_calcpower(low, mid, high, weight):
-   factor = 1
-   # implement price reversal guessings upon outer band touches if reversal direction is confirmed by mid band rise/fall!
-   # observe wether this guessing or the confirming strategy works better and change other indicator to better strategy
-   # (and compare effectiveness with old version)
    return factor
 
 
@@ -148,44 +176,88 @@ def PEAK_calcpower(pow, dir, uppeak, downpeak, acc, weight, last, close_val, swi
    return factor
 
 
+def detect_impact(impact_counter, power, detector, tech_ind):
+   if power != detector:
+      impact_counter[tech_ind] += 1
+   # print(f'power after {tech_ind}:', power)
+   return power
+
 
 # FUTURE TEST FOR EFFECTIVENESS: NOT RELY ON ACTUAL DEDECTED MOVEMENTS (VIA DIR), BUT ACTUALLY GUESS/FORESEE REVERSALS
 # FUTURE TEST FOR EFFECTIVENESS: define range-bound phases: they occur if "power" is near 0 or
 # if a variable that measures the 'power' of trend indicators only is near 0.
 # in such a range-bound phase, e.g. touching cama-points, fibo-points or outer BBs could be a reversal signal.
-def powers(Close, T, last, timestamps, VMMTs, clims):
+def powers(Close, T, last, timestamps, VMMTs, clims, impact_counter):
    powers = []
    for idx in range(len(Close)):
       power = 0
+      detector = 0
       # if using Close for calculation, don't forget to use -1 or lower index than current.
-      if idx > 15:
+      if idx > 15 and idx % 10 == 0:
          power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['macd_chwin']-1):idx+1], 
                                  T['MACD']['histo'][idx-(T['MACD']['histo_chwin']-1):idx+1], 
                                  # T['MACD']['signal'][idx-(T['MACD']['signal_chwin']-1):idx+1], # not used (yet?)
                                  T['MACD']['zeroweight'], T['MACD']['histoweight'])
+         detector = detect_impact(impact_counter, power, detector, 'MACD')
+
          power += VWAP_calcpower(Close[idx-1], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1], T['VWAP']['weight'])  # --> vwap misuse?
-         # I 'misuse' the fibonacci points in a unconventional way as breakthrough indicator. 
+         # I 'misuse' the fibonacci points in a unconventional way as breakthrough indicator.
+         detector = detect_impact(impact_counter, power, detector, 'VWAP')
+
          power += FIBO_calcpower(Close[idx-(T['FIBO']['chwin']):idx], T['DIR'][idx], T['FIBO'][2][idx], T['FIBO'][4][idx],
                                       T['FIBO'][6][idx], T['FIBO'][8][idx], T['FIBO']['weight'])
+         detector = detect_impact(impact_counter, power, detector, 'FIBO')
+
          power += RSI_calcpower(T['RSI']['rsi'][idx-(T['RSI']['chwin']-1):idx+1], T['RSI']['low'],
                                 T['RSI']['high'], T['RSI']['weight'])
+         detector = detect_impact(impact_counter, power, detector, 'RSI')
+
          power += CCI_calcpower(T['CCI']['cci'][idx-(T['CCI']['chwin']-1):idx+1], T['CCI']['low'],
                                 T['CCI']['high'], T['CCI']['weight'])
+         detector = detect_impact(impact_counter, power, detector, 'CCI')
+
+         power += BB_calcpower(T['BB']['low'][idx-(T['BB']['chwin']-1):idx+1], T['BB']['mid'][idx-(T['BB']['chwin']-1):idx+1],
+                                T['BB']['high'][idx-(T['BB']['chwin']-1):idx+1], Close[idx-(T['FIBO']['chwin']):idx], T['BB']['weight'])
+         detector = detect_impact(impact_counter, power, detector, 'BB')
+
          power *= VOL_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['pos2neg_factor'],
-                                T['VOL']['upweight'], timestamps[idx-1], VMMTs, clims)
+                                T['VOL']['defuse_lvl'], T['VOL']['weight'], timestamps[idx-1], VMMTs, clims)
+         detector = detect_impact(impact_counter, power, detector, 'VOL')
+
          power *= ADX_calcpower(power, T['ADX']['adx'][idx-(T['ADX']['chwin']-1):idx+1], T['ADX']['DM+'][idx],
                                 T['ADX']['DM-'][idx], T['ADX']['treshold'], T['ADX']['abs_weight'], T['ADX']['dyn_weight'])
-         power *= BB_calcpower(T['BB']['low'][idx-(T['BB']['chwin']-1):idx+1], T['BB']['mid'][idx-(T['BB']['chwin']-1):idx+1],
-                                T['BB']['high'][idx-(T['BB']['chwin']-1):idx+1], T['BB']['weight'])
-         # - use BB outer bands like camas (!) ( --> resistance/support focusses more on absolute values)
-         # place BB outerband calc after ADX and before CAMA
+         detector = detect_impact(impact_counter, power, detector, 'ADX')
 
          power *= CAMA_calcpower(power, Close[idx-1], T['CAMA']['R4'][idx], T['CAMA']['R3'][idx], T['CAMA']['S3'][idx],
                                  T['CAMA']['S4'][idx], T['CAMA']['3weight'], T['CAMA']['4weight'])
+         detector = detect_impact(impact_counter, power, detector, 'CAMA')
+
          power *= PEAK_calcpower(power, T['DIR'][idx-(T['PEAK']['swingdist']-1):idx+1], T['PEAK']['+'], T['PEAK']['-'],
                                  T['PEAK']['accuracy'], T['PEAK']['weight'], last, Close[idx-1], T['PEAK']['swingdist'])
-      else:
-         powers.append(0)
+         detector = detect_impact(impact_counter, power, detector, 'PEAK')
+
+         print('_______________________________')
+      powers.append(power)
+   
+   # floats = 0
+   # ints = 0
+   # elses = 0
+
+   # for p in powers:
+   #    print(p)
+   #    if type(p) == float:
+   #       floats += 1
+   #    elif type(p) == int:
+   #       ints += 1
+   #    else:
+   #       elses += 1
+         # if isinstance(p, _Indicator):
+         #    print('Indicator type found:', type(p), '  value:', p)
+   # print('--------------\ntypes found:')
+   # print('floats:', floats, '  ints:', ints, '  elses:', elses)
+   # print('--------------')
+   
+
    powers = helpers.trans_list_to_BT_array(powers, 'powers')
    return powers
 

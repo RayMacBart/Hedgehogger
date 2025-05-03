@@ -60,7 +60,7 @@ def get_DST_switch_startdays(year):
 
 def calc_pdfm(meanlist, voldiff, span, TS, clims):
    meanidx = None
-   for i in meanlist:
+   for i in range(len(meanlist)):
       if (i*clims <= TS.hour*60+TS.minute < (i+1)*clims):
          meanidx = i
    first_diffmean = meanlist[(meanidx-span)+1] # works also over list end/begin
