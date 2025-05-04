@@ -75,13 +75,15 @@ class Hedgehog(Strategy):
    ATR_win = 14
    ADX_win = 14
    sizegap_win = 100
-
-   vol_defuse_lvl = 2
-   vol_pos2neg_factor = 3
-   sizegap_granularity = 10
    sizepeak_win = 100
+
+   # mnfpwi: "max decreasing factor per weight impact"
+   vol_mdfpwi = 0.15  # 0.05 - 0.4  (in 0.05 steps)
+   # mpfpw: "max positive factor per weight"
+   vol_mpfpw = 1.5  # 1.2 - 2 (in 0.1 steps) - 3 (in 0.2 steps) - 4.2 (in 0.4 steps), 5
+   sizegap_granularity = 10
    sizepeak_granularity = 10
-   peak_accuracy = 3  # in % - the less, the more accurate
+   peak_accuracy = 1
 
    # change measure windows:
    MACD_chwin = 5 # 3-8 
@@ -93,7 +95,7 @@ class Hedgehog(Strategy):
    vol_chwin = 5 # 2-?
    ADX_chwin = 5 #?
    bbands_chwin = 5 #?
-   peak_swingdist = 3 # 2-?
+   peak_swingdist = 2 # 2-?
 
    # indicator weights
    volume_weight = 1
@@ -165,8 +167,8 @@ class Hedgehog(Strategy):
       # DISCOVERY: Breaking these fibos indicates overall trend in that direction where it broke through!
       self.dirs = self.I(helpers.dir, self.data.Close, self.last_swing, self.seclast_swing)
       self.indicators = {'PSAR': self.PSAR, 'DIR': self.dirs,
-                         'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin, 'defuse_lvl': self.vol_defuse_lvl,
-                                 'pos2neg_factor': self.vol_pos2neg_factor, 'weight': self.volume_weight},
+                         'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin, 'mdfpwi': self.vol_mdfpwi,
+                                 'mpfpw': self.vol_mpfpw, 'weight': self.volume_weight},
                          'VWAP': {'vwap': self.VWAP, 'chwin': self.VWAP_chwin, 'weight': self.VWAP_weight}, 
                          'ATR': {'atr': self.ATR,  'weight': self.ATR_weight},
                          'ADX': {'adx': self.ADX_adx, 'DM+': self.ADX_DM_pos, 'DM-': self.ADX_DM_neg, 'chwin': self.ADX_chwin,

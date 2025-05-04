@@ -58,32 +58,35 @@ def get_DST_switch_startdays(year):
 
 
 
-def calc_pdfm(meanlist, voldiff, span, TS, clims):
+def calc_zsdfm(meanlist, voldiff, span, TS, clims):
    meanidx = None
    for i in range(len(meanlist)):
       if (i*clims <= TS.hour*60+TS.minute < (i+1)*clims):
          meanidx = i
-   first_diffmean = meanlist[(meanidx-span)+1] # works also over list end/begin
-   # +1 because otherwise it would result in 1 more than span included item!
-   voldiffmean = meanlist[meanidx]/(first_diffmean/100)-100
-   return voldiff - voldiffmean
+   # below, the loop is necessary because values are already relative, not absolute!
+   mean_diffsum = 0
+   for relval in meanlist[(meanidx-span)+2:meanidx+1]:
+      # +2: +1 cause otherwise it results in 1 more item than the span includes, and the other +1 cause
+      # the first relative difference from the first value must be taken from the second item!
+      mean_diffsum += relval
+   return voldiff - mean_diffsum
 
 
-def get_procentual_deviation_from_mean(voldiff, span, TS, VMMTs, clims):
-   PDFM = 0 # Procentual Deviation From Mean
+def get_vol2mean_zscore_deviation(voldiff, span, TS, VMMTs, clims):
+   ZSDFM = 0 # Procentual Deviation From Mean
    gsd = get_DST_switch_startdays
    if (((TS.month <= 3) and (TS.day < gsd(TS.year)[0])) or 
       ((TS.month >= 11) and (TS.day >= gsd(TS.year)[3]))):
-      PDFM = calc_pdfm(VMMTs['winter'], voldiff, span, TS, clims)
+      ZSDFM = calc_zsdfm(VMMTs['winter'], voldiff, span, TS, clims)
    elif (((TS.month == 3) and (gsd(TS.year)[0] <= TS.day < gsd(TS.year)[1])) or
          (((TS.month == 10) and (gsd(TS.year)[2] <= TS.day)) or
             ((TS.month == 11) and (TS.day < gsd(TS.year)[3])))):
-      PDFM = calc_pdfm(VMMTs['trans'], voldiff, span, TS, clims)
+      ZSDFM = calc_zsdfm(VMMTs['trans'], voldiff, span, TS, clims)
    elif (((TS.month == 3) and (TS.day >= gsd(TS.year)[1])) or
          ((TS.month == 10) and (TS.day < gsd(TS.year)[2])) or
          (3 < TS.month < 10)):
-      PDFM = calc_pdfm(VMMTs['summer'], voldiff, span, TS, clims)
-   return PDFM
+      ZSDFM = calc_zsdfm(VMMTs['summer'], voldiff, span, TS, clims)
+   return ZSDFM
 
 
    # old idea with surpass treshold:

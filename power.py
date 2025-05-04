@@ -1,7 +1,7 @@
 import helpers
 from moves import is_rising_above as rises
 from moves import is_falling_below as falls
-from DST_timehelper import get_procentual_deviation_from_mean
+from DST_timehelper import get_vol2mean_zscore_deviation
 
 
 def MACD_calcpower(macd, histo, 
@@ -107,22 +107,34 @@ def BB_calcpower(low, mid, high, Closes, weight):
    # (and compare effectiveness with old version)
 
 
-def VOL_calcpower(vols, pos2neg_factor, defuse_lvl, weight, TS, VMMTs, clims):
-   # voldiff = vols[-1]/(vols[0]/100)-100
+def VOL_calcpower(vols, mdfpwi, mpfpw, weight, TS, VMMTs, clims):  
+   # mnfpwi: "max decreasing factor per weight impact"
+   # mpfpw: "max positive factor per weight"
    zscore_volstart = (vols[0]-VMMTs['mean'])/VMMTs['std']
    zscore_volend = (vols[-1]-VMMTs['mean'])/VMMTs['std']
-   zvoldiff = zscore_volend - zscore_volstart
-   PDFM = get_procentual_deviation_from_mean(zvoldiff, len(vols), TS, VMMTs, clims)
+   zvoldiff = zscore_volend - zscore_volstart  # this is possible because absolute values are used here
+   # ^ this would not be possible with the already relative values in VMMTs!
+   ZSDFM = get_vol2mean_zscore_deviation(zvoldiff, len(vols), TS, VMMTs, clims) # ZSCORE DEVIATION FROM MEANS
    factor = 1
-   dePDFM = helpers.defuse(abs(PDFM), defuse_lvl)
-   maxval = helpers.defuse(1000, defuse_lvl)
-   if PDFM > 0:
-      factor += 0.2*(dePDFM/maxval)*weight
-   elif PDFM < 0:
-      factor -= 0.16666*(dePDFM/maxval)*weight
-   print('VOL-FACTOR:', factor)
+   if ZSDFM < 0:
+      factor -= mdfpwi*(ZSDFM/VMMTs['min'])*weight
+      if factor < 1 / abs(VMMTs['min'])*weight:
+         factor = 1 / abs(VMMTs['min'])*weight
+   elif ZSDFM > 0:
+      factor += ZSDFM*weight
+      if factor > mpfpw:
+         factor = mpfpw
    return factor
    
+
+   # with the new z score normalized version, the below defusing/adjusting isn't necessary anymore
+   # dePDFM = helpers.defuse(abs(PDFM), defuse_lvl)
+   # maxval = helpers.defuse(1000, defuse_lvl)
+   # if ZSDFM > 0:
+   #    factor += 0.2*(deZSDFM/maxval)*weight
+   # elif ZSDFM < 0:
+   #    factor -= 0.16666*(deZSDFM/maxval)*weight
+
    #  normdev = (PDFM - VMMTs['mean']) / VMMTs['std'] # z score normalization --> nice, but not really helping here
    # old idea with surpass treshold:
    # vpdf = get_volume_peak_defusing_factor(TS)
@@ -164,14 +176,16 @@ def CAMA_calcpower(pow, close_val, R4, R3, S3, S4, w3, w4):
 def PEAK_calcpower(pow, dir, uppeak, downpeak, acc, weight, last, close_val, swingdist):
    factor = 1
    if ((pow < 0 and dir[-1] < 0 and dir[-swingdist] > 0 and  # "dir[-swingdist]" implements distance of last swing
-        (uppeak - uppeak*(acc/200) <= last <= uppeak + uppeak*(acc/200))) or
+        # BELOW YOU MUST ADD THE PEAK VAL TO THE LAST SWINGS VAL!!!!
+        (uppeak - uppeak*(0.25/acc) <= last <= uppeak + uppeak*(0.25/acc))) or
         (pow > 0 and dir[-1] > 0 and dir[-swingdist] < 0 and 
-         (downpeak - downpeak*(acc/200) <= last <= downpeak + downpeak*(acc/200)))):
+         (downpeak - downpeak*(0.25/acc) <= last <= downpeak + downpeak*(0.25/acc)))):
       factor += weight/5
    elif ((pow < 0 and all(d < 0 for d in dir[-swingdist:]) and # "after more than 'swingdist' candles into same dir"
-         (downpeak - downpeak*(acc/200) <= (last - close_val) <= downpeak + downpeak*(acc/200))) or
+          # BELOW YOU MUST SUBTRACT THE PEAK VAL TO THE LAST SWINGS VAL!!!!
+         (downpeak - downpeak*(0.25/acc) <= (last - close_val) <= downpeak + downpeak*(0.25/acc))) or
          (pow > 0 and all(d > 0 for d in dir[-swingdist:]) and 
-          (uppeak - uppeak*(acc/200) <= (close_val - last) <= uppeak + uppeak*(acc/200)))):
+          (uppeak - uppeak*(0.25/acc) <= (close_val - last) <= uppeak + uppeak*(0.25/acc)))):
       factor -= weight/5
    return factor
 
@@ -220,8 +234,8 @@ def powers(Close, T, last, timestamps, VMMTs, clims, impact_counter):
                                 T['BB']['high'][idx-(T['BB']['chwin']-1):idx+1], Close[idx-(T['FIBO']['chwin']):idx], T['BB']['weight'])
          detector = detect_impact(impact_counter, power, detector, 'BB')
 
-         power *= VOL_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['pos2neg_factor'],
-                                T['VOL']['defuse_lvl'], T['VOL']['weight'], timestamps[idx-1], VMMTs, clims)
+         power *= VOL_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['mdfpwi'],
+                                T['VOL']['mpfpw'], T['VOL']['weight'], timestamps[idx-1], VMMTs, clims)
          detector = detect_impact(impact_counter, power, detector, 'VOL')
 
          power *= ADX_calcpower(power, T['ADX']['adx'][idx-(T['ADX']['chwin']-1):idx+1], T['ADX']['DM+'][idx],
@@ -236,7 +250,7 @@ def powers(Close, T, last, timestamps, VMMTs, clims, impact_counter):
                                  T['PEAK']['accuracy'], T['PEAK']['weight'], last, Close[idx-1], T['PEAK']['swingdist'])
          detector = detect_impact(impact_counter, power, detector, 'PEAK')
 
-         print('_______________________________')
+         # print('_______________________________')
       powers.append(power)
    
    # floats = 0

@@ -38,12 +38,11 @@ def adjust_volume_data(vol_series):
 
 
 def convert2VMMT_dict(volmean_df):
-    return {'winter': volmean_df['winter'].tolist(),
-            'trans': volmean_df['trans'].tolist(),
-            'summer': volmean_df['summer'].tolist(),
-            'mean': np.mean(pd.concat([volmean_df['winter'], volmean_df['trans'], volmean_df['summer']], ignore_index=True)),
-            'std': np.std(pd.concat([volmean_df['winter'], volmean_df['trans'], volmean_df['summer']], ignore_index=True))}
-
+   vmmt_dict = {'winter': volmean_df['winter'].tolist(), 'trans': volmean_df['trans'].tolist(), 'summer': volmean_df['summer'].tolist(),
+                'mean': volmean_df['mean'][0], 'std': volmean_df['std'][0]}
+   vmmt_dict['min'] = min(vmmt_dict['winter'] + vmmt_dict['trans'] + vmmt_dict['summer'])
+   print('mean:', vmmt_dict['mean'], 'std:', vmmt_dict['std'], 'min:', vmmt_dict['min'])
+   return vmmt_dict
 
 
 def defuse(val, lvl):
