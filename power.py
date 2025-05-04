@@ -173,25 +173,40 @@ def CAMA_calcpower(pow, close_val, R4, R3, S3, S4, w3, w4):
    return factor
 
 
-def PEAK_calcpower(pow, dir, uppeak, downpeak, acc, weight, last, close_val, swingdist):
+def PEAK_calcpower(pow, dir_val, uppeak, downpeak, acc, weight, last_val, close_val):
    factor = 1
-   if ((pow < 0 and dir[-1] < 0 and dir[-swingdist] > 0 and  # "dir[-swingdist]" implements distance of last swing
-        # BELOW YOU MUST ADD THE PEAK VAL TO THE LAST SWINGS VAL!!!!
-        (uppeak - uppeak*(0.25/acc) <= last <= uppeak + uppeak*(0.25/acc))) or
-        (pow > 0 and dir[-1] > 0 and dir[-swingdist] < 0 and 
-         (downpeak - downpeak*(0.25/acc) <= last <= downpeak + downpeak*(0.25/acc)))):
-      factor += weight/5
-   elif ((pow < 0 and all(d < 0 for d in dir[-swingdist:]) and # "after more than 'swingdist' candles into same dir"
-          # BELOW YOU MUST SUBTRACT THE PEAK VAL TO THE LAST SWINGS VAL!!!!
-         (downpeak - downpeak*(0.25/acc) <= (last - close_val) <= downpeak + downpeak*(0.25/acc))) or
-         (pow > 0 and all(d > 0 for d in dir[-swingdist:]) and 
-          (uppeak - uppeak*(0.25/acc) <= (close_val - last) <= uppeak + uppeak*(0.25/acc)))):
-      factor -= weight/5
+   if (((pow < 0 and dir_val < 0 and close_val < last_val) and 
+        (last_val - (downpeak - close_val*(acc/200)) <= close_val <= (last_val - (downpeak + close_val*(acc/200))))) or
+        ((pow > 0 and dir_val > 0 and close_val > last_val) and 
+         (last_val + (uppeak - close_val*(acc/200)) <= last_val <= (last_val + (uppeak + close_val*(acc/200)))))):
+      if weight/10 < 1:
+         factor -= weight/10
+      else:
+         factor = 0
    return factor
 
 
-def detect_impact(impact_counter, power, detector, tech_ind):
-   if power != detector:
+# OLD VERSION (WITH A DIFFERENTIATION FROM REVERSAL CONFIRMATION BY CANDLE AMOUNT SINCE LAST SWING... NOT CONVINCING):
+# def PEAK_calcpower(pow, dir, uppeak, downpeak, acc, weight, last, close_val, swingdist):
+#    factor = 1
+#    if ((pow < 0 and dir[-1] < 0 and dir[-swingdist] > 0 and  # "dir[-swingdist]" implements distance of last swing
+#         # BELOW YOU MUST ADD THE PEAK VAL TO THE LAST SWINGS VAL!!!!
+#         (last - (downpeak - downpeak*(acc/200)) <= close_val <= (last - (downpeak + downpeak*(acc/200))))) or
+
+#         (pow > 0 and dir[-1] > 0 and dir[-swingdist] < 0 and 
+#          (last + (uppeak - uppeak*(acc/200)) <= last <= (last + (uppeak + uppeak*(acc/200)))))):
+#       factor += weight/5
+#    elif ((pow < 0 and all(d < 0 for d in dir[-swingdist:]) and # "after more than 'swingdist' candles into same dir"
+#           # BELOW YOU MUST SUBTRACT THE PEAK VAL TO THE LAST SWINGS VAL!!!!
+#          (downpeak - downpeak*(0.25/acc) <= (last - close_val) <= downpeak + downpeak*(0.25/acc))) or
+#          (pow > 0 and all(d > 0 for d in dir[-swingdist:]) and 
+#           (uppeak - uppeak*(0.25/acc) <= (close_val - last) <= uppeak + uppeak*(0.25/acc)))):
+#       factor -= weight/5
+#    return factor
+
+
+def detect_impact(impact_counter, power, lastpower, tech_ind):
+   if power != lastpower:
       impact_counter[tech_ind] += 1
    # print(f'power after {tech_ind}:', power)
    return power
@@ -205,50 +220,51 @@ def powers(Close, T, last, timestamps, VMMTs, clims, impact_counter):
    powers = []
    for idx in range(len(Close)):
       power = 0
-      detector = 0
+      lastpower = 0
       # if using Close for calculation, don't forget to use -1 or lower index than current.
       if idx > 15 and idx % 10 == 0:
          power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['macd_chwin']-1):idx+1], 
                                  T['MACD']['histo'][idx-(T['MACD']['histo_chwin']-1):idx+1], 
                                  # T['MACD']['signal'][idx-(T['MACD']['signal_chwin']-1):idx+1], # not used (yet?)
                                  T['MACD']['zeroweight'], T['MACD']['histoweight'])
-         detector = detect_impact(impact_counter, power, detector, 'MACD')
+         lastpower = detect_impact(impact_counter, power, lastpower, 'MACD')
 
          power += VWAP_calcpower(Close[idx-1], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1], T['VWAP']['weight'])  # --> vwap misuse?
          # I 'misuse' the fibonacci points in a unconventional way as breakthrough indicator.
-         detector = detect_impact(impact_counter, power, detector, 'VWAP')
+         lastpower = detect_impact(impact_counter, power, lastpower, 'VWAP')
 
          power += FIBO_calcpower(Close[idx-(T['FIBO']['chwin']):idx], T['DIR'][idx], T['FIBO'][2][idx], T['FIBO'][4][idx],
                                       T['FIBO'][6][idx], T['FIBO'][8][idx], T['FIBO']['weight'])
-         detector = detect_impact(impact_counter, power, detector, 'FIBO')
+         lastpower = detect_impact(impact_counter, power, lastpower, 'FIBO')
 
          power += RSI_calcpower(T['RSI']['rsi'][idx-(T['RSI']['chwin']-1):idx+1], T['RSI']['low'],
                                 T['RSI']['high'], T['RSI']['weight'])
-         detector = detect_impact(impact_counter, power, detector, 'RSI')
+         lastpower = detect_impact(impact_counter, power, lastpower, 'RSI')
 
          power += CCI_calcpower(T['CCI']['cci'][idx-(T['CCI']['chwin']-1):idx+1], T['CCI']['low'],
                                 T['CCI']['high'], T['CCI']['weight'])
-         detector = detect_impact(impact_counter, power, detector, 'CCI')
+         lastpower = detect_impact(impact_counter, power, lastpower, 'CCI')
 
          power += BB_calcpower(T['BB']['low'][idx-(T['BB']['chwin']-1):idx+1], T['BB']['mid'][idx-(T['BB']['chwin']-1):idx+1],
-                                T['BB']['high'][idx-(T['BB']['chwin']-1):idx+1], Close[idx-(T['FIBO']['chwin']):idx], T['BB']['weight'])
-         detector = detect_impact(impact_counter, power, detector, 'BB')
+                                T['BB']['high'][idx-(T['BB']['chwin']-1):idx+1], Close[idx-(T['BB']['chwin']):idx], T['BB']['weight'])
+         lastpower = detect_impact(impact_counter, power, lastpower, 'BB')
 
          power *= VOL_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['mdfpwi'],
                                 T['VOL']['mpfpw'], T['VOL']['weight'], timestamps[idx-1], VMMTs, clims)
-         detector = detect_impact(impact_counter, power, detector, 'VOL')
+         lastpower = detect_impact(impact_counter, power, lastpower, 'VOL')
 
          power *= ADX_calcpower(power, T['ADX']['adx'][idx-(T['ADX']['chwin']-1):idx+1], T['ADX']['DM+'][idx],
                                 T['ADX']['DM-'][idx], T['ADX']['treshold'], T['ADX']['abs_weight'], T['ADX']['dyn_weight'])
-         detector = detect_impact(impact_counter, power, detector, 'ADX')
+         lastpower = detect_impact(impact_counter, power, lastpower, 'ADX')
 
          power *= CAMA_calcpower(power, Close[idx-1], T['CAMA']['R4'][idx], T['CAMA']['R3'][idx], T['CAMA']['S3'][idx],
                                  T['CAMA']['S4'][idx], T['CAMA']['3weight'], T['CAMA']['4weight'])
-         detector = detect_impact(impact_counter, power, detector, 'CAMA')
+         lastpower = detect_impact(impact_counter, power, lastpower, 'CAMA')
 
-         power *= PEAK_calcpower(power, T['DIR'][idx-(T['PEAK']['swingdist']-1):idx+1], T['PEAK']['+'], T['PEAK']['-'],
-                                 T['PEAK']['accuracy'], T['PEAK']['weight'], last, Close[idx-1], T['PEAK']['swingdist'])
-         detector = detect_impact(impact_counter, power, detector, 'PEAK')
+         power *= PEAK_calcpower(power, T['DIR'][idx], T['PEAK']['+'], T['PEAK']['-'],
+                                 T['PEAK']['accuracy'], T['PEAK']['weight'], last[idx], Close[idx-1] #, T['PEAK']['swingdist']
+         )
+         lastpower = detect_impact(impact_counter, power, lastpower, 'PEAK')
 
          # print('_______________________________')
       powers.append(power)

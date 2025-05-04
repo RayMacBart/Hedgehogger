@@ -83,7 +83,7 @@ class Hedgehog(Strategy):
    vol_mpfpw = 1.5  # 1.2 - 2 (in 0.1 steps) - 3 (in 0.2 steps) - 4.2 (in 0.4 steps), 5
    sizegap_granularity = 10
    sizepeak_granularity = 10
-   peak_accuracy = 1
+   peak_accuracy = 5  # area of peak value recognition in % --> the lower, the more accurate!
 
    # change measure windows:
    MACD_chwin = 5 # 3-8 
@@ -95,7 +95,7 @@ class Hedgehog(Strategy):
    vol_chwin = 5 # 2-?
    ADX_chwin = 5 #?
    bbands_chwin = 5 #?
-   peak_swingdist = 2 # 2-?
+   # peak_swingdist = 2 # 2-?
 
    # indicator weights
    volume_weight = 1
@@ -186,8 +186,9 @@ class Hedgehog(Strategy):
                          'CAMA': {'R4': self.cama_R4, 'R3': self.cama_R3, 'S3': self.cama_S3,
                                   'S4': self.cama_S4, '3weight': self.cama3_weight, '4weight': self.cama4_weight},
                          'GAP': {'+': self.sizegap_up, '-': self.sizegap_down, 'weight': self.gap_weight},
-                         'PEAK': {'+': self.sizepeak_up, '-': self.sizepeak_down, 'accuracy': self.peak_accuracy, 
-                                  'swingdist': self.peak_swingdist, 'weight': self.peak_weight},
+                         'PEAK': {'+': self.sizepeak_up, '-': self.sizepeak_down, 'accuracy': self.peak_accuracy, 'weight': self.peak_weight
+                                 #  , 'swingdist': self.peak_swingdist
+                                  },
                          'FIBO': {2: self.fibo_dist2, 4: self.fibo_dist4, 6: self.fibo_dist6,
                                   8: self.fibo_dist8, 'chwin': self.fibo_chwin, 'weight': self.fibo_weight}
                         }
