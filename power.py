@@ -2,6 +2,7 @@ import helpers
 from moves import is_rising_above as rises
 from moves import is_falling_below as falls
 from DST_timehelper import get_vol2mean_zscore_deviation
+import pdb
 
 
 def MACD_calcpower(macd, histo, 
@@ -81,19 +82,24 @@ def CCI_calcpower(cci, low, high, weight):
    return shift
 
 
-def BB_calcpower(low, mid, high, Closes, weight):
+def BB_calcpower(low, mid, high, Highs, Lows, dir, weight):
    shift = 0
-   if rises(Closes) and (Closes[-1] < ((mid[-1]*2 + low[-1]) / 3)): # one third below mid
+   # pdb.set_trace()
+   if dir > 0 and (Lows[-1] < mid[-1]):
+   # old version: (also removed below from check: rises(Closes) and replaced with dir>0 and Lows)
+   # if dir > 0 and (Lows[-1] < ((mid[-1]*2 + low[-1]) / 3)): # below one third below mid
       touched = False
-      for i in range(len(Closes)):
-         if Closes[i] <= low[i]:
+      for i in range(len(Lows)):
+         if Lows[i] <= low[i]:
             touched = True
       if touched:
          shift += weight
-   elif falls(Closes) and (Closes[-1] > ((mid[-1]*2 + high[-1]) / 3)): # one third above mid
+   elif dir < 0 and (Highs[-1] > mid[-1]): # above one third above mid
+   # old version: (also removed below from check: falls(Closes) and replaced with dir<0 and Highs)
+   # elif dir < 0 and (Highs[-1] > ((mid[-1]*2 + high[-1]) / 3)): # above one third above mid
       touched = False
-      for i in range(len(Closes)):
-         if Closes[i] >= high[i]:
+      for i in range(len(Highs)):
+         if Highs[i] >= high[i]:
             touched = True
       if touched:
          shift -= weight
@@ -216,9 +222,10 @@ def detect_impact(impact_counter, power, lastpower, tech_ind):
 # FUTURE TEST FOR EFFECTIVENESS: define range-bound phases: they occur if "power" is near 0 or
 # if a variable that measures the 'power' of trend indicators only is near 0.
 # in such a range-bound phase, e.g. touching cama-points, fibo-points or outer BBs could be a reversal signal.
-def powers(Close, T, last, timestamps, VMMTs, clims, impact_counter):
+
+def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
    powers = []
-   for idx in range(len(Close)):
+   for idx in range(len(Data.Close)):
       power = 0
       lastpower = 0
       # if using Close for calculation, don't forget to use -1 or lower index than current.
@@ -229,11 +236,11 @@ def powers(Close, T, last, timestamps, VMMTs, clims, impact_counter):
                                  T['MACD']['zeroweight'], T['MACD']['histoweight'])
          lastpower = detect_impact(impact_counter, power, lastpower, 'MACD')
 
-         power += VWAP_calcpower(Close[idx-1], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1], T['VWAP']['weight'])  # --> vwap misuse?
+         power += VWAP_calcpower(Data.Close[idx-1], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1], T['VWAP']['weight'])  # --> vwap misuse?
          # I 'misuse' the fibonacci points in a unconventional way as breakthrough indicator.
          lastpower = detect_impact(impact_counter, power, lastpower, 'VWAP')
 
-         power += FIBO_calcpower(Close[idx-(T['FIBO']['chwin']):idx], T['DIR'][idx], T['FIBO'][2][idx], T['FIBO'][4][idx],
+         power += FIBO_calcpower(Data.Close[idx-(T['FIBO']['chwin']):idx], T['DIR'][idx], T['FIBO'][2][idx], T['FIBO'][4][idx],
                                       T['FIBO'][6][idx], T['FIBO'][8][idx], T['FIBO']['weight'])
          lastpower = detect_impact(impact_counter, power, lastpower, 'FIBO')
 
@@ -246,7 +253,8 @@ def powers(Close, T, last, timestamps, VMMTs, clims, impact_counter):
          lastpower = detect_impact(impact_counter, power, lastpower, 'CCI')
 
          power += BB_calcpower(T['BB']['low'][idx-(T['BB']['chwin']-1):idx+1], T['BB']['mid'][idx-(T['BB']['chwin']-1):idx+1],
-                                T['BB']['high'][idx-(T['BB']['chwin']-1):idx+1], Close[idx-(T['BB']['chwin']):idx], T['BB']['weight'])
+                                T['BB']['high'][idx-(T['BB']['chwin']-1):idx+1], Data.High[idx-(T['BB']['chwin']):idx], 
+                                Data.Low[idx-(T['BB']['chwin']):idx], T['DIR'][idx], T['BB']['weight'])
          lastpower = detect_impact(impact_counter, power, lastpower, 'BB')
 
          power *= VOL_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['mdfpwi'],
@@ -257,12 +265,12 @@ def powers(Close, T, last, timestamps, VMMTs, clims, impact_counter):
                                 T['ADX']['DM-'][idx], T['ADX']['treshold'], T['ADX']['abs_weight'], T['ADX']['dyn_weight'])
          lastpower = detect_impact(impact_counter, power, lastpower, 'ADX')
 
-         power *= CAMA_calcpower(power, Close[idx-1], T['CAMA']['R4'][idx], T['CAMA']['R3'][idx], T['CAMA']['S3'][idx],
+         power *= CAMA_calcpower(power, Data.Close[idx-1], T['CAMA']['R4'][idx], T['CAMA']['R3'][idx], T['CAMA']['S3'][idx],
                                  T['CAMA']['S4'][idx], T['CAMA']['3weight'], T['CAMA']['4weight'])
          lastpower = detect_impact(impact_counter, power, lastpower, 'CAMA')
 
          power *= PEAK_calcpower(power, T['DIR'][idx], T['PEAK']['+'], T['PEAK']['-'],
-                                 T['PEAK']['accuracy'], T['PEAK']['weight'], last[idx], Close[idx-1] #, T['PEAK']['swingdist']
+                                 T['PEAK']['accuracy'], T['PEAK']['weight'], last[idx], Data.Close[idx-1] #, T['PEAK']['swingdist']
          )
          lastpower = detect_impact(impact_counter, power, lastpower, 'PEAK')
 

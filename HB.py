@@ -192,7 +192,7 @@ class Hedgehog(Strategy):
                          'FIBO': {2: self.fibo_dist2, 4: self.fibo_dist4, 6: self.fibo_dist6,
                                   8: self.fibo_dist8, 'chwin': self.fibo_chwin, 'weight': self.fibo_weight}
                         }
-      self.powers = self.I(powers, self.data.Close, self.indicators, self.last_swing, self.data.index, self.volmean_movetimes, clims, impact_counter)
+      self.powers = self.I(powers, self.data, self.indicators, self.last_swing, self.data.index, self.volmean_movetimes, clims, impact_counter)
 
       # indis for stopdist calc: PSAR, ATR, BB width, GAP
 
