@@ -2,7 +2,7 @@ import helpers
 from moves import is_rising_above as rises
 from moves import is_falling_below as falls
 from DST_timehelper import get_vol2mean_zscore_deviation
-import pdb
+# import pdb
 
 
 def MACD_calcpower(macd, histo, 
@@ -21,6 +21,7 @@ def MACD_calcpower(macd, histo,
 
 
 def VWAP_calcpower(close_val, vwap, weight):
+   # this only relative movement - maybe also implement absolute dedection of being above/below tresholds (= new variables)
    shift = 0
    if falls(vwap, close_val):
       shift += weight
@@ -82,11 +83,10 @@ def CCI_calcpower(cci, low, high, weight):
    return shift
 
 
-def BB_calcpower(low, mid, high, Highs, Lows, dir, weight):
+def BB_outer_touch_calcpower(low, mid, high, Highs, Lows, dir, weight):
    shift = 0
-   # pdb.set_trace()
    if dir > 0 and (Lows[-1] < mid[-1]):
-   # old version: (also removed below from check: rises(Closes) and replaced with dir>0 and Lows)
+   # old, pickier (maybe better!!!) version: (also removed below from check: rises(Closes) and replaced with dir>0 and Lows)
    # if dir > 0 and (Lows[-1] < ((mid[-1]*2 + low[-1]) / 3)): # below one third below mid
       touched = False
       for i in range(len(Lows)):
@@ -95,7 +95,7 @@ def BB_calcpower(low, mid, high, Highs, Lows, dir, weight):
       if touched:
          shift += weight
    elif dir < 0 and (Highs[-1] > mid[-1]): # above one third above mid
-   # old version: (also removed below from check: falls(Closes) and replaced with dir<0 and Highs)
+   # old, pickier (maybe better!!!) version: (also removed below from check: falls(Closes) and replaced with dir<0 and Highs)
    # elif dir < 0 and (Highs[-1] > ((mid[-1]*2 + high[-1]) / 3)): # above one third above mid
       touched = False
       for i in range(len(Highs)):
@@ -111,6 +111,12 @@ def BB_calcpower(low, mid, high, Highs, Lows, dir, weight):
    # reversal direction is confirmed by mid band rise/fall!
    # observe wether this guessing or the confirming strategy works better and change other indicator to better strategy
    # (and compare effectiveness with old version)
+
+def BB_trend_calcpower(pow, mids, widths, expfac, weight):  # expfac: width expansion factor
+   factor = 1
+   if (((pow > 0) and rises(mids)) or ((pow < 0) and falls(mids))) and rises(widths, widths[0]*expfac):
+      factor += weight/5
+   return factor
 
 
 def VOL_calcpower(vols, mdfpwi, mpfpw, weight, TS, VMMTs, clims):  
@@ -252,9 +258,12 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
                                 T['CCI']['high'], T['CCI']['weight'])
          lastpower = detect_impact(impact_counter, power, lastpower, 'CCI')
 
-         power += BB_calcpower(T['BB']['low'][idx-(T['BB']['chwin']-1):idx+1], T['BB']['mid'][idx-(T['BB']['chwin']-1):idx+1],
-                                T['BB']['high'][idx-(T['BB']['chwin']-1):idx+1], Data.High[idx-(T['BB']['chwin']):idx], 
-                                Data.Low[idx-(T['BB']['chwin']):idx], T['DIR'][idx], T['BB']['weight'])
+         power += BB_outer_touch_calcpower(T['BB']['low'][idx-(T['BB']['chwin-out']-1):idx+1], T['BB']['mid'][idx-(T['BB']['chwin-out']-1):idx+1],
+                                T['BB']['high'][idx-(T['BB']['chwin-out']-1):idx+1], Data.High[idx-(T['BB']['chwin-out']):idx], 
+                                Data.Low[idx-(T['BB']['chwin-out']):idx], T['DIR'][idx], T['BB']['weight-out'])
+         lastpower = detect_impact(impact_counter, power, lastpower, 'BB')
+         power *= BB_trend_calcpower(power, T['BB']['mid'][idx-(T['BB']['chwin-trend']-1):idx+1], 
+                                     T['BB']['width'][idx-(T['BB']['chwin-trend']-1):idx+1], T['BB']['expfac'], T['BB']['weight-trend'])
          lastpower = detect_impact(impact_counter, power, lastpower, 'BB')
 
          power *= VOL_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['mdfpwi'],

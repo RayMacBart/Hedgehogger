@@ -77,6 +77,7 @@ class Hedgehog(Strategy):
    sizegap_win = 100
    sizepeak_win = 100
 
+   bbands_expfac = 1.3  # width expansion factor that shall be reacted upon - the lower the more sensitive/reactive. use 0.1 steps
    # mnfpwi: "max decreasing factor per weight impact"
    vol_mdfpwi = 0.15  # 0.05 - 0.4  (in 0.05 steps)
    # mpfpw: "max positive factor per weight"
@@ -94,7 +95,8 @@ class Hedgehog(Strategy):
    CCI_chwin = 5 # 3-10
    vol_chwin = 5 # 2-?
    ADX_chwin = 5 #?
-   bbands_chwin = 5 #?
+   bbands_chwin_out = 5 #?
+   bbands_chwin_trend = 5 # 3-8
    # peak_swingdist = 2 # 2-?
 
    # indicator weights
@@ -105,7 +107,8 @@ class Hedgehog(Strategy):
    CCI_weight = 1
    MACD_zeroweight = 1
    MACD_histoweight = 1
-   bbands_weight = 1
+   bbands_weight_out = 1
+   bbands_weight_trend = 1
    cama3_weight = 1
    cama4_weight = 1
    VWAP_weight = 1
@@ -182,7 +185,9 @@ class Hedgehog(Strategy):
                                   'macd_chwin': self.MACD_chwin, 'histo_chwin': self.histo_chwin,
                                   'zeroweight': self.MACD_zeroweight, 'histoweight': self.MACD_histoweight},
                          'BB': {'low': self.lowerband, 'high': self.upperband,'mid': self.middleband,
-                                'width': self.bandwidth, 'chwin': self.bbands_chwin, 'weight': self.bbands_weight},
+                                'width': self.bandwidth, 'chwin-out': self.bbands_chwin_out, 'chwin-trend': self.bbands_chwin_trend,
+                                'weight-out': self.bbands_weight_out, 'weight-trend': self.bbands_weight_trend,
+                                'expfac': self.bbands_expfac},  # width expansion factor
                          'CAMA': {'R4': self.cama_R4, 'R3': self.cama_R3, 'S3': self.cama_S3,
                                   'S4': self.cama_S4, '3weight': self.cama3_weight, '4weight': self.cama4_weight},
                          'GAP': {'+': self.sizegap_up, '-': self.sizegap_down, 'weight': self.gap_weight},
