@@ -51,7 +51,9 @@ df['Close'] = df['Close'].apply(helpers.remove_nocomma_anomaly)
 
 df['Volume'] = helpers.adjust_volume_data(df['Volume']).set_axis(df.index)
 
-impact_counter = {'MACD': 0, 'VWAP': 0, 'FIBO': 0, 'RSI': 0, 'CCI': 0, 'BB': 0, 'VOL': 0, 'ADX': 0, 'CAMA': 0, 'PEAK': 0}
+impact_counter = {'MACD': 0, 'MACD-zeroX': 0, 'MACD-sigX': 0, 'VWAP': 0, 'FIBO': 0, 'RSI': 0, 'RSI-abs': 0, 'RSI-dyn': 0,
+                  'CCI': 0, 'CCI-abs': 0, 'CCI-dyn': 0, 'BB-out': 0, 'BB-trend': 0, 'ADX': 0, 'ADX-abs': 0, 'ADX-dyn': 0,
+                  'VOL': 0, 'CAMA': 0, 'PEAK': 0}
 
 class Hedgehog(Strategy):
 
@@ -60,10 +62,10 @@ class Hedgehog(Strategy):
    RSI_lower_bound = 40
    CCI_upper_treshold = 100
    CCI_lower_treshold = -100
-   ADX_treshold = 30
+   ADX_treshold = 25
 
    # indicator calculation windows
-   RSI_win = 90
+   RSI_win = 20
    CCI_win = 20
    MACD_shortwin = 12
    MACD_longwin = 26
@@ -77,7 +79,10 @@ class Hedgehog(Strategy):
    sizegap_win = 100
    sizepeak_win = 100
 
-   bbands_expfac = 1.3  # width expansion factor that shall be reacted upon - the lower the more sensitive/reactive. use 0.1 steps
+   # 'expfac:' expansion factors that shall be reacted upon - the lower the more sensitive/reactive. use 0.1 steps
+   vwap_expfac = 1.2  # difference between price and vwap 
+   bbands_expfac = 1.3  # width between outer bands
+
    # mnfpwi: "max decreasing factor per weight impact"
    vol_mdfpwi = 0.15  # 0.05 - 0.4  (in 0.05 steps)
    # mpfpw: "max positive factor per weight"
@@ -89,7 +94,7 @@ class Hedgehog(Strategy):
    # change measure windows:
    MACD_chwin = 5 # 3-8 
    histo_chwin = 5 # 3-8
-   VWAP_chwin = 5 # 3-8
+   VWAP_chwin = 8 # 3-8
    fibo_chwin = 5 # 3-8
    RSI_chwin = 5 # 3-10
    CCI_chwin = 5 # 3-10
@@ -172,7 +177,8 @@ class Hedgehog(Strategy):
       self.indicators = {'PSAR': self.PSAR, 'DIR': self.dirs,
                          'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin, 'mdfpwi': self.vol_mdfpwi,
                                  'mpfpw': self.vol_mpfpw, 'weight': self.volume_weight},
-                         'VWAP': {'vwap': self.VWAP, 'chwin': self.VWAP_chwin, 'weight': self.VWAP_weight}, 
+                         'VWAP': {'vwap': self.VWAP, 'chwin': self.VWAP_chwin, 'weight': self.VWAP_weight,
+                                  'expfac': self.vwap_expfac}, # difference expansion factor
                          'ATR': {'atr': self.ATR,  'weight': self.ATR_weight},
                          'ADX': {'adx': self.ADX_adx, 'DM+': self.ADX_DM_pos, 'DM-': self.ADX_DM_neg, 'chwin': self.ADX_chwin,
                                  'treshold': self.ADX_treshold, 'abs_weight': self.ADX_abs_weight, 'dyn_weight': self.ADX_dyn_weight},
