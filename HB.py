@@ -53,7 +53,9 @@ df['Volume'] = helpers.adjust_volume_data(df['Volume']).set_axis(df.index)
 
 impact_counter = {'MACD': 0, 'MACD-zeroX': 0, 'MACD-sigX': 0, 'VWAP': 0, 'FIBO': 0, 'RSI': 0, 'RSI-abs': 0, 'RSI-dyn': 0,
                   'CCI': 0, 'CCI-abs': 0, 'CCI-dyn': 0, 'BB-out': 0, 'BB-trend': 0, 'ADX': 0, 'ADX-abs': 0, 'ADX-dyn': 0,
-                  'VOL': 0, 'CAMA': 0, 'PEAK': 0}
+                  'VOL': 0, 'CAMA': 0, 'GAP': 0, 'PEAK': 0, 'ATR': 0, 'ATR-abs': 0, 'ATR-dyn': 0}
+
+
 
 class Hedgehog(Strategy):
 
@@ -89,6 +91,7 @@ class Hedgehog(Strategy):
    vol_mpfpw = 1.5  # 1.2 - 2 (in 0.1 steps) - 3 (in 0.2 steps) - 4.2 (in 0.4 steps), 5
    sizegap_granularity = 10
    sizepeak_granularity = 10
+   gap_accuracy = 5  # area of gap value recognition in % --> the lower, the more accurate!
    peak_accuracy = 5  # area of peak value recognition in % --> the lower, the more accurate!
 
    # change measure windows:
@@ -100,6 +103,8 @@ class Hedgehog(Strategy):
    CCI_chwin = 5 # 3-10
    vol_chwin = 5 # 2-?
    ADX_chwin = 5 #?
+   ATR_chwin = 5
+   ATR_mincalcwin = 100  # minimum of used data for zscore calculation for absolute valued indications
    bbands_chwin_out = 5 #?
    bbands_chwin_trend = 5 # 3-8
    # peak_swingdist = 2 # 2-?
@@ -127,7 +132,7 @@ class Hedgehog(Strategy):
    stopdist = 0.0003
 
    volmean_movetimes = helpers.convert2VMMT_dict(volmean_df)
-   
+
 
 
    def init(self):
@@ -179,7 +184,8 @@ class Hedgehog(Strategy):
                                  'mpfpw': self.vol_mpfpw, 'weight': self.volume_weight},
                          'VWAP': {'vwap': self.VWAP, 'chwin': self.VWAP_chwin, 'weight': self.VWAP_weight,
                                   'expfac': self.vwap_expfac}, # difference expansion factor
-                         'ATR': {'atr': self.ATR,  'weight': self.ATR_weight},
+                         'ATR': {'atr': self.ATR,  'chwin': self.ATR_chwin, 'mincalcwin': self.ATR_mincalcwin,
+                                 'win': self.ATR_win, 'weight': self.ATR_weight},
                          'ADX': {'adx': self.ADX_adx, 'DM+': self.ADX_DM_pos, 'DM-': self.ADX_DM_neg, 'chwin': self.ADX_chwin,
                                  'treshold': self.ADX_treshold, 'abs_weight': self.ADX_abs_weight, 'dyn_weight': self.ADX_dyn_weight},
                          'RSI': {'rsi': self.RSI, 'low': self.RSI_lower_bound, 'high': self.RSI_upper_bound,
@@ -196,7 +202,7 @@ class Hedgehog(Strategy):
                                 'expfac': self.bbands_expfac},  # width expansion factor
                          'CAMA': {'R4': self.cama_R4, 'R3': self.cama_R3, 'S3': self.cama_S3,
                                   'S4': self.cama_S4, '3weight': self.cama3_weight, '4weight': self.cama4_weight},
-                         'GAP': {'+': self.sizegap_up, '-': self.sizegap_down, 'weight': self.gap_weight},
+                         'GAP': {'+': self.sizegap_up, '-': self.sizegap_down, 'accuracy': self.gap_accuracy, 'weight': self.gap_weight},
                          'PEAK': {'+': self.sizepeak_up, '-': self.sizepeak_down, 'accuracy': self.peak_accuracy, 'weight': self.peak_weight
                                  #  , 'swingdist': self.peak_swingdist
                                   },
