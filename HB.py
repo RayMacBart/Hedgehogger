@@ -14,7 +14,6 @@ import reaction
 from power import powers
 import TSL
 from backtesting import Backtest, Strategy
-from radar import radar
 from backtesting.lib import crossover
 
 asset = sys.argv[1] if len(sys.argv) > 1 else "EURUSD"
@@ -107,6 +106,8 @@ class Hedgehog(Strategy):
    ATR_mincalcwin = 100  # minimum of used data for zscore calculation for absolute valued indications
    bbands_chwin_out = 5 #?
    bbands_chwin_trend = 5 # 3-8
+   bbands_TSL_chwin = 5  # 2-?
+   power_TSL_chwin = 5
    # peak_swingdist = 2 # 2-?
 
    # indicator weights
@@ -126,6 +127,12 @@ class Hedgehog(Strategy):
    gap_weight = 1
    peak_weight = 1
    fibo_weight = 1
+
+   bbands_TSL_weight = 1
+   ATR_TSL_weight = 1
+   power_TSL_weight = 1
+
+   minTSLdist = 0.0001  # opt steps:  0.00005, 0.0001, 0.00015, 0.0002, 0.00025 ...
 
    size = 0.1  # of buy/sell orders
    cc = -1  # candle counter
@@ -185,7 +192,7 @@ class Hedgehog(Strategy):
                          'VWAP': {'vwap': self.VWAP, 'chwin': self.VWAP_chwin, 'weight': self.VWAP_weight,
                                   'expfac': self.vwap_expfac}, # difference expansion factor
                          'ATR': {'atr': self.ATR,  'chwin': self.ATR_chwin, 'mincalcwin': self.ATR_mincalcwin,
-                                 'win': self.ATR_win, 'weight': self.ATR_weight},
+                                 'win': self.ATR_win, 'weight': self.ATR_weight, 'TSL-weight': self.ATR_TSL_weight},
                          'ADX': {'adx': self.ADX_adx, 'DM+': self.ADX_DM_pos, 'DM-': self.ADX_DM_neg, 'chwin': self.ADX_chwin,
                                  'treshold': self.ADX_treshold, 'abs_weight': self.ADX_abs_weight, 'dyn_weight': self.ADX_dyn_weight},
                          'RSI': {'rsi': self.RSI, 'low': self.RSI_lower_bound, 'high': self.RSI_upper_bound,
@@ -198,8 +205,8 @@ class Hedgehog(Strategy):
                                   'zeroweight': self.MACD_zeroweight, 'histoweight': self.MACD_histoweight},
                          'BB': {'low': self.lowerband, 'high': self.upperband,'mid': self.middleband,
                                 'width': self.bandwidth, 'chwin-out': self.bbands_chwin_out, 'chwin-trend': self.bbands_chwin_trend,
-                                'weight-out': self.bbands_weight_out, 'weight-trend': self.bbands_weight_trend,
-                                'expfac': self.bbands_expfac},  # width expansion factor
+                                'weight-out': self.bbands_weight_out, 'weight-trend': self.bbands_weight_trend, 'TSL-weight': self.bbands_TSL_weight,
+                                'TSL-chwin': self.bbands_TSL_chwin, 'expfac': self.bbands_expfac},  # width expansion factor
                          'CAMA': {'R4': self.cama_R4, 'R3': self.cama_R3, 'S3': self.cama_S3,
                                   'S4': self.cama_S4, '3weight': self.cama3_weight, '4weight': self.cama4_weight},
                          'GAP': {'+': self.sizegap_up, '-': self.sizegap_down, 'accuracy': self.gap_accuracy, 'weight': self.gap_weight},
@@ -211,10 +218,10 @@ class Hedgehog(Strategy):
                         }
       self.powers = self.I(powers, self.data, self.indicators, self.last_swing, self.data.index, self.volmean_movetimes, clims, impact_counter)
 
-      # indis for stopdist calc: PSAR, ATR, BB width, GAP
 
-      # self.trend = self.I(radar, self.data.Close, self.indicators)
-      # self.TSL_distance = self.I(TSL.get_distance, self.data.Close, self.indicators) 
+      # self.TSL_distance = self.I(TSL.get_distance, self.data.Close, self.indicators, self.powers, self.power_TSL_chwin, 
+      #                            self.minTSLdist, self.power_TSL_weight) 
+
       # self.decisions = self.I(action.decisions, self.data.Close, self.orderscore)
 
 

@@ -173,7 +173,14 @@ def BB_outer_touch_calcpower(low, mid, high, Highs, Lows, dir, weight):
 def BB_trend_calcpower(pow, mids, widths, expfac, weight):  # expfac: width expansion factor
    factor = 1
    if (((pow > 0) and rises(mids)) or ((pow < 0) and falls(mids))) and rises(widths, widths[0]*expfac):
-      factor += weight/4
+      abs_prct_change = abs((widths[-1]/(widths[0]/100)-100))
+
+      # following line is the result of an effortful mathematical research:
+      defused_abs_change = abs_prct_change**abs((abs_prct_change/560)-1) if abs_prct_change <= 100 else 44
+      # ... it constraints the change value to a max of 44, heading towards it until the input of 100% (where it peaks!) in a logarithmic flattening curve
+
+
+      factor += (abs_prct_change/100)*weight
    return factor
 
 
@@ -276,7 +283,7 @@ def PEAK_calcpower(pow, dir_val, uppeak_val, downpeak_val, acc, weight, last_swi
    return factor
 
 
-def ATR_calcpower(atr, mincalcwin, chwin, win, weight, impact_counter): # ADJUST THAT IT CAN'T TURN POWER TO NEGATIVE!!!
+def ATR_calcpower(atr, mincalcwin, chwin, win, weight, impact_counter):
    factor = 1
    if len(atr) > win + chwin:
       # absolute, static triggering
@@ -324,7 +331,9 @@ def detect_impact(impact_counter, power, lastpower, tech_ind):
    if power != lastpower:
       impact_counter[tech_ind] += 1
    if power - lastpower:
-      print(f'impact of {tech_ind}:', power - lastpower)
+      # print(f'impact of {tech_ind}:', power - lastpower)
+      if tech_ind == 'BB-trend':
+         print(f'impact of {tech_ind}:', power - lastpower)
    return power
 
 
@@ -340,7 +349,7 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
       power = 0
       lastpower = 0
       # if using Close for calculation, don't forget to use -1 or lower index than current.
-      if idx > 20:
+      if idx > 15:
          # and idx % 10 == 0:
          power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['macd_chwin']-1):idx+1], 
                                  T['MACD']['histo'][idx-(T['MACD']['histo_chwin']-1):idx+1], 
@@ -424,7 +433,6 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
    # print('--------------\ntypes found:')
    # print('floats:', floats, '  ints:', ints, '  elses:', elses)
    # print('--------------')
-   
 
    powers = helpers.trans_list_to_BT_array(powers, 'powers')
    return powers
