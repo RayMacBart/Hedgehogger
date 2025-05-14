@@ -37,22 +37,23 @@ def add_power_impact(reldist, powers, minTSLdist, TSLweight):
 
 
 # indis for stopdist calc: PSAR, ATR, BB width, GAP
-def get_distance(Close, T, powers, power_TSL_chwin, minTSLdist, power_TSL_weight):
-   distances = []
+def stoplosses(Close, T, powers, power_TSL_chwin, minTSLdist, power_TSL_weight):
+   abs_SL_dists = []
    for idx in range(len(Close)):
       # if using Close for calculation, don't forget to use -1 or lower index than current.
-      init_distpos = T['PSAR'][idx]
-      reldist = init_distpos - Close[idx-1]
-      reldist += add_ATR_impact(reldist, T['ATR']['atr'][:idx+1], T['ATR']['mincalcwin'], T['ATR']['chwin'], T['ATR']['win'], T['ATR']['TSL-weight'])
-      if idx > 20:
-         reldist += add_BB_width_impact(reldist, T['BB']['width'][idx-(T['BB']['TSL-chwin']-1):idx+1], T['BB']['TSL-weight'])
-         reldist += add_power_impact(reldist, powers[idx-(power_TSL_chwin-1):idx+1], minTSLdist, power_TSL_weight)
+      reldist = T['PSAR'][idx] - Close[idx-1]
+      # reldist += add_ATR_impact(reldist, T['ATR']['atr'][:idx+1], T['ATR']['mincalcwin'], T['ATR']['chwin'], T['ATR']['win'], T['ATR']['TSL-weight'])
+      # if idx > 20:
+      #    reldist += add_BB_width_impact(reldist, T['BB']['width'][idx-(T['BB']['TSL-chwin']-1):idx+1], T['BB']['TSL-weight'])
+      #    reldist += add_power_impact(reldist, powers[idx-(power_TSL_chwin-1):idx+1], minTSLdist, power_TSL_weight)
       
       # ! until this point, distance calcs were only regarding absolute value - now determine direction pos/neg by applying 'decision' val
          
-      distances.append(Close[idx-1] + reldist)
-   distances = helpers.trans_list_to_BT_array(distances, 'distances')
-   return distances
+      abs_SL_dists.append(abs(reldist))
+   abs_SL_dists = helpers.trans_list_to_BT_array(abs_SL_dists, 'stop loss values')
+   return abs_SL_dists
+   # --> why returning absolute distances and not the "ready" stoploss values (Close[idx-1] + reldist)?
+   # ...because it is safer and hence better to determine the stoploss direction upon actual, active trades (dedected in next())!
 
 
 

@@ -13,6 +13,7 @@ import sizepeak
 import reaction
 from power import powers
 import TSL
+import DST_timehelper
 from backtesting import Backtest, Strategy
 from backtesting.lib import crossover
 
@@ -40,7 +41,7 @@ except Exception as e:
     print('Error occured during loading VOLUME MEAN data:', e)
 
 
-clims = 60 if candlesize == 'H1' else int(candlesize[1:])
+clims = 60 if candlesize == 'H1' else int(candlesize[1:])  # clims = candle length in minutes
 
 # df = df.map(helpers.remove_nocomma_anomaly)   --> leads to false manipulation of Volume data
 df['Open'] = df['Open'].apply(helpers.remove_nocomma_anomaly)
@@ -86,8 +87,10 @@ class Hedgehog(Strategy):
 
    # mnfpwi: "max decreasing factor per weight impact"
    vol_mdfpwi = 0.15  # 0.05 - 0.4  (in 0.05 steps)
+   vol_max_impact_zscore = 3  # steps:  2,  2.5,  3,  3.5,  4,  4.5,  5,  5.5,  6
+   # old:
    # mpfpw: "max positive factor per weight"
-   vol_mpfpw = 1.5  # 1.2 - 2 (in 0.1 steps) - 3 (in 0.2 steps) - 4.2 (in 0.4 steps), 5
+   # vol_mpfpw = 1.5  # 1.2 - 2 (in 0.1 steps) - 3 (in 0.2 steps) - 4.2 (in 0.4 steps), 5
    sizegap_granularity = 10
    sizepeak_granularity = 10
    gap_accuracy = 5  # area of gap value recognition in % --> the lower, the more accurate!
@@ -123,7 +126,8 @@ class Hedgehog(Strategy):
    cama3_weight = 1
    cama4_weight = 1
    VWAP_weight = 1
-   ATR_weight = 1
+   ATR_abs_weight = 1
+   ATR_dyn_weight = 1
    gap_weight = 1
    peak_weight = 1
    fibo_weight = 1
@@ -132,7 +136,15 @@ class Hedgehog(Strategy):
    ATR_TSL_weight = 1
    power_TSL_weight = 1
 
+   # following values must not be greater than 60
+   neworder_stoptime_dist = 20
+   order_closetime_dist = 5
+   reenter_time_dist = 5
+
    minTSLdist = 0.0001  # opt steps:  0.00005, 0.0001, 0.00015, 0.0002, 0.00025 ...
+
+   close_triggerpower = 3
+   order_triggerpower =  8
 
    size = 0.1  # of buy/sell orders
    cc = -1  # candle counter
@@ -188,13 +200,13 @@ class Hedgehog(Strategy):
       self.dirs = self.I(helpers.dir, self.data.Close, self.last_swing, self.seclast_swing)
       self.indicators = {'PSAR': self.PSAR, 'DIR': self.dirs,
                          'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin, 'mdfpwi': self.vol_mdfpwi,
-                                 'mpfpw': self.vol_mpfpw, 'weight': self.volume_weight},
+                                 'max_impact_zscore': self.vol_max_impact_zscore, 'weight': self.volume_weight},
                          'VWAP': {'vwap': self.VWAP, 'chwin': self.VWAP_chwin, 'weight': self.VWAP_weight,
                                   'expfac': self.vwap_expfac}, # difference expansion factor
-                         'ATR': {'atr': self.ATR,  'chwin': self.ATR_chwin, 'mincalcwin': self.ATR_mincalcwin,
-                                 'win': self.ATR_win, 'weight': self.ATR_weight, 'TSL-weight': self.ATR_TSL_weight},
+                         'ATR': {'atr': self.ATR,  'chwin': self.ATR_chwin, 'mincalcwin': self.ATR_mincalcwin, 'win': self.ATR_win,
+                                 'abs-weight': self.ATR_abs_weight, 'dyn-weight': self.ATR_dyn_weight, 'TSL-weight': self.ATR_TSL_weight},
                          'ADX': {'adx': self.ADX_adx, 'DM+': self.ADX_DM_pos, 'DM-': self.ADX_DM_neg, 'chwin': self.ADX_chwin,
-                                 'treshold': self.ADX_treshold, 'abs_weight': self.ADX_abs_weight, 'dyn_weight': self.ADX_dyn_weight},
+                                 'treshold': self.ADX_treshold, 'abs-weight': self.ADX_abs_weight, 'dyn-weight': self.ADX_dyn_weight},
                          'RSI': {'rsi': self.RSI, 'low': self.RSI_lower_bound, 'high': self.RSI_upper_bound,
                                  'chwin': self.RSI_chwin, 'weight': self.RSI_weight},
                          'CCI': {'cci': self.CCI, 'low': self.CCI_lower_treshold, 'high': self.CCI_upper_treshold,
@@ -219,72 +231,40 @@ class Hedgehog(Strategy):
       self.powers = self.I(powers, self.data, self.indicators, self.last_swing, self.data.index, self.volmean_movetimes, clims, impact_counter)
 
 
-      # self.TSL_distance = self.I(TSL.get_distance, self.data.Close, self.indicators, self.powers, self.power_TSL_chwin, 
-      #                            self.minTSLdist, self.power_TSL_weight) 
+      self.abs_SL_dists = self.I(TSL.stoplosses, self.data.Close, self.indicators, self.powers, self.power_TSL_chwin, 
+                                 self.minTSLdist, self.power_TSL_weight) 
 
-      # self.decisions = self.I(action.decisions, self.data.Close, self.orderscore)
 
 
    def next(self):
-      # Calculate TSL-distances first:
-      # distance = TSL.get_distance(self.data.Close, self.indicators)
-      if self.dirs[-1] > 0:
-         bought = 0
-         for t in self.trades:
-            if t.is_long:
-               bought += 1
-               t.sl = self.data.Close-self.stopdist
-         if not bought:
-            self.buy(size=self.size, sl=self.data.Close-self.stopdist)
-      elif self.dirs[-1] < 0:
-         sold = 0
-         for t in self.trades:
-            if t.is_short:
-               sold += 1
-               t.sl = self.data.Close+self.stopdist
-         if not sold:
-            self.sell(size=self.size, sl=self.data.Close+self.stopdist)
-
-      # psar_distance = self.PSAR[-1] - self.data.Close[-1]
-      # if psar_distance < 0:
-      #    bought = 0
-      #    for t in self.trades:
-      #       if t.is_long:
-      #          bought += 1
-      #          t.sl = self.data.Close[-1] + psar_distance
-      #    if not bought and self.dirs[-1] > 0:
-      #       self.buy(size=self.size, sl=self.data.Close[-1] + psar_distance)
-      # elif psar_distance > 0:
-      #    sold = 0
-      #    for t in self.trades:
-      #       if t.is_short:
-      #          sold += 1
-      #          t.sl = self.data.Close[-1] + psar_distance
-      #    if not sold  and self.dirs[-1] < 0:
-      #       self.sell(size=self.size, sl=self.data.Close[-1] + psar_distance)
-
-      # if self.scores > 100:
-      #    bought = 0
-      #    for t in self.trades:
-      #       if t.is_long:
-      #          bought += 1
-      #    if not bought:
-      #       self.buy(size=self.size)
-            # --> set calculated trailing stop loss distance here!
-
-      # elif self.scores < 100:
-      #    sold = 0
-      #    for t in self.trades:
-      #       if t.is_long:
-      #          sold += 1
-      #    if not sold:
-      #       self.sell(size=self.size)
-            # --> set calculated trailing stop loss distance here!
-
-      # self.cc += 1
-      # T = helpers.get_current_indicator_data(self.indicators, self.cc)
-      # dir = helpers.get_dir(self.data.Close[-1], self.last_swing[-1], self.seclast_swing[-1])
-      # reaction.react(self.buy, self.sell, self.size, self.trades, T, self.trend[-1], self.last_swing[-1], self.seclast_swing[-1], dir)
+      longs, shorts = helpers.get_tradetype_amounts(self.trades)
+      neworder_stoptime = DST_timehelper.is_stoptime(self.data.index[-1], self.neworder_stoptime_dist, self.reenter_time_dist, clims)  # clims = candle length in minutes
+      order_closetime = DST_timehelper.is_stoptime(self.data.index[-1], self.order_closetime_dist, self.reenter_time_dist, clims) if neworder_stoptime else False
+      if longs:
+         for trade in longs:
+            if order_closetime:
+               trade.close()
+            else:
+               trade.sl = self.data.Close[-1] - self.abs_SL_dists[-1]
+      if shorts:
+         for trade in shorts:
+            if order_closetime:
+               trade.close()
+            else:
+               trade.sl = self.data.Close[-1] + self.abs_SL_dists[-1]
+      else:
+         if powers[-1] <= -self.close_triggerpower:
+            if longs:
+               for trade in longs:
+                  trade.close()
+            if (powers[-1] <= -self.order_triggerpower) and not neworder_stoptime:
+               self.sell(size=self.size, sl=(self.data.Close[-1] + self.abs_SL_dists[-1]))  # multiple sell order accumulation intended!
+         elif powers[-1] >= self.close_triggerpower:
+            if shorts:
+               for trade in shorts:
+                  trade.close()
+            if (powers[-1] >= self.order_triggerpower) and not neworder_stoptime:
+               self.buy(size=self.size, sl=(self.data.Close[-1] - self.abs_SL_dists[-1]))  # multiple buy order accumulation intended!
 
 
 
@@ -292,7 +272,9 @@ bt = Backtest(df, Hedgehog, cash=1000,
               commission=0.00015, 
               margin=0.033)
 
+
 stats = bt.run()
+
 
 # for optimization, include the objectives return%, profit factor, sharpe ratio, sortino ratio and calmar ratio
 # and give each the same weight resulting into one single value to be optimized. This is done by calculating the

@@ -174,17 +174,13 @@ def BB_trend_calcpower(pow, mids, widths, expfac, weight):  # expfac: width expa
    factor = 1
    if (((pow > 0) and rises(mids)) or ((pow < 0) and falls(mids))) and rises(widths, widths[0]*expfac):
       abs_prct_change = abs((widths[-1]/(widths[0]/100)-100))
-
-      # following line is the result of an effortful mathematical research:
-      defused_abs_change = abs_prct_change**abs((abs_prct_change/560)-1) if abs_prct_change <= 100 else 44
-      # ... it constraints the change value to a max of 44, heading towards it until the input of 100% (where it peaks!) in a logarithmic flattening curve
-
-
-      factor += (abs_prct_change/100)*weight
+      DAPC = helpers.calc_special_defusion(abs_prct_change, 100, 560)  # Defused Absolute Percentual Change
+      factor += (DAPC/100)*weight
    return factor
 
 
-def VOL_calcpower(vols, mdfpwi, mpfpw, weight, TS, VMMTs, clims):  
+
+def VOL_calcpower(vols, mdfpwi, max_impact_zscore, weight, TS, VMMTs, clims):  
    # mdfpwi: "max decreasing factor per weight impact"
    # mpfpw: "max positive factor per weight"
    zscore_volstart = (vols[0]-VMMTs['mean'])/VMMTs['std']
@@ -196,13 +192,17 @@ def VOL_calcpower(vols, mdfpwi, mpfpw, weight, TS, VMMTs, clims):
    if ZSDFM < 0:
       zsmin = (VMMTs['min']-VMMTs['mean'])/VMMTs['std']
       factor -= mdfpwi*(ZSDFM/zsmin)*weight
-      # the old idea - nice, but a little unclear (and why this way?):
+      # the old idea - nice, but a little unclear (and why this way at all?):
       # if factor < 1 / abs(zsmin)*weight:
       #    factor = 1 / abs(zsmin)*weight
    elif ZSDFM > 0:
-      factor += ZSDFM*weight
-      if factor > mpfpw:
-         factor = mpfpw
+      expodenom = helpers.get_zscore_defusion_expodenom(max_impact_zscore)  # 'expodenom' = exponent denominator
+      DPZC = helpers.calc_special_defusion(ZSDFM, max_impact_zscore, expodenom)  # Defused Positive Z-Score Change
+      factor += DPZC*weight
+      # old, hard cutting version:
+      # factor += ZSDFM*weight   # use variable "max logarithmic zscore goal (?) with helpers function "get_defuse_formula_val"
+      # if factor > mpfpw:
+      #    factor = mpfpw
    if factor < 0.5:  # NEW (+clear): 1 indicator can't decrease power more than make it half
       factor = 0.5
    return factor
@@ -243,7 +243,12 @@ def ADX_calcpower(pow, adx, dmp, dmn, treshold, abs_weight, dyn_weight, impact_c
       # dynamic movement impacts:
       if (dmp > dmn and rises(adx)) or (dmp < dmn and falls(adx)):
          prct_change = (adx[-1]/(adx[0]/100)-100)
-         factor += (factor/100)*prct_change*(dyn_weight)
+         abs_prct_change = abs(prct_change)
+         DAPC = helpers.calc_special_defusion(abs_prct_change, 100, 560)  # Defused Absolute Percentual Change
+         if (dmp > dmn and rises(adx)):
+            factor += (DAPC/100)*(dyn_weight)
+         elif (dmp < dmn and falls(adx)):
+            factor -= (DAPC/100)*(dyn_weight)
          # /1.67
          impact_counter['ADX-dyn'] += 1
          # label += 'dyn, '
@@ -279,30 +284,32 @@ def PEAK_calcpower(pow, dir_val, uppeak_val, downpeak_val, acc, weight, last_swi
         (last_swing_val - downpeak_val - close_val*(acc/200) <= close_val <= last_swing_val - downpeak_val + close_val*(acc/200))) or
         ((pow > 0 and dir_val > 0 and close_val > last_swing_val) and 
          (last_swing_val + uppeak_val - close_val*(acc/200) <= last_swing_val <= last_swing_val + uppeak_val + close_val*(acc/200)))):
-      factor -= weight/6 if weight/6 < 0.5 else 0.5  # means "else it decreases it by 0.5 (which would result in also 0.5 coincidally)"
+      factor -= weight/6 if weight/6 < 0.5 else 0.5  # means "else it decreases it by 0.5 (which would result also in 0.5 coincidally)"
    return factor
 
 
-def ATR_calcpower(atr, mincalcwin, chwin, win, weight, impact_counter):
+def ATR_calcpower(atr, mincalcwin, chwin, win, abs_weight, dyn_weight, impact_counter):
    factor = 1
    if len(atr) > win + chwin:
       # absolute, static triggering
       if len(atr) >= mincalcwin + win:  # by the initial amount of NaNs longer - so min calcwin is based on actual values
          current_zscore_ATR = (atr[-1] - np.nanmean(atr)) / np.nanstd(atr)  # these exclude NaNs from calc automatically
          if current_zscore_ATR > 1:
-            factor += ((current_zscore_ATR - 1)/4)*weight
+            factor += ((current_zscore_ATR - 1)/4)*abs_weight
             impact_counter['ATR-abs'] += 1
          elif current_zscore_ATR < -1:
-            factor += ((current_zscore_ATR + 1)/5)*weight
+            factor += ((current_zscore_ATR + 1)/5)*abs_weight
             impact_counter['ATR-abs'] += 1
       # relative, dynamic triggering
       if rises(atr[-chwin:]) or falls(atr[-chwin:]):
          prct_change = (atr[-1]/(atr[-chwin]/100)-100)
+         abs_prct_change = abs(prct_change)
+         DAPC = helpers.calc_special_defusion(abs_prct_change, 100, 560)  # Defused Absolute Percentual Change
          impact_counter['ATR-dyn'] += 1
-         if rises(atr[-chwin:]):
-            factor += (prct_change/120)*weight
-         elif falls(atr[-chwin:]):
-            factor += (prct_change/160)*weight
+         if rises(atr[-chwin:]) and (prct_change > 0):
+            factor += (DAPC/100)*dyn_weight
+         elif falls(atr[-chwin:]) and (prct_change < 0):
+            factor -= (DAPC/100)*dyn_weight
    if factor < 0.5:  # NEW (+clear): 1 indicator can't decrease power more than make it half
       factor = 0.5
    return factor
@@ -330,10 +337,10 @@ def ATR_calcpower(atr, mincalcwin, chwin, win, weight, impact_counter):
 def detect_impact(impact_counter, power, lastpower, tech_ind):
    if power != lastpower:
       impact_counter[tech_ind] += 1
-   if power - lastpower:
+   # if power - lastpower:
       # print(f'impact of {tech_ind}:', power - lastpower)
-      if tech_ind == 'BB-trend':
-         print(f'impact of {tech_ind}:', power - lastpower)
+      # if tech_ind == 'ATR':
+      #    print(f'impact of {tech_ind}:', power - lastpower)
    return power
 
 
@@ -387,11 +394,11 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
          lastpower = detect_impact(impact_counter, power, lastpower, 'BB-trend')
 
          power *= VOL_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['mdfpwi'],
-                                T['VOL']['mpfpw'], T['VOL']['weight'], timestamps[idx-1], VMMTs, clims)
+                                T['VOL']['max_impact_zscore'], T['VOL']['weight'], timestamps[idx-1], VMMTs, clims)
          lastpower = detect_impact(impact_counter, power, lastpower, 'VOL')
 
          power *= ADX_calcpower(power, T['ADX']['adx'][idx-(T['ADX']['chwin']-1):idx+1], T['ADX']['DM+'][idx], T['ADX']['DM-'][idx],
-                                T['ADX']['treshold'], T['ADX']['abs_weight'], T['ADX']['dyn_weight'], impact_counter)
+                                T['ADX']['treshold'], T['ADX']['abs-weight'], T['ADX']['dyn-weight'], impact_counter)
          lastpower = detect_impact(impact_counter, power, lastpower, 'ADX')
 
          # old: (CHECK IF IT WORKS BETTER THAN CAMA VERSION ABOVE!)
@@ -410,10 +417,12 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
          lastpower = detect_impact(impact_counter, power, lastpower, 'PEAK')
 
 
-         power *= ATR_calcpower(T['ATR']['atr'][:idx+1], T['ATR']['mincalcwin'], T['ATR']['chwin'], T['ATR']['win'], T['ATR']['weight'], impact_counter)
+         power *= ATR_calcpower(T['ATR']['atr'][:idx+1], T['ATR']['mincalcwin'], T['ATR']['chwin'], T['ATR']['win'], 
+                                T['ATR']['abs-weight'], T['ATR']['dyn-weight'], impact_counter)
          lastpower = detect_impact(impact_counter, power, lastpower, 'ATR')
 
          # print('_______________________________')
+      # print(power)
       powers.append(power)
    
    # floats = 0

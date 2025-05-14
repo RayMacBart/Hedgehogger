@@ -3,6 +3,13 @@ class RanOutDSTDataError(Exception):
    pass
 
 
+class NoTimePeriodFoundError(Exception):
+   """Custom exception fired if the used time of a timestamp can't be found in any DST time period -
+   it must not be possible, that this happens."""
+   pass
+
+
+
 def get_DST_switch_startdays(year):
    """the days in the list are starting date days of the periods in following chronological order (with indexes):
    [0] = transition in spring, [1] = summer, [2] = transition in autumn, [3] = winter.
@@ -58,6 +65,24 @@ def get_DST_switch_startdays(year):
 
 
 
+def get_time_period(TS):
+   gsd = get_DST_switch_startdays
+   if (((TS.month <= 3) and (TS.day < gsd(TS.year)[0])) or 
+      ((TS.month >= 11) and (TS.day >= gsd(TS.year)[3]))):
+      return 'winter'
+   elif (((TS.month == 3) and (gsd(TS.year)[0] <= TS.day < gsd(TS.year)[1])) or
+         (((TS.month == 10) and (gsd(TS.year)[2] <= TS.day)) or
+            ((TS.month == 11) and (TS.day < gsd(TS.year)[3])))):
+      return 'trans'
+   elif (((TS.month == 3) and (TS.day >= gsd(TS.year)[1])) or
+         ((TS.month == 10) and (TS.day < gsd(TS.year)[2])) or
+         (3 < TS.month < 10)):
+      return 'summer'
+   else:
+      raise NoTimePeriodFoundError("Time used in TimeStamp can't be found in any DST time period!")
+
+
+
 def calc_zsdfm(meanlist, voldiff, span, TS, clims):
    meanidx = None
    for i in range(len(meanlist)):
@@ -72,21 +97,29 @@ def calc_zsdfm(meanlist, voldiff, span, TS, clims):
    return voldiff - mean_diffsum
 
 
+
 def get_vol2mean_zscore_deviation(voldiff, span, TS, VMMTs, clims):
-   ZSDFM = 0 # Procentual Deviation From Mean
-   gsd = get_DST_switch_startdays
-   if (((TS.month <= 3) and (TS.day < gsd(TS.year)[0])) or 
-      ((TS.month >= 11) and (TS.day >= gsd(TS.year)[3]))):
-      ZSDFM = calc_zsdfm(VMMTs['winter'], voldiff, span, TS, clims)
-   elif (((TS.month == 3) and (gsd(TS.year)[0] <= TS.day < gsd(TS.year)[1])) or
-         (((TS.month == 10) and (gsd(TS.year)[2] <= TS.day)) or
-            ((TS.month == 11) and (TS.day < gsd(TS.year)[3])))):
-      ZSDFM = calc_zsdfm(VMMTs['trans'], voldiff, span, TS, clims)
-   elif (((TS.month == 3) and (TS.day >= gsd(TS.year)[1])) or
-         ((TS.month == 10) and (TS.day < gsd(TS.year)[2])) or
-         (3 < TS.month < 10)):
-      ZSDFM = calc_zsdfm(VMMTs['summer'], voldiff, span, TS, clims)
+   time_period = get_time_period(TS)
+   ZSDFM = calc_zsdfm(VMMTs[time_period], voldiff, span, TS, clims)  # Z-Score Deviation From Mean
    return ZSDFM
+
+
+
+def is_stoptime(TS, stopdist, reenterdist, clims):  # TS = TimeStamp,  clims = candle length in minutes
+   switch_hour = 22 if get_time_period(TS) == 'winter' else 21
+   if (TS.weekday == 4 and TS.hour >= switch_hour) or TS.TS.weekday == 5 or (TS.weekday == 6 and TS.hour < switch_hour):
+      return True
+   if clims > stopdist:
+      stopdist = clims
+   if clims > reenterdist:
+      reenterdist = clims
+   if TS.weekday in (0,1,2,3,4) and (TS.hour == switch_hour - 1) and TS.minute >= (60 - stopdist):
+      return True
+   if TS.weekday in (0,1,2,3,6) and (TS.hour == switch_hour) and TS.minute < reenterdist:
+      return True
+   return False
+
+
 
 
    # old idea with surpass treshold:
@@ -134,3 +167,4 @@ def get_vol2mean_zscore_deviation(voldiff, span, TS, VMMTs, clims):
    #          ((TS.hour == 14) and (TS.minute < 5))):
    #       vpdf = 0.6
    # return vpdf
+

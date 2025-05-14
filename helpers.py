@@ -58,6 +58,39 @@ def defuse(val, lvl):
 #     return {col: ((volmean_df[col]-mean_all)/std_all).tolist() for col in ['winter', 'trans', 'summer']}
 
 
+def get_zscore_defusion_expodenom(max_zscore):  # 'expodenom' = exponent denominator
+   """The returned value should be used in 'calc_special_defusion' afterwards."""
+   if max_zscore == 2:
+      return 3.5
+   elif max_zscore == 2.5:
+      return 4.9
+   elif max_zscore == 3:
+      return 6.3
+   elif max_zscore == 3.5:
+      return 7.9
+   elif max_zscore == 4:
+      return 9.5
+   elif max_zscore == 4.5:
+      return 11.3
+   elif max_zscore == 5:
+      return 13.2
+   elif max_zscore == 5.5:
+      return 15
+   elif max_zscore == 6:
+      return 16.9
+
+
+# following function is the result of an effortful mathematical research:
+def calc_special_defusion(value, max_impact_value, expodenom): # 'expodenom' = exponent denominator
+   """Note, that this function only works with absolute (positive) values.
+   This function constraints the changing value to a maximum by decreasing it in a logarithmic flattening curve.
+   A value higher than the wished maximum will be set to the maximum as well.
+   Also note, that 'max_impact_value' must be properly tailored to 'expodenom'.
+   E.g. with a procentual input, if 100% should be this maximum value to have any effect, expodenom must be 560.
+   For calculating expodenoms from maximum zscore values, use the function 'get_zscore_defusion_expodenom' beforehand.
+   """
+   return value**abs((value/expodenom)-1) if value <= max_impact_value else max_impact_value**abs((max_impact_value/expodenom)-1)
+
 
 def last_swings_generator(Open, Close):
    last_swing_value = Close[0]
@@ -131,7 +164,7 @@ def dir(Close, last, seclast):
    return dirs
 
 
-def get_tradetypes(trades):
+def get_tradetype_amounts(trades):
    longs = []
    shorts = []
    for trade in trades:
@@ -142,39 +175,40 @@ def get_tradetypes(trades):
    return longs, shorts
 
 
-def get_current_indicator_data(ti, cc):
-   T = {}
-   T['PSAR'] = ti['PSAR'][cc]
-   T['VWAP'] = ti['VWAP'][cc]
-   T['ATR'] = ti['ATR'][cc]
-   T['ADX'] = {}
-   T['ADX']['adx'] = ti['ADX']['adx'][cc]
-   T['ADX']['DM+'] = ti['ADX']['DM+'][cc]
-   T['ADX']['DM-'] = ti['ADX']['DM-'][cc]
-   T['RSI'] = {}
-   T['RSI']['rsi'] = ti['RSI']['rsi'][cc]
-   T['RSI']['low'] = ti['RSI']['low']
-   T['RSI']['high'] = ti['RSI']['high']
-   T['MACD'] = {}
-   T['MACD']['macd'] = ti['MACD']['macd'][cc]
-   T['MACD']['histo'] = ti['MACD']['histo'][cc]
-   T['MACD']['signal'] = ti['MACD']['signal'][cc]
-   T['BB'] = {}
-   T['BB']['low'] = ti['BB']['low'][cc]
-   T['BB']['high'] = ti['BB']['high'][cc]
-   T['BB']['mid'] = ti['BB']['mid'][cc]
-   T['BB']['width'] = ti['BB']['width'][cc]
-   T['CAMA'] = {}
-   T['CAMA']['R4'] = ti['CAMA']['R4'][cc]
-   T['CAMA']['R3'] = ti['CAMA']['R3'][cc]
-   T['CAMA']['S3'] = ti['CAMA']['S3'][cc]
-   T['CAMA']['S4'] = ti['CAMA']['S4'][cc]
-   T['GAP'] = {}
-   T['GAP']['+'] = ti['GAP']['+'][cc]
-   T['GAP']['-'] = ti['GAP']['-'][cc]
-   T['FIBO'] = {}
-   T['FIBO'][2] = ti['FIBO'][2][cc]
-   T['FIBO'][4] = ti['FIBO'][4][cc]
-   T['FIBO'][6] = ti['FIBO'][6][cc]
-   T['FIBO'][8] = ti['FIBO'][8][cc]
-   return T
+
+# def get_current_indicator_data(ti, cc):
+#    T = {}
+#    T['PSAR'] = ti['PSAR'][cc]
+#    T['VWAP'] = ti['VWAP'][cc]
+#    T['ATR'] = ti['ATR'][cc]
+#    T['ADX'] = {}
+#    T['ADX']['adx'] = ti['ADX']['adx'][cc]
+#    T['ADX']['DM+'] = ti['ADX']['DM+'][cc]
+#    T['ADX']['DM-'] = ti['ADX']['DM-'][cc]
+#    T['RSI'] = {}
+#    T['RSI']['rsi'] = ti['RSI']['rsi'][cc]
+#    T['RSI']['low'] = ti['RSI']['low']
+#    T['RSI']['high'] = ti['RSI']['high']
+#    T['MACD'] = {}
+#    T['MACD']['macd'] = ti['MACD']['macd'][cc]
+#    T['MACD']['histo'] = ti['MACD']['histo'][cc]
+#    T['MACD']['signal'] = ti['MACD']['signal'][cc]
+#    T['BB'] = {}
+#    T['BB']['low'] = ti['BB']['low'][cc]
+#    T['BB']['high'] = ti['BB']['high'][cc]
+#    T['BB']['mid'] = ti['BB']['mid'][cc]
+#    T['BB']['width'] = ti['BB']['width'][cc]
+#    T['CAMA'] = {}
+#    T['CAMA']['R4'] = ti['CAMA']['R4'][cc]
+#    T['CAMA']['R3'] = ti['CAMA']['R3'][cc]
+#    T['CAMA']['S3'] = ti['CAMA']['S3'][cc]
+#    T['CAMA']['S4'] = ti['CAMA']['S4'][cc]
+#    T['GAP'] = {}
+#    T['GAP']['+'] = ti['GAP']['+'][cc]
+#    T['GAP']['-'] = ti['GAP']['-'][cc]
+#    T['FIBO'] = {}
+#    T['FIBO'][2] = ti['FIBO'][2][cc]
+#    T['FIBO'][4] = ti['FIBO'][4][cc]
+#    T['FIBO'][6] = ti['FIBO'][6][cc]
+#    T['FIBO'][8] = ti['FIBO'][8][cc]
+#    return T
