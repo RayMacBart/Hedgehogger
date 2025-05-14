@@ -41,7 +41,7 @@ def reduce2day_means(VT): # Volumedata Timelist
 
 def get_full_data_infos(winter, trans, summer):
    full_data = winter + trans + summer
-   return np.mean(full_data), np.std(full_data)
+   return np.nanmean(full_data), np.nanstd(full_data)
 
 
 def convert_daymeans2zscore_lists(winter, trans, summer, mean_all, std_all):

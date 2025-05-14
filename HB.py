@@ -1,28 +1,28 @@
 import sys
 import os
-import numpy as np
 import pandas as pd
 import pandas_ta as ta
 import helpers
 import indicator_setups
-# from mean_volume_moves import get_volmean_movetimes
 import camafuncs
 import fibofuncs
 import sizegap
 import sizepeak
-import reaction
 from power import powers
 import TSL
 import DST_timehelper
 from backtesting import Backtest, Strategy
-from backtesting.lib import crossover
+# from backtesting.lib import crossover
+
+# pairs to use with IG.com due to their low spreads:  EURUSD,  AUDUSD,  USDJPY
 
 asset = sys.argv[1] if len(sys.argv) > 1 else "EURUSD"
+adjufac = 100 if asset == "USDJPY" else 1  # adjustment factor for the USD/JPY pair which has a 100x higher pip-size!
 candlesize = sys.argv[2] if len(sys.argv) > 2 else "M5"
-dataspan = sys.argv[3] if len(sys.argv) > 3 else "0-10k"
+dataspan = "_"+str(sys.argv[3]) if len(sys.argv) > 3 else ""
 
 try:
-    file_path = os.path.join("data", f"{asset}_{candlesize}_{dataspan}.csv")
+    file_path = os.path.join("data", f"{asset}_{candlesize}{dataspan}.csv")
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"File not found: {file_path}")
     
@@ -44,6 +44,7 @@ except Exception as e:
 clims = 60 if candlesize == 'H1' else int(candlesize[1:])  # clims = candle length in minutes
 
 # df = df.map(helpers.remove_nocomma_anomaly)   --> leads to false manipulation of Volume data
+
 df['Open'] = df['Open'].apply(helpers.remove_nocomma_anomaly)
 df['High'] = df['High'].apply(helpers.remove_nocomma_anomaly)
 df['Low'] = df['Low'].apply(helpers.remove_nocomma_anomaly)
@@ -141,14 +142,15 @@ class Hedgehog(Strategy):
    order_closetime_dist = 5
    reenter_time_dist = 5
 
-   minTSLdist = 0.0001  # opt steps:  0.00005, 0.0001, 0.00015, 0.0002, 0.00025 ...
+   minTSLdist = 0.0001*adjufac  # opt steps:  0.00005, 0.0001, 0.00015, 0.0002, 0.00025 ...
 
    close_triggerpower = 3
    order_triggerpower =  8
 
    size = 0.1  # of buy/sell orders
-   cc = -1  # candle counter
-   stopdist = 0.0003
+
+   # cc = -1  # candle counter
+   # stopdist = 0.0003
 
    volmean_movetimes = helpers.convert2VMMT_dict(volmean_df)
 
@@ -269,7 +271,7 @@ class Hedgehog(Strategy):
 
 
 bt = Backtest(df, Hedgehog, cash=1000, 
-              commission=0.00015, 
+              commission=0.00012*adjufac, 
               margin=0.033)
 
 

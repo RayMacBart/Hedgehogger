@@ -15,7 +15,29 @@ def get_DST_switch_startdays(year):
    [0] = transition in spring, [1] = summer, [2] = transition in autumn, [3] = winter.
    Note that the months of these dates never change over the years
    (equivalent list with months always would be: [3,3,10,11])"""
-   if year == 2020:
+   if year == 2009:
+      return [8,29,25,1]
+   elif year == 2010:
+      return [14,28,31,7]
+   elif year == 2011:
+      return [13,27,30,6]
+   elif year == 2012:
+      return [11,25,28,4]
+   elif year == 2013:
+      return [10,31,27,3]
+   elif year == 2014:
+      return [9,30,26,2]
+   elif year == 2015:
+      return [8,29,25,1]
+   elif year == 2016:
+      return [13,27,30,6]
+   elif year == 2017:
+      return [12,26,29,5]
+   elif year == 2018:
+      return [11,25,28,4]
+   elif year == 2019:
+      return [10,31,27,3]
+   elif year == 2020:
       return [8,29,25,1]
    elif year == 2021:
       return [14,28,31,7]
