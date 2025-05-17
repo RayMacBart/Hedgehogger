@@ -4,6 +4,12 @@ import numpy as np
 import pandas as pd
 
 
+class insufficientDataError(Exception):
+   """This error is raised if it's not possible to handle the given 
+   dataspan and timeshift due to insufficient amount of data."""
+   pass
+
+
 def trans_list_to_BT_array(data, name):
    data = np.array(data, dtype='float64')
    data = _Array(data, name=name)

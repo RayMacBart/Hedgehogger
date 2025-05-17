@@ -89,8 +89,9 @@ def get_DST_switch_startdays(year):
 
 def get_time_period(TS):
    gsd = get_DST_switch_startdays
-   if (((TS.month <= 3) and (TS.day < gsd(TS.year)[0])) or 
-      ((TS.month >= 11) and (TS.day >= gsd(TS.year)[3]))):
+   if (((TS.month == 3) and (TS.day < gsd(TS.year)[0])) or 
+      ((TS.month == 11) and (TS.day >= gsd(TS.year)[3])) or
+      (TS.month < 3) or (TS.month == 12)):
       return 'winter'
    elif (((TS.month == 3) and (gsd(TS.year)[0] <= TS.day < gsd(TS.year)[1])) or
          (((TS.month == 10) and (gsd(TS.year)[2] <= TS.day)) or
@@ -101,6 +102,7 @@ def get_time_period(TS):
          (3 < TS.month < 10)):
       return 'summer'
    else:
+      print('year:', TS.year, '   month:', TS.month, '   day:', TS.day)
       raise NoTimePeriodFoundError("Time used in TimeStamp can't be found in any DST time period!")
 
 

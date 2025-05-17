@@ -14,19 +14,25 @@ import DST_timehelper
 from backtesting import Backtest, Strategy
 # from backtesting.lib import crossover
 
+# 3rd arg 'dataspan' must be min. 2580 with M1, min. 520 with M5,  min. 180 with M15...
+
 # pairs to use with IG.com due to their low spreads:  EURUSD,  AUDUSD,  USDJPY
 
 asset = sys.argv[1] if len(sys.argv) > 1 else "EURUSD"
 adjufac = 100 if asset == "USDJPY" else 1  # adjustment factor for the USD/JPY pair which has a 100x higher pip-size!
-candlesize = sys.argv[2] if len(sys.argv) > 2 else "M5"
-dataspan = "_"+str(sys.argv[3]) if len(sys.argv) > 3 else ""
+candlesize = ("M"+str(sys.argv[2]) if int(sys.argv[2]) != 60 else "H1") if len(sys.argv) > 2 else "M5"
+dataspan = int(sys.argv[3]) if len(sys.argv) > 3 else 10000
+pastshift = int(sys.argv[4]) if len(sys.argv) > 4 else 0
+
+if dataspan*(pastshift+1) > 100000:
+    raise helpers.insufficientDataError("Can't handle given dataspan and pastshift due to insufficient amount of data.")
 
 try:
-    file_path = os.path.join("data", f"{asset}_{candlesize}{dataspan}.csv")
+    file_path = os.path.join("data", f"{asset}_{candlesize}.csv")
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"File not found: {file_path}")
-    
-    df = pd.read_csv(file_path, sep="\t", parse_dates=['Timestamp'], index_col='Timestamp')
+    df = pd.read_csv(file_path, sep="\t", parse_dates=['Timestamp'], index_col='Timestamp').iloc[-dataspan*(pastshift+1):
+                                                                                                 (-dataspan*pastshift if pastshift else None)]
     print("Data successfully loaded!")
 except Exception as e:
     print('Error occured during loading MAIN PRICE CHART data:\n', e)
@@ -239,34 +245,35 @@ class Hedgehog(Strategy):
 
 
    def next(self):
-      longs, shorts = helpers.get_tradetype_amounts(self.trades)
-      neworder_stoptime = DST_timehelper.is_stoptime(self.data.index[-1], self.neworder_stoptime_dist, self.reenter_time_dist, clims)  # clims = candle length in minutes
-      order_closetime = DST_timehelper.is_stoptime(self.data.index[-1], self.order_closetime_dist, self.reenter_time_dist, clims) if neworder_stoptime else False
-      if longs:
-         for trade in longs:
-            if order_closetime:
-               trade.close()
-            else:
-               trade.sl = self.data.Close[-1] - self.abs_SL_dists[-1]
-      if shorts:
-         for trade in shorts:
-            if order_closetime:
-               trade.close()
-            else:
-               trade.sl = self.data.Close[-1] + self.abs_SL_dists[-1]
-      else:
-         if powers[-1] <= -self.close_triggerpower:
-            if longs:
-               for trade in longs:
-                  trade.close()
-            if (powers[-1] <= -self.order_triggerpower) and not neworder_stoptime:
-               self.sell(size=self.size, sl=(self.data.Close[-1] + self.abs_SL_dists[-1]))  # multiple sell order accumulation intended!
-         elif powers[-1] >= self.close_triggerpower:
-            if shorts:
-               for trade in shorts:
-                  trade.close()
-            if (powers[-1] >= self.order_triggerpower) and not neworder_stoptime:
-               self.buy(size=self.size, sl=(self.data.Close[-1] - self.abs_SL_dists[-1]))  # multiple buy order accumulation intended!
+       pass
+      # longs, shorts = helpers.get_tradetype_amounts(self.trades)
+      # neworder_stoptime = DST_timehelper.is_stoptime(self.data.index[-1], self.neworder_stoptime_dist, self.reenter_time_dist, clims)  # clims = candle length in minutes
+      # order_closetime = DST_timehelper.is_stoptime(self.data.index[-1], self.order_closetime_dist, self.reenter_time_dist, clims) if neworder_stoptime else False
+      # if longs:
+      #    for trade in longs:
+      #       if order_closetime:
+      #          trade.close()
+      #       else:
+      #          trade.sl = self.data.Close[-1] - self.abs_SL_dists[-1]
+      # if shorts:
+      #    for trade in shorts:
+      #       if order_closetime:
+      #          trade.close()
+      #       else:
+      #          trade.sl = self.data.Close[-1] + self.abs_SL_dists[-1]
+      # else:
+      #    if powers[-1] <= -self.close_triggerpower:
+      #       if longs:
+      #          for trade in longs:
+      #             trade.close()
+      #       if (powers[-1] <= -self.order_triggerpower) and not neworder_stoptime:
+      #          self.sell(size=self.size, sl=(self.data.Close[-1] + self.abs_SL_dists[-1]))  # multiple sell order accumulation intended!
+      #    elif powers[-1] >= self.close_triggerpower:
+      #       if shorts:
+      #          for trade in shorts:
+      #             trade.close()
+      #       if (powers[-1] >= self.order_triggerpower) and not neworder_stoptime:
+      #          self.buy(size=self.size, sl=(self.data.Close[-1] - self.abs_SL_dists[-1]))  # multiple buy order accumulation intended!
 
 
 
@@ -307,17 +314,19 @@ stats = bt.run()
 
 
 # print('_______________________________')
-print(stats._strategy)
-print("stopdist:", stats._strategy.stopdist)
+print("stats._strategy:\n", stats._strategy)
+# print("stopdist:", stats._strategy.stopdist)
 # print('_______________________________')
 
 print('____________________________________________________________')
-print(stats)
+print("stats:\n", stats)
+print("Sortino Ratio:", stats["Sortino Ratio"])
+print("Buy & Hold Return [%]:", stats["Buy & Hold Return [%]"])
 print('____________________________________________________________')
 
-print('trades:', stats._trades)
+print('stats._trades:\n', stats._trades)
 # print('____________________________________________________________')
-bt.plot()
+# bt.plot()
 
 print('POWER IMPACT COUNTER:')
 for k, v in impact_counter.items():
