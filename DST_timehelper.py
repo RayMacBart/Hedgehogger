@@ -131,7 +131,7 @@ def get_vol2mean_zscore_deviation(voldiff, span, TS, VMMTs, clims):
 
 def is_stoptime(TS, stopdist, reenterdist, clims):  # TS = TimeStamp,  clims = candle length in minutes
    switch_hour = 22 if get_time_period(TS) == 'winter' else 21
-   if (TS.weekday == 4 and TS.hour >= switch_hour) or TS.TS.weekday == 5 or (TS.weekday == 6 and TS.hour < switch_hour):
+   if (TS.weekday == 4 and TS.hour >= switch_hour) or TS.weekday == 5 or (TS.weekday == 6 and TS.hour < switch_hour):
       return True
    if clims > stopdist:
       stopdist = clims

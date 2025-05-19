@@ -1,0 +1,87 @@
+Metadata-Version: 2.1
+Name: sambo
+Version: 1.25.1
+Summary: Sequential And Model-Based Optimization
+Home-page: https://sambo-optimization.github.io
+License: AGPL-3.0
+Project-URL: Documentation, https://sambo-optimization.github.io/doc/sambo/
+Project-URL: Source, https://github.com/sambo-optimization/sambo
+Project-URL: Tracker, https://github.com/sambo-optimization/sambo/issues
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Mathematics
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Classifier: License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: Financial and Insurance Industry
+Classifier: Intended Audience :: Healthcare Industry
+Classifier: Intended Audience :: Manufacturing
+Classifier: Intended Audience :: Science/Research
+Classifier: Operating System :: OS Independent
+Classifier: Framework :: Jupyter
+Classifier: Framework :: Matplotlib
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Typing :: Typed
+Requires-Python: >= 3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE.md
+Requires-Dist: numpy >=1.10.0
+Requires-Dist: scipy >=1.11.0
+Provides-Extra: all
+Requires-Dist: scikit-learn >=1.1 ; extra == 'all'
+Requires-Dist: joblib ; extra == 'all'
+Requires-Dist: matplotlib ; extra == 'all'
+
+[![SAMBO - Sequential And Model-Based Optimization](logo.svg)](https://sambo-optimization.github.io/)
+=====
+[![Build Status](https://img.shields.io/github/actions/workflow/status/sambo-optimization/sambo/ci.yml?branch=master&style=for-the-badge)](https://github.com/sambo-optimization/sambo/actions)
+[![Code Coverage](https://img.shields.io/badge/coverage-96%25-%2397ca00?style=for-the-badge)](https://github.com/sambo-optimization/sambo/actions/workflows/ci.yml)
+[![sambo on PyPI](https://img.shields.io/pypi/v/sambo.svg?color=blue&style=for-the-badge)](https://pypi.org/project/sambo)
+[![package downloads](https://img.shields.io/pypi/dm/sambo.svg?color=skyblue&style=for-the-badge)](https://pypistats.org/packages/sambo)
+[![total downloads](https://img.shields.io/pepy/dt/sambo?style=for-the-badge&label=%E2%88%91&color=skyblue)](https://pypistats.org/packages/sambo)
+[![GitHub Sponsors](https://img.shields.io/github/sponsors/kernc?color=pink&style=for-the-badge&label=%E2%99%A5)](https://github.com/sponsors/kernc)
+
+SAMBO: Sequential And Model-Based (Bayesian) Optimization of black-box objective functions.
+
+[**Project website**](https://sambo-optimization.github.io)
+
+[Documentation]
+
+[Documentation]: https://sambo-optimization.github.io/doc/sambo/
+
+
+Installation
+------------
+```shell
+$ pip install sambo
+# or
+$ pip install 'sambo[all]'   # Pulls in Matplotlib, scikit-learn
+```
+
+
+Usage
+-----
+See [examples on the project website](https://sambo-optimization.github.io/#examples).
+
+
+Features
+--------
+* Python 3+
+* Simple usage, standard API.
+* Algorithms prioritize to minimize number of evaluations of the objective function: SHGO, SCE-UA and SMBO available.
+* Minimal dependencies: NumPy, SciPy (scikit-learn & Matplotlib optional).
+* State-of-the-art performance—see [benchmark results](https://sambo-optimization.github.io/#benchmark)
+  against other common optimizer implementations.
+* Integral, real (floating), and categorical dimensions.
+* Fast approximate global black-box optimization.
+* [Beautiful Matplotlib charts](https://sambo-optimization.github.io/#examples).
+
+
+
+
+
+Development
+-----------
+Check [CONTRIBUTING.md](CONTRIBUTING.md) for hacking details.

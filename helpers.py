@@ -22,8 +22,8 @@ def fill_inclomplete_data(data, ref, name):
    if len(data) < len(ref):
       for i in range(len(ref) - len(data)):
          yield data[-1]
-         if i == len(ref) - len(data) - 1:
-            print(f"FILLED UP DATA OF COLUMN '{name}' WITH IT'S LAST VALUE UNTIL THE END!")
+         # if i == len(ref) - len(data) - 1:
+         #    print(f"FILLED UP DATA OF COLUMN '{name}' WITH IT'S LAST VALUE UNTIL THE END!")
 
 
 def remove_nocomma_anomaly(x):
@@ -130,18 +130,19 @@ def seclast_swing_generator(Close, last_swing):
 
 def seclast_swing(Close, last_swing):
    seclast_swing = list(seclast_swing_generator(Close, last_swing))
-   return seclast_swing
-
-def seclast_swing(Close, last_swing):
-   seclast_swing = []
-   seclast_swing.append(Close[0])
-   for idx in range(1, len(last_swing)):
-      if last_swing[idx] != last_swing[idx-1]:
-         seclast_swing.append(last_swing[idx-1])
-      else:
-         seclast_swing.append(seclast_swing[-1])
    seclast_swing = trans_list_to_BT_array(seclast_swing, 'seclast swing')
    return seclast_swing
+
+# def seclast_swing(Close, last_swing):
+#    seclast_swing = []
+#    seclast_swing.append(Close[0])
+#    for idx in range(1, len(last_swing)):
+#       if last_swing[idx] != last_swing[idx-1]:
+#          seclast_swing.append(last_swing[idx-1])
+#       else:
+#          seclast_swing.append(seclast_swing[-1])
+#    seclast_swing = trans_list_to_BT_array(seclast_swing, 'seclast swing')
+#    return seclast_swing
 
 
 def dir(Close, last, seclast):

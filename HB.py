@@ -2,8 +2,10 @@ import sys
 import os
 import pandas as pd
 import pandas_ta as ta
+import numpy as np
 import helpers
 import indicator_setups
+import sambo
 import camafuncs
 import fibofuncs
 import sizegap
@@ -11,6 +13,7 @@ import sizepeak
 from power import powers
 import TSL
 import DST_timehelper
+import value_dumper as valdump
 from backtesting import Backtest, Strategy
 # from backtesting.lib import crossover
 
@@ -76,9 +79,9 @@ class Hedgehog(Strategy):
    # indicator calculation windows
    RSI_win = 20
    CCI_win = 20
-   MACD_shortwin = 12
-   MACD_longwin = 26
-   MACD_signalwin = 9
+   MACD_shortwin = 4
+   MACD_longwin = 7
+   MACD_signalwin = 3
    PSAR_af0 = 0.02
    PSAR_af = 0.02
    PSAR_max_af = 0.2
@@ -104,7 +107,7 @@ class Hedgehog(Strategy):
    peak_accuracy = 5  # area of peak value recognition in % --> the lower, the more accurate!
 
    # change measure windows:
-   MACD_chwin = 5 # 3-8 
+   MACD_chwin = 8 # 3-8 
    histo_chwin = 5 # 3-8
    VWAP_chwin = 8 # 3-8
    fibo_chwin = 5 # 3-8
@@ -150,8 +153,8 @@ class Hedgehog(Strategy):
 
    minTSLdist = 0.0001*adjufac  # opt steps:  0.00005, 0.0001, 0.00015, 0.0002, 0.00025 ...
 
-   close_triggerpower = 3
-   order_triggerpower =  8
+   close_triggerpower = 1
+   order_triggerpower =  1
 
    size = 0.1  # of buy/sell orders
 
@@ -166,75 +169,75 @@ class Hedgehog(Strategy):
       self.PSAR_df = ta.psar(self.data.High.s, self.data.Low.s, self.data.Close.s)
       self.PSAR = self.I(indicator_setups.PSAR, self.PSAR_df[f'PSARl_{self.PSAR_af0}_{self.PSAR_max_af}'], 
                          self.PSAR_df[f'PSARs_{self.PSAR_af0}_{self.PSAR_max_af}'], self.data.Close, name='PSAR')
-      self.RSI = self.I(ta.rsi, self.data.Close.s, self.RSI_win)
-      self.CCI = self.I(ta.cci, self.data.High.s, self.data.Low.s, self.data.Close.s, self.CCI_win)
+    #   self.RSI = self.I(ta.rsi, self.data.Close.s, self.RSI_win)
+    #   self.CCI = self.I(ta.cci, self.data.High.s, self.data.Low.s, self.data.Close.s, self.CCI_win)
       self.MACD_df = ta.macd(self.data.Close.s, self.MACD_shortwin, self.MACD_longwin, self.MACD_signalwin)
       self.MACD_macd = self.I(lambda: self.MACD_df[f'MACD_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='MACD')
       self.MACD_histogram = self.I(lambda: self.MACD_df[f'MACDh_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Histogram')
       # self.MACD_signalline = self.I(lambda: self.MACD_df[f'MACDs_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Signalline')
-      self.VWAP = self.I(ta.vwap, self.data.High.s, self.data.Low.s, self.data.Close.s, self.data.Volume.s, name='VWAP')
-      self.bbands_df = ta.bbands(self.data.Close.s, self.bbands_win)
-      self.lowerband = self.I(indicator_setups.lowerband, self.bbands_df[f'BBL_{self.bbands_win}_2.0'], name='lower bband')
-      self.upperband = self.I(indicator_setups.upperband, self.bbands_df[f'BBU_{self.bbands_win}_2.0'], name='upper bband')
-      self.middleband = self.I(indicator_setups.middleband, self.bbands_df[f'BBM_{self.bbands_win}_2.0'], name='middle bband')
-      self.bandwidth = self.I(indicator_setups.bandwidth, self.bbands_df[f'BBB_{self.bbands_win}_2.0'], name='bband width')
-      self.ATR = self.I(ta.atr, self.data.High.s, self.data.Low.s, self.data.Close.s, self.ATR_win, name='ATR')
-      self.ADX_df = ta.adx(self.data.High.s, self.data.Low.s, self.data.Close.s, self.ADX_win)
-      self.ADX_adx = self.I(indicator_setups.get_adx, self.ADX_df[f'ADX_{self.ADX_win}'], name='ADX')
-      self.ADX_DM_pos = self.I(indicator_setups.get_dmp, self.ADX_df[f'DMP_{self.ADX_win}'], name='DM+')
-      self.ADX_DM_neg = self.I(indicator_setups.get_dmn, self.ADX_df[f'DMN_{self.ADX_win}'], name='DM-')
-      cama_start_idxs, initday_usable = camafuncs.get_cama_startidx(self.data.index, candlesize)
-      cama_dailydata = camafuncs.get_cama_dailydata(self.data.index, self.data.High, self.data.Low,
-                                            self.data.Close, cama_start_idxs, initday_usable)
-      self.cama_R4 = self.I(camafuncs.cama_R4, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
-      self.cama_R3 = self.I(camafuncs.cama_R3, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
-      self.cama_S3 = self.I(camafuncs.cama_S3, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
-      self.cama_S4 = self.I(camafuncs.cama_S4, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
+    #   self.VWAP = self.I(ta.vwap, self.data.High.s, self.data.Low.s, self.data.Close.s, self.data.Volume.s, name='VWAP')
+    #   self.bbands_df = ta.bbands(self.data.Close.s, self.bbands_win)
+    #   self.lowerband = self.I(indicator_setups.lowerband, self.bbands_df[f'BBL_{self.bbands_win}_2.0'], name='lower bband')
+    #   self.upperband = self.I(indicator_setups.upperband, self.bbands_df[f'BBU_{self.bbands_win}_2.0'], name='upper bband')
+    #   self.middleband = self.I(indicator_setups.middleband, self.bbands_df[f'BBM_{self.bbands_win}_2.0'], name='middle bband')
+    #   self.bandwidth = self.I(indicator_setups.bandwidth, self.bbands_df[f'BBB_{self.bbands_win}_2.0'], name='bband width')
+    #   self.ATR = self.I(ta.atr, self.data.High.s, self.data.Low.s, self.data.Close.s, self.ATR_win, name='ATR')
+    #   self.ADX_df = ta.adx(self.data.High.s, self.data.Low.s, self.data.Close.s, self.ADX_win)
+    #   self.ADX_adx = self.I(indicator_setups.get_adx, self.ADX_df[f'ADX_{self.ADX_win}'], name='ADX')
+    #   self.ADX_DM_pos = self.I(indicator_setups.get_dmp, self.ADX_df[f'DMP_{self.ADX_win}'], name='DM+')
+    #   self.ADX_DM_neg = self.I(indicator_setups.get_dmn, self.ADX_df[f'DMN_{self.ADX_win}'], name='DM-')
+    #   cama_start_idxs, initday_usable = camafuncs.get_cama_startidx(self.data.index, candlesize)
+    #   cama_dailydata = camafuncs.get_cama_dailydata(self.data.index, self.data.High, self.data.Low,
+    #                                         self.data.Close, cama_start_idxs, initday_usable)
+    #   self.cama_R4 = self.I(camafuncs.cama_R4, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
+    #   self.cama_R3 = self.I(camafuncs.cama_R3, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
+    #   self.cama_S3 = self.I(camafuncs.cama_S3, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
+    #   self.cama_S4 = self.I(camafuncs.cama_S4, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
       self.last_swing = self.I(helpers.last_swing, self.data.Open, self.data.Close)
       self.seclast_swing = self.I(helpers.seclast_swing, self.data.Close, self.last_swing)
-      self.sizegap_up = self.I(sizegap.sizegap_up, self.last_swing, self.seclast_swing, 
-                                                  self.sizegap_win, self.sizegap_granularity, name='GAP+') 
-      self.sizegap_down = self.I(sizegap.sizegap_down, self.last_swing, self.seclast_swing, 
-                                                  self.sizegap_win, self.sizegap_granularity, name='GAP-')
-      self.sizepeak_up = self.I(sizepeak.sizepeak_up, self.last_swing, self.seclast_swing, 
-                                                  self.sizepeak_win, self.sizepeak_granularity, name='PEAK+') 
-      self.sizepeak_down = self.I(sizepeak.sizepeak_down, self.last_swing, self.seclast_swing, 
-                                                  self.sizepeak_win, self.sizepeak_granularity, name='PEAK-')
-      self.fibo_dist2 = self.I(fibofuncs.fibo_dist2, self.data.Close, self.last_swing, self.seclast_swing)
-      self.fibo_dist4 = self.I(fibofuncs.fibo_dist4, self.data.Close, self.last_swing, self.seclast_swing)
-      self.fibo_dist6 = self.I(fibofuncs.fibo_dist6, self.data.Close, self.last_swing, self.seclast_swing)
-      self.fibo_dist8 = self.I(fibofuncs.fibo_dist8, self.data.Close, self.last_swing, self.seclast_swing)
+    #   self.sizegap_up = self.I(sizegap.sizegap_up, self.last_swing, self.seclast_swing, 
+    #                                               self.sizegap_win, self.sizegap_granularity, name='GAP+') 
+    #   self.sizegap_down = self.I(sizegap.sizegap_down, self.last_swing, self.seclast_swing, 
+    #                                               self.sizegap_win, self.sizegap_granularity, name='GAP-')
+    #   self.sizepeak_up = self.I(sizepeak.sizepeak_up, self.last_swing, self.seclast_swing, 
+    #                                               self.sizepeak_win, self.sizepeak_granularity, name='PEAK+') 
+    #   self.sizepeak_down = self.I(sizepeak.sizepeak_down, self.last_swing, self.seclast_swing, 
+    #                                               self.sizepeak_win, self.sizepeak_granularity, name='PEAK-')
+    #   self.fibo_dist2 = self.I(fibofuncs.fibo_dist2, self.data.Close, self.last_swing, self.seclast_swing)
+    #   self.fibo_dist4 = self.I(fibofuncs.fibo_dist4, self.data.Close, self.last_swing, self.seclast_swing)
+    #   self.fibo_dist6 = self.I(fibofuncs.fibo_dist6, self.data.Close, self.last_swing, self.seclast_swing)
+    #   self.fibo_dist8 = self.I(fibofuncs.fibo_dist8, self.data.Close, self.last_swing, self.seclast_swing)
       # DISCOVERY: Breaking these fibos indicates overall trend in that direction where it broke through!
       self.dirs = self.I(helpers.dir, self.data.Close, self.last_swing, self.seclast_swing)
       self.indicators = {'PSAR': self.PSAR, 'DIR': self.dirs,
-                         'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin, 'mdfpwi': self.vol_mdfpwi,
-                                 'max_impact_zscore': self.vol_max_impact_zscore, 'weight': self.volume_weight},
-                         'VWAP': {'vwap': self.VWAP, 'chwin': self.VWAP_chwin, 'weight': self.VWAP_weight,
-                                  'expfac': self.vwap_expfac}, # difference expansion factor
-                         'ATR': {'atr': self.ATR,  'chwin': self.ATR_chwin, 'mincalcwin': self.ATR_mincalcwin, 'win': self.ATR_win,
-                                 'abs-weight': self.ATR_abs_weight, 'dyn-weight': self.ATR_dyn_weight, 'TSL-weight': self.ATR_TSL_weight},
-                         'ADX': {'adx': self.ADX_adx, 'DM+': self.ADX_DM_pos, 'DM-': self.ADX_DM_neg, 'chwin': self.ADX_chwin,
-                                 'treshold': self.ADX_treshold, 'abs-weight': self.ADX_abs_weight, 'dyn-weight': self.ADX_dyn_weight},
-                         'RSI': {'rsi': self.RSI, 'low': self.RSI_lower_bound, 'high': self.RSI_upper_bound,
-                                 'chwin': self.RSI_chwin, 'weight': self.RSI_weight},
-                         'CCI': {'cci': self.CCI, 'low': self.CCI_lower_treshold, 'high': self.CCI_upper_treshold,
-                                 'chwin': self.CCI_chwin, 'weight': self.CCI_weight},
+                        #  'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin, 'mdfpwi': self.vol_mdfpwi,
+                        #          'max_impact_zscore': self.vol_max_impact_zscore, 'weight': self.volume_weight},
+                        #  'VWAP': {'vwap': self.VWAP, 'chwin': self.VWAP_chwin, 'weight': self.VWAP_weight,
+                        #           'expfac': self.vwap_expfac}, # difference expansion factor
+                        #  'ATR': {'atr': self.ATR,  'chwin': self.ATR_chwin, 'mincalcwin': self.ATR_mincalcwin, 'win': self.ATR_win,
+                        #          'abs-weight': self.ATR_abs_weight, 'dyn-weight': self.ATR_dyn_weight, 'TSL-weight': self.ATR_TSL_weight},
+                        #  'ADX': {'adx': self.ADX_adx, 'DM+': self.ADX_DM_pos, 'DM-': self.ADX_DM_neg, 'chwin': self.ADX_chwin,
+                        #          'treshold': self.ADX_treshold, 'abs-weight': self.ADX_abs_weight, 'dyn-weight': self.ADX_dyn_weight},
+                        #  'RSI': {'rsi': self.RSI, 'low': self.RSI_lower_bound, 'high': self.RSI_upper_bound,
+                        #          'chwin': self.RSI_chwin, 'weight': self.RSI_weight},
+                        #  'CCI': {'cci': self.CCI, 'low': self.CCI_lower_treshold, 'high': self.CCI_upper_treshold,
+                        #          'chwin': self.CCI_chwin, 'weight': self.CCI_weight},
                          'MACD': {'macd': self.MACD_macd, 'histo': self.MACD_histogram,
                                   #'signal': self.MACD_signalline, # not used (yet?)
                                   'macd_chwin': self.MACD_chwin, 'histo_chwin': self.histo_chwin,
                                   'zeroweight': self.MACD_zeroweight, 'histoweight': self.MACD_histoweight},
-                         'BB': {'low': self.lowerband, 'high': self.upperband,'mid': self.middleband,
-                                'width': self.bandwidth, 'chwin-out': self.bbands_chwin_out, 'chwin-trend': self.bbands_chwin_trend,
-                                'weight-out': self.bbands_weight_out, 'weight-trend': self.bbands_weight_trend, 'TSL-weight': self.bbands_TSL_weight,
-                                'TSL-chwin': self.bbands_TSL_chwin, 'expfac': self.bbands_expfac},  # width expansion factor
-                         'CAMA': {'R4': self.cama_R4, 'R3': self.cama_R3, 'S3': self.cama_S3,
-                                  'S4': self.cama_S4, '3weight': self.cama3_weight, '4weight': self.cama4_weight},
-                         'GAP': {'+': self.sizegap_up, '-': self.sizegap_down, 'accuracy': self.gap_accuracy, 'weight': self.gap_weight},
-                         'PEAK': {'+': self.sizepeak_up, '-': self.sizepeak_down, 'accuracy': self.peak_accuracy, 'weight': self.peak_weight
-                                 #  , 'swingdist': self.peak_swingdist
-                                  },
-                         'FIBO': {2: self.fibo_dist2, 4: self.fibo_dist4, 6: self.fibo_dist6,
-                                  8: self.fibo_dist8, 'chwin': self.fibo_chwin, 'weight': self.fibo_weight}
+                        #  'BB': {'low': self.lowerband, 'high': self.upperband,'mid': self.middleband,
+                        #         'width': self.bandwidth, 'chwin-out': self.bbands_chwin_out, 'chwin-trend': self.bbands_chwin_trend,
+                        #         'weight-out': self.bbands_weight_out, 'weight-trend': self.bbands_weight_trend, 'TSL-weight': self.bbands_TSL_weight,
+                        #         'TSL-chwin': self.bbands_TSL_chwin, 'expfac': self.bbands_expfac},  # width expansion factor
+                        #  'CAMA': {'R4': self.cama_R4, 'R3': self.cama_R3, 'S3': self.cama_S3,
+                        #           'S4': self.cama_S4, '3weight': self.cama3_weight, '4weight': self.cama4_weight},
+                        #  'GAP': {'+': self.sizegap_up, '-': self.sizegap_down, 'accuracy': self.gap_accuracy, 'weight': self.gap_weight},
+                        #  'PEAK': {'+': self.sizepeak_up, '-': self.sizepeak_down, 'accuracy': self.peak_accuracy, 'weight': self.peak_weight
+                        #          #  , 'swingdist': self.peak_swingdist
+                        #           },
+                        #  'FIBO': {2: self.fibo_dist2, 4: self.fibo_dist4, 6: self.fibo_dist6,
+                        #           8: self.fibo_dist8, 'chwin': self.fibo_chwin, 'weight': self.fibo_weight}
                         }
       self.powers = self.I(powers, self.data, self.indicators, self.last_swing, self.data.index, self.volmean_movetimes, clims, impact_counter)
 
@@ -245,44 +248,45 @@ class Hedgehog(Strategy):
 
 
    def next(self):
-       pass
-      # longs, shorts = helpers.get_tradetype_amounts(self.trades)
-      # neworder_stoptime = DST_timehelper.is_stoptime(self.data.index[-1], self.neworder_stoptime_dist, self.reenter_time_dist, clims)  # clims = candle length in minutes
-      # order_closetime = DST_timehelper.is_stoptime(self.data.index[-1], self.order_closetime_dist, self.reenter_time_dist, clims) if neworder_stoptime else False
-      # if longs:
-      #    for trade in longs:
-      #       if order_closetime:
-      #          trade.close()
-      #       else:
-      #          trade.sl = self.data.Close[-1] - self.abs_SL_dists[-1]
-      # if shorts:
-      #    for trade in shorts:
-      #       if order_closetime:
-      #          trade.close()
-      #       else:
-      #          trade.sl = self.data.Close[-1] + self.abs_SL_dists[-1]
-      # else:
-      #    if powers[-1] <= -self.close_triggerpower:
-      #       if longs:
-      #          for trade in longs:
-      #             trade.close()
-      #       if (powers[-1] <= -self.order_triggerpower) and not neworder_stoptime:
-      #          self.sell(size=self.size, sl=(self.data.Close[-1] + self.abs_SL_dists[-1]))  # multiple sell order accumulation intended!
-      #    elif powers[-1] >= self.close_triggerpower:
-      #       if shorts:
-      #          for trade in shorts:
-      #             trade.close()
-      #       if (powers[-1] >= self.order_triggerpower) and not neworder_stoptime:
-      #          self.buy(size=self.size, sl=(self.data.Close[-1] - self.abs_SL_dists[-1]))  # multiple buy order accumulation intended!
+      longs, shorts = helpers.get_tradetype_amounts(self.trades)
+      neworder_stoptime = DST_timehelper.is_stoptime(self.data.index[-1], self.neworder_stoptime_dist, self.reenter_time_dist, clims)  # clims = candle length in minutes
+      order_closetime = DST_timehelper.is_stoptime(self.data.index[-1], self.order_closetime_dist, self.reenter_time_dist, clims) if neworder_stoptime else False
+      if longs:
+         for trade in longs:
+            if order_closetime:
+               trade.close()
+            else:
+               trade.sl = self.data.Close[-1] - self.abs_SL_dists[-1]
+      if shorts:
+         for trade in shorts:
+            if order_closetime:
+               trade.close()
+            else:
+               trade.sl = self.data.Close[-1] + self.abs_SL_dists[-1]
+      else:
+         if self.powers[-1] <= -self.close_triggerpower:
+            if longs:
+               for trade in longs:
+                  trade.close()
+            if (self.powers[-1] <= -self.order_triggerpower) and not neworder_stoptime:
+               self.sell(size=self.size, sl=((self.data.Close[-1] + self.abs_SL_dists[-1]) if (self.abs_SL_dists[-1] > 0.0001) else 
+                                             (self.data.Close[-1] + 0.0001)))  # multiple sell order accumulation intended!
+         elif self.powers[-1] >= self.close_triggerpower:
+            if shorts:
+               for trade in shorts:
+                  trade.close()
+            if (self.powers[-1] >= self.order_triggerpower) and not neworder_stoptime:
+               self.buy(size=self.size, sl=((self.data.Close[-1] - self.abs_SL_dists[-1]) if (self.abs_SL_dists[-1] > 0.0001) else 
+                                            (self.data.Close[-1] - 0.0001)))  # multiple buy order accumulation intended!
 
 
 
 bt = Backtest(df, Hedgehog, cash=1000, 
               commission=0.00012*adjufac, 
-              margin=0.033)
+              margin=0.033, hedging=True)
 
 
-stats = bt.run()
+# stats = bt.run()
 
 
 # for optimization, include the objectives return%, profit factor, sharpe ratio, sortino ratio and calmar ratio
@@ -293,7 +297,61 @@ stats = bt.run()
 # inputs in the optimize() functions for every objective - this ensures a cross-objective consistent normalization 
 # on a high, fastidious niveau.
 
-# stats = bt.optimize(
+stats = bt.optimize(
+               MACD_shortwin = [3,25],
+               MACD_longwin = [4,50],
+               MACD_signalwin = [2,20],
+               MACD_chwin = [3,8],
+               maximize = 'Avg. Trade [%]',
+            #    maximize = lambda stats: stats['Profit Factor'] 
+            #    if stats['# Trades'] >= 100 else -np.inf,
+               method='sambo',
+               max_tries=500,
+               constraint=lambda p: p.MACD_signalwin < p.MACD_shortwin < p.MACD_longwin
+            )
+
+#    RSI_upper_bound = range(55, 85, 10),
+#    RSI_lower_bound = range(15, 45, 10),
+#    RSI_win = range(10, 100, 10),
+   # constraint = lambda x: x = x
+
+# print('_______________________________')
+# print("stats._strategy._maximize:\n", stats._strategy._maximize)
+with open('.\\optimization_files\\params.txt', 'a') as paramfile:
+   for k, v in stats._strategy._params.items():
+      paramfile.write(f"{k}: {v} | ")
+   paramfile.write('\n')
+print("stats._strategy._params:\n", stats._strategy._params)
+# print("stopdist:", stats._strategy.stopdist)
+# print('_______________________________')
+
+print('____________________________________________________________')
+# print("stats:\n", stats)
+print("Return:", stats["Return [%]"])
+print("Avg. Trade:", stats["Avg. Trade [%]"])
+print("Expectancy:", stats["Expectancy [%]"])
+print("SQN:", stats["SQN"])
+print("Sharpe Ratio:", stats["Sharpe Ratio"])
+print("Sortino Ratio:", stats["Sortino Ratio"])
+print("Calmar Ratio:", stats["Calmar Ratio"])
+print("Profit Factor:", stats["Profit Factor"])
+# valdump.dump_return(stats["Return [%]"])
+# valdump.dump_sharpe(stats["Sharpe Ratio"])
+# valdump.dump_sortino(stats["Sortino Ratio"])
+# valdump.dump_calmar(stats["Calmar Ratio"])
+valdump.dump_profac(stats["Profit Factor"])
+print('____________________________________________________________')
+
+# print('stats._trades:\n', stats._trades)
+# print('____________________________________________________________')
+bt.plot()
+
+# print('POWER IMPACT COUNTER:')
+# for k, v in impact_counter.items():
+#    print(f"{k}: {v}")
+
+
+
 #    stopdist = [
       # 0.00001, 0.00002, 0.00003, 0.00004, 0.00005, 0.00006, 0.00007, 0.00008, 0.00009, 0.0001, 
       #          0.00011, 0.00012, 0.00013, 0.00014, 0.00015, 0.00016, 0.00017, 0.00018, 0.00019, 0.0002,
@@ -305,31 +363,3 @@ stats = bt.run()
                # 0.00071, 0.00072, 0.00073, 0.00074, 0.00075, 0.00076, 0.00077, 0.00078, 0.00079, 0.0008,
                # 0.00081, 0.00082, 0.00083, 0.00084, 0.00085, 0.00086, 0.00087, 0.00088, 0.00089, 0.0009
                # ],
-   # RSI_upper_bound = range(55, 85, 10),
-   # RSI_lower_bound = range(15, 45, 10),
-   # RSI_win = range(10, 100, 10),
-   # maximize = 'Return [%]',
-   # constraint = lambda x: x = x
-# )
-
-
-# print('_______________________________')
-print("stats._strategy:\n", stats._strategy)
-# print("stopdist:", stats._strategy.stopdist)
-# print('_______________________________')
-
-print('____________________________________________________________')
-print("stats:\n", stats)
-print("Sortino Ratio:", stats["Sortino Ratio"])
-print("Buy & Hold Return [%]:", stats["Buy & Hold Return [%]"])
-print('____________________________________________________________')
-
-print('stats._trades:\n', stats._trades)
-# print('____________________________________________________________')
-# bt.plot()
-
-print('POWER IMPACT COUNTER:')
-for k, v in impact_counter.items():
-   print(f"{k}: {v}")
-
-
