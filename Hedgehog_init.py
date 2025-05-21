@@ -1,3 +1,5 @@
+import os
+import pandas as pd
 import pandas_ta as ta
 import helpers
 import indicator_setups
@@ -7,11 +9,29 @@ import sizegap
 import sizepeak
 import TSL
 from power import powers
+from helpers import convert2VMMT_dict
+from var_config import get_vars
 
 
 def __init__(self):
 
-   self.minTSLdist = 0.0001*self.outvars['adjufac']  # opt steps:  0.00005, 0.0001, 0.00015, 0.0002, 0.00025 ...
+   # self.asset, self.candlesize = get_vars()
+   self.adjufac = 100 if self.asset == "USDJPY" else 1  # adjustment factor for the USD/JPY pair which has a 100x higher pip-size!
+   self.clims = 60 if self.candlesize == 'H1' else int(self.candlesize[1:])  # clims = candle length in minutes
+   self.impact_counter = {'MACD': 0, 'MACD-zeroX': 0, 'MACD-sigX': 0, 'VWAP': 0, 'FIBO': 0, 'RSI': 0, 'RSI-abs': 0, 'RSI-dyn': 0,
+                     'CCI': 0, 'CCI-abs': 0, 'CCI-dyn': 0, 'BB-out': 0, 'BB-trend': 0, 'ADX': 0, 'ADX-abs': 0, 'ADX-dyn': 0,
+                     'VOL': 0, 'CAMA': 0, 'GAP': 0, 'PEAK': 0, 'ATR': 0, 'ATR-abs': 0, 'ATR-dyn': 0}
+   try:
+      file_path2 = os.path.join("volmean_data", f"volmean_{self.asset}_{self.candlesize}.csv")
+      if not os.path.exists(file_path2):
+         raise FileNotFoundError(f"File not found: {file_path2}")
+      volmean_df = pd.read_csv(file_path2, sep="\t")
+      print("Volmean Data successfully loaded!")
+   except Exception as e:
+      print('Error occured during loading VOLUME MEAN data:', e)
+   self.volmean_movetimes = convert2VMMT_dict(volmean_df)
+
+   self.minTSLdist = 0.0001*self.adjufac  # opt steps:  0.00005, 0.0001, 0.00015, 0.0002, 0.00025 ...
 
    self.PSAR_df = ta.psar(self.data.High.s, self.data.Low.s, self.data.Close.s)
    self.PSAR = self.I(indicator_setups.PSAR, self.PSAR_df[f'PSARl_{self.PSAR_af0}_{self.PSAR_max_af}'], 
@@ -87,7 +107,7 @@ def __init__(self):
                      #           8: self.fibo_dist8, 'chwin': self.fibo_chwin, 'weight': self.fibo_weight}
                      }
    self.powers = self.I(powers, self.data, self.indicators, self.last_swing, self.data.index, 
-                        self.volmean_movetimes, self.outvars['clims'], self.outvars['impact_counter'])
+                        self.volmean_movetimes, self.clims, self.impact_counter)
 
 
    self.abs_SL_dists = self.I(TSL.stoplosses, self.data.Close, self.indicators, self.powers, self.power_TSL_chwin, 

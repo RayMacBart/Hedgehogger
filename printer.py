@@ -3,11 +3,13 @@ import value_dumper as valdump
 def print_results(results):
    for r in results:
       print('____________________________________________________________')
-      print(f"\t::: {r['asset']} || {r['candlesize']} || {r['pastshift']} :::")
-      print('____________________________________________________________')
-      print("r['stats']._strategy._params:\n", r['stats']._strategy._params)
+      print(f"\t::: {r['asset']} || {r['candlesize']} || {r['pastshift']} :::\n")
+      for k, v in r['stats']._strategy._params.items():
+         if k != 'outvars':
+            print(f"    {k}: {v}")
       print('____________________________________________________________')
       # print("r['stats']:\n", r['stats'])
+      # print('____________________________________________________________')
       print("Return:", r['stats']["Return [%]"])
       print("Avg. Trade:", r['stats']["Avg. Trade [%]"])
       print("Expectancy:", r['stats']["Expectancy [%]"])
@@ -16,7 +18,7 @@ def print_results(results):
       print("Sortino Ratio:", r['stats']["Sortino Ratio"])
       print("Calmar Ratio:", r['stats']["Calmar Ratio"])
       print("Profit Factor:", r['stats']["Profit Factor"])
-      print('____________________________________________________________\n')
+      print('____________________________________________________________')
       # print("stopdist:", r['stats']._strategy.stopdist)
       # print('r['stats']._trades:\n', r['stats']._trades)
       # print("r['stats']._strategy._maximize:\n", r['stats']._strategy._maximize)

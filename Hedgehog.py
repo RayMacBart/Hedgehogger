@@ -1,16 +1,14 @@
-from helpers import convert2VMMT_dict
 from backtesting import Strategy
 import Hedgehog_init
 import Hedgehog_next
+from var_config import get_vars
 
 # pairs to use with IG.com due to their low spreads:  EURUSD,  AUDUSD,  USDJPY
 
 
-
-
 class Hedgehog(Strategy):
 
-   outvars = {'volmean_df': None, 'clims': None, 'impact_counter': None, 'adjufac': None}  # "outside variables"
+   asset, candlesize = get_vars()
 
    # boundaries/tresholds:
    RSI_upper_bound = 60
@@ -102,7 +100,7 @@ class Hedgehog(Strategy):
    # cc = -1  # candle counter
    # stopdist = 0.0003
 
-   volmean_movetimes = convert2VMMT_dict(outvars['volmean_df'])
+   
 
 
 

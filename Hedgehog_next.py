@@ -4,9 +4,9 @@ import DST_timehelper
 def next(self):
    longs, shorts = helpers.get_tradetype_amounts(self.trades)
    neworder_stoptime = DST_timehelper.is_stoptime(self.data.index[-1], self.neworder_stoptime_dist, 
-                                                   self.reenter_time_dist, self.outvars['clims'])  # clims = candle length in minutes
+                                                   self.reenter_time_dist, self.clims)  # clims = candle length in minutes
    order_closetime = DST_timehelper.is_stoptime(self.data.index[-1], self.order_closetime_dist, self.reenter_time_dist,
-                                                self.outvars['clims']) if neworder_stoptime else False
+                                                self.clims) if neworder_stoptime else False
    if longs:
       for trade in longs:
          if order_closetime:
