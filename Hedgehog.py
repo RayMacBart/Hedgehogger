@@ -2,6 +2,7 @@ from backtesting import Strategy
 import Hedgehog_init
 import Hedgehog_next
 from var_config import get_vars
+from volfuncs import get_vmmts
 
 # pairs to use with IG.com due to their low spreads:  EURUSD,  AUDUSD,  USDJPY
 
@@ -9,10 +10,13 @@ from var_config import get_vars
 class Hedgehog(Strategy):
 
    asset, candlesize = get_vars()
-
+   volmean_movetimes = get_vmmts(asset, candlesize)
+   adjufac = 100 if asset == "USDJPY" else 1  # adjustment factor for the USD/JPY pair which has a 100x higher pip-size!
+   clims = 60 if candlesize == 'H1' else int(candlesize[1:])  # clims = candle length in minutes
+   
    # boundaries/tresholds:
-   RSI_upper_bound = 60
-   RSI_lower_bound = 40
+   RSI_upper_bound = 70
+   RSI_lower_bound = 30
    CCI_upper_treshold = 100
    CCI_lower_treshold = -100
    ADX_treshold = 25
@@ -20,9 +24,9 @@ class Hedgehog(Strategy):
    # indicator calculation windows
    RSI_win = 20
    CCI_win = 20
-   MACD_shortwin = 4
+   MACD_shortwin = 3
    MACD_longwin = 7
-   MACD_signalwin = 3
+   MACD_signalwin = 2
    PSAR_af0 = 0.02
    PSAR_af = 0.02
    PSAR_max_af = 0.2
@@ -48,7 +52,7 @@ class Hedgehog(Strategy):
    peak_accuracy = 5  # area of peak value recognition in % --> the lower, the more accurate!
 
    # change measure windows:
-   MACD_chwin = 8 # 3-8 
+   MACD_chwin = 3 # 3-8 
    histo_chwin = 5 # 3-8
    VWAP_chwin = 8 # 3-8
    fibo_chwin = 5 # 3-8
@@ -72,6 +76,7 @@ class Hedgehog(Strategy):
    CCI_weight = 1
    MACD_zeroweight = 1
    MACD_histoweight = 1
+   MACD_comboweight = 1
    bbands_weight_out = 1
    bbands_weight_trend = 1
    cama3_weight = 1
@@ -103,130 +108,12 @@ class Hedgehog(Strategy):
    
 
 
-
    def init(self):
       Hedgehog_init.__init__(self)
-   #    self.minTSLdist = 0.0001*self.outvars['adjufac']  # opt steps:  0.00005, 0.0001, 0.00015, 0.0002, 0.00025 ...
-
-   #    self.PSAR_df = ta.psar(self.data.High.s, self.data.Low.s, self.data.Close.s)
-   #    self.PSAR = self.I(indicator_setups.PSAR, self.PSAR_df[f'PSARl_{self.PSAR_af0}_{self.PSAR_max_af}'], 
-   #                       self.PSAR_df[f'PSARs_{self.PSAR_af0}_{self.PSAR_max_af}'], self.data.Close, name='PSAR')
-   #  #   self.RSI = self.I(ta.rsi, self.data.Close.s, self.RSI_win)
-   #  #   self.CCI = self.I(ta.cci, self.data.High.s, self.data.Low.s, self.data.Close.s, self.CCI_win)
-   #    self.MACD_df = ta.macd(self.data.Close.s, self.MACD_shortwin, self.MACD_longwin, self.MACD_signalwin)
-   #    self.MACD_macd = self.I(lambda: self.MACD_df[f'MACD_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='MACD')
-   #    self.MACD_histogram = self.I(lambda: self.MACD_df[f'MACDh_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Histogram')
-   #    # self.MACD_signalline = self.I(lambda: self.MACD_df[f'MACDs_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Signalline')
-   #  #   self.VWAP = self.I(ta.vwap, self.data.High.s, self.data.Low.s, self.data.Close.s, self.data.Volume.s, name='VWAP')
-   #  #   self.bbands_df = ta.bbands(self.data.Close.s, self.bbands_win)
-   #  #   self.lowerband = self.I(indicator_setups.lowerband, self.bbands_df[f'BBL_{self.bbands_win}_2.0'], name='lower bband')
-   #  #   self.upperband = self.I(indicator_setups.upperband, self.bbands_df[f'BBU_{self.bbands_win}_2.0'], name='upper bband')
-   #  #   self.middleband = self.I(indicator_setups.middleband, self.bbands_df[f'BBM_{self.bbands_win}_2.0'], name='middle bband')
-   #  #   self.bandwidth = self.I(indicator_setups.bandwidth, self.bbands_df[f'BBB_{self.bbands_win}_2.0'], name='bband width')
-   #  #   self.ATR = self.I(ta.atr, self.data.High.s, self.data.Low.s, self.data.Close.s, self.ATR_win, name='ATR')
-   #  #   self.ADX_df = ta.adx(self.data.High.s, self.data.Low.s, self.data.Close.s, self.ADX_win)
-   #  #   self.ADX_adx = self.I(indicator_setups.get_adx, self.ADX_df[f'ADX_{self.ADX_win}'], name='ADX')
-   #  #   self.ADX_DM_pos = self.I(indicator_setups.get_dmp, self.ADX_df[f'DMP_{self.ADX_win}'], name='DM+')
-   #  #   self.ADX_DM_neg = self.I(indicator_setups.get_dmn, self.ADX_df[f'DMN_{self.ADX_win}'], name='DM-')
-   #  #   cama_start_idxs, initday_usable = camafuncs.get_cama_startidx(self.data.index, candlesize)
-   #  #   cama_dailydata = camafuncs.get_cama_dailydata(self.data.index, self.data.High, self.data.Low,
-   #  #                                         self.data.Close, cama_start_idxs, initday_usable)
-   #  #   self.cama_R4 = self.I(camafuncs.cama_R4, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
-   #  #   self.cama_R3 = self.I(camafuncs.cama_R3, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
-   #  #   self.cama_S3 = self.I(camafuncs.cama_S3, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
-   #  #   self.cama_S4 = self.I(camafuncs.cama_S4, self.data.Close, cama_dailydata, cama_start_idxs, initday_usable)
-   #    self.last_swing = self.I(helpers.last_swing, self.data.Open, self.data.Close)
-   #    self.seclast_swing = self.I(helpers.seclast_swing, self.data.Close, self.last_swing)
-   #  #   self.sizegap_up = self.I(sizegap.sizegap_up, self.last_swing, self.seclast_swing, 
-   #  #                                               self.sizegap_win, self.sizegap_granularity, name='GAP+') 
-   #  #   self.sizegap_down = self.I(sizegap.sizegap_down, self.last_swing, self.seclast_swing, 
-   #  #                                               self.sizegap_win, self.sizegap_granularity, name='GAP-')
-   #  #   self.sizepeak_up = self.I(sizepeak.sizepeak_up, self.last_swing, self.seclast_swing, 
-   #  #                                               self.sizepeak_win, self.sizepeak_granularity, name='PEAK+') 
-   #  #   self.sizepeak_down = self.I(sizepeak.sizepeak_down, self.last_swing, self.seclast_swing, 
-   #  #                                               self.sizepeak_win, self.sizepeak_granularity, name='PEAK-')
-   #  #   self.fibo_dist2 = self.I(fibofuncs.fibo_dist2, self.data.Close, self.last_swing, self.seclast_swing)
-   #  #   self.fibo_dist4 = self.I(fibofuncs.fibo_dist4, self.data.Close, self.last_swing, self.seclast_swing)
-   #  #   self.fibo_dist6 = self.I(fibofuncs.fibo_dist6, self.data.Close, self.last_swing, self.seclast_swing)
-   #  #   self.fibo_dist8 = self.I(fibofuncs.fibo_dist8, self.data.Close, self.last_swing, self.seclast_swing)
-   #    # DISCOVERY: Breaking these fibos indicates overall trend in that direction where it broke through!
-   #    self.dirs = self.I(helpers.dir, self.data.Close, self.last_swing, self.seclast_swing)
-   #    self.indicators = {'PSAR': self.PSAR, 'DIR': self.dirs,
-   #                      #  'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin, 'mdfpwi': self.vol_mdfpwi,
-   #                      #          'max_impact_zscore': self.vol_max_impact_zscore, 'weight': self.volume_weight},
-   #                      #  'VWAP': {'vwap': self.VWAP, 'chwin': self.VWAP_chwin, 'weight': self.VWAP_weight,
-   #                      #           'expfac': self.vwap_expfac}, # difference expansion factor
-   #                      #  'ATR': {'atr': self.ATR,  'chwin': self.ATR_chwin, 'mincalcwin': self.ATR_mincalcwin, 'win': self.ATR_win,
-   #                      #          'abs-weight': self.ATR_abs_weight, 'dyn-weight': self.ATR_dyn_weight, 'TSL-weight': self.ATR_TSL_weight},
-   #                      #  'ADX': {'adx': self.ADX_adx, 'DM+': self.ADX_DM_pos, 'DM-': self.ADX_DM_neg, 'chwin': self.ADX_chwin,
-   #                      #          'treshold': self.ADX_treshold, 'abs-weight': self.ADX_abs_weight, 'dyn-weight': self.ADX_dyn_weight},
-   #                      #  'RSI': {'rsi': self.RSI, 'low': self.RSI_lower_bound, 'high': self.RSI_upper_bound,
-   #                      #          'chwin': self.RSI_chwin, 'weight': self.RSI_weight},
-   #                      #  'CCI': {'cci': self.CCI, 'low': self.CCI_lower_treshold, 'high': self.CCI_upper_treshold,
-   #                      #          'chwin': self.CCI_chwin, 'weight': self.CCI_weight},
-   #                       'MACD': {'macd': self.MACD_macd, 'histo': self.MACD_histogram,
-   #                                #'signal': self.MACD_signalline, # not used (yet?)
-   #                                'macd_chwin': self.MACD_chwin, 'histo_chwin': self.histo_chwin,
-   #                                'zeroweight': self.MACD_zeroweight, 'histoweight': self.MACD_histoweight},
-   #                      #  'BB': {'low': self.lowerband, 'high': self.upperband,'mid': self.middleband,
-   #                      #         'width': self.bandwidth, 'chwin-out': self.bbands_chwin_out, 'chwin-trend': self.bbands_chwin_trend,
-   #                      #         'weight-out': self.bbands_weight_out, 'weight-trend': self.bbands_weight_trend, 'TSL-weight': self.bbands_TSL_weight,
-   #                      #         'TSL-chwin': self.bbands_TSL_chwin, 'expfac': self.bbands_expfac},  # width expansion factor
-   #                      #  'CAMA': {'R4': self.cama_R4, 'R3': self.cama_R3, 'S3': self.cama_S3,
-   #                      #           'S4': self.cama_S4, '3weight': self.cama3_weight, '4weight': self.cama4_weight},
-   #                      #  'GAP': {'+': self.sizegap_up, '-': self.sizegap_down, 'accuracy': self.gap_accuracy, 'weight': self.gap_weight},
-   #                      #  'PEAK': {'+': self.sizepeak_up, '-': self.sizepeak_down, 'accuracy': self.peak_accuracy, 'weight': self.peak_weight
-   #                      #          #  , 'swingdist': self.peak_swingdist
-   #                      #           },
-   #                      #  'FIBO': {2: self.fibo_dist2, 4: self.fibo_dist4, 6: self.fibo_dist6,
-   #                      #           8: self.fibo_dist8, 'chwin': self.fibo_chwin, 'weight': self.fibo_weight}
-   #                      }
-   #    self.powers = self.I(powers, self.data, self.indicators, self.last_swing, self.data.index, 
-   #                         self.volmean_movetimes, self.outvars['clims'], self.outvars['impact_counter'])
-
-
-   #    self.abs_SL_dists = self.I(TSL.stoplosses, self.data.Close, self.indicators, self.powers, self.power_TSL_chwin, 
-   #                               self.minTSLdist, self.power_TSL_weight)
-   #    self.current_sl = self.data.Close[0]
-
 
 
    def next(self):
       Hedgehog_next.next(self)
-      # longs, shorts = helpers.get_tradetype_amounts(self.trades)
-      # neworder_stoptime = DST_timehelper.is_stoptime(self.data.index[-1], self.neworder_stoptime_dist, 
-      #                                                self.reenter_time_dist, self.outvars['clims'])  # clims = candle length in minutes
-      # order_closetime = DST_timehelper.is_stoptime(self.data.index[-1], self.order_closetime_dist, self.reenter_time_dist,
-      #                                              self.outvars['clims']) if neworder_stoptime else False
-      # if longs:
-      #    for trade in longs:
-      #       if order_closetime:
-      #          trade.close()
-      #       elif self.data.Close[-1] - self.abs_SL_dists[-1] > self.current_sl:
-      #          self.current_sl = self.data.Close[-1] - self.abs_SL_dists[-1]
-      #          trade.sl = self.current_sl
-      # if shorts:
-      #    for trade in shorts:
-      #       if order_closetime:
-      #          trade.close()
-      #       elif self.data.Close[-1] + self.abs_SL_dists[-1] < self.current_sl:
-      #          self.current_sl = self.data.Close[-1] + self.abs_SL_dists[-1]
-      #          trade.sl = self.current_sl
-      # else:
-      #    if self.powers[-1] <= -self.close_triggerpower:
-      #       if longs:
-      #          for trade in longs:
-      #             trade.close()
-      #       if (self.powers[-1] <= -self.order_triggerpower) and not neworder_stoptime:
-      #          self.sell(size=self.size, sl=((self.data.Close[-1] + self.abs_SL_dists[-1]) if (self.abs_SL_dists[-1] > 0.0001) else 
-      #                                        (self.data.Close[-1] + 0.0001)))  # multiple sell order accumulation intended!
-      #    elif self.powers[-1] >= self.close_triggerpower:
-      #       if shorts:
-      #          for trade in shorts:
-      #             trade.close()
-      #       if (self.powers[-1] >= self.order_triggerpower) and not neworder_stoptime:
-      #          self.buy(size=self.size, sl=((self.data.Close[-1] - self.abs_SL_dists[-1]) if (self.abs_SL_dists[-1] > 0.0001) else 
-      #                                       (self.data.Close[-1] - 0.0001)))  # multiple buy order accumulation intended!
 
 
 

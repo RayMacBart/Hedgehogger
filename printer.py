@@ -2,11 +2,11 @@ import value_dumper as valdump
 
 def print_results(results):
    for r in results:
-      print('____________________________________________________________')
+      print('____________________________________________________________\n')
       print(f"\t::: {r['asset']} || {r['candlesize']} || {r['pastshift']} :::\n")
       for k, v in r['stats']._strategy._params.items():
          if k != 'outvars':
-            print(f"    {k}: {v}")
+            print(f"     {k}: {v}")
       print('____________________________________________________________')
       # print("r['stats']:\n", r['stats'])
       # print('____________________________________________________________')
@@ -31,17 +31,17 @@ def print_results(results):
 
 def dump_results(results):
    for r in results:
-      with open('.\\optimization_files\\params.txt', 'a') as paramfile:
+      with open('.\\optimization_files\\sambo_MACD_zero_2880_norm3.txt', 'a') as paramfile:
          for k, v in r['stats']._strategy._params.items():
-            paramfile.write(f"{k}: {v} | ")
+            paramfile.write(f"{k}:{v}|")
          paramfile.write('\n')
+      valdump.dump_expectancy(r['stats']["Expectancy [%]"])
+      valdump.dump_profac(r['stats']["Profit Factor"])
+      valdump.dump_SQN(r['stats']["SQN"])
       # valdump.dump_return(r['stats']["Return [%]"])
       # valdump.dump_sharpe(r['stats']["Sharpe Ratio"])
       # valdump.dump_sortino(r['stats']["Sortino Ratio"])
       # valdump.dump_calmar(r['stats']["Calmar Ratio"])
-      # valdump.dump_profac(r['stats']["Profit Factor"])
-      valdump.dump_expectancy(r['stats']["Expectancy [%]"])
       # valdump.dump_avgtrade(r['stats']["Avg. Trade [%]"])
-      # valdump.dump_SQN(r['stats']["SQN"])
 
       

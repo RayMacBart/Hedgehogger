@@ -1,0 +1,65 @@
+--------------------
+max_tries = 100 = 27.173913043478258% of 368,
+results:MACD_shortwin: 5 | MACD_longwin: 8 | MACD_signalwin: 4 | MACD_chwin: 3 | 
+--------------------
+____________________
+--------------------
+max_tries = 140 = 38.04347826086956% of 368,
+results:MACD_shortwin: 5 | MACD_longwin: 8 | MACD_signalwin: 4 | MACD_chwin: 7 | 
+--------------------
+____________________
+--------------------
+max_tries = 180 = 48.91304347826087% of 368,
+results:MACD_shortwin: 5 | MACD_longwin: 8 | MACD_signalwin: 4 | MACD_chwin: 3 | 
+--------------------
+____________________
+--------------------
+max_tries = 220 = 59.78260869565217% of 368,
+results:MACD_shortwin: 5 | MACD_longwin: 8 | MACD_signalwin: 4 | MACD_chwin: 3 | 
+--------------------
+____________________
+--------------------
+max_tries = 260 = 70.65217391304347% of 368,
+results:MACD_shortwin: 5 | MACD_longwin: 8 | MACD_signalwin: 4 | MACD_chwin: 3 | 
+--------------------
+____________________
+--------------------
+max_tries = 300 = 81.52173913043478% of 368,
+results:MACD_shortwin: 5 | MACD_longwin: 8 | MACD_signalwin: 4 | MACD_chwin: 3 | 
+--------------------
+____________________
+--------------------
+max_tries = 340 = 92.39130434782608% of 368,
+results:MACD_shortwin: 5 | MACD_longwin: 8 | MACD_signalwin: 4 | MACD_chwin: 3 | 
+--------------------
+____________________
+--------------------
+max_tries = 380 = 103.26086956521739% of 368,
+results:MACD_shortwin: 5 | MACD_longwin: 8 | MACD_signalwin: 4 | MACD_chwin: 3 | 
+--------------------
+____________________
+--------------------
+max_tries = 420 = 114.13043478260869% of 368,
+results:MACD_shortwin: 5 | MACD_longwin: 8 | MACD_signalwin: 4 | MACD_chwin: 6 | 
+--------------------
+____________________
+--------------------
+max_tries = 460 = 125.0% of 368,
+results:MACD_shortwin: 5 | MACD_longwin: 8 | MACD_signalwin: 4 | MACD_chwin: 3 | 
+--------------------
+____________________
+--------------------
+max_tries = 500 = 135.8695652173913% of 368,
+results:MACD_shortwin: 5 | MACD_longwin: 8 | MACD_signalwin: 4 | MACD_chwin: 8 | 
+--------------------
+____________________
+--------------------
+max_tries = 540 = 146.7391304347826% of 368,
+results:MACD_shortwin: 5 | MACD_longwin: 8 | MACD_signalwin: 4 | MACD_chwin: 3 | 
+--------------------
+____________________
+--------------------
+max_tries = 580 = 157.6086956521739% of 368,
+results:MACD_shortwin: 5 | MACD_longwin: 8 | MACD_signalwin: 4 | MACD_chwin: 3 | 
+--------------------
+____________________

@@ -4,6 +4,7 @@ import pandas as pd
 import helpers
 from backtesting import Backtest
 from Hedgehog import Hedgehog
+from volfuncs import adjust_volume_data
 from var_config import get_vars
 import printer
 import sambo
@@ -14,9 +15,11 @@ import sambo
 
 def do_backtest(param):
 
-   pastshift = param  # the only automatically iterated value
+   # pastshift = param  # the only automatically iterated value   # REUSE AFTER MAX_TRIES RESEARCH!
+   pastshift = 0  # REMOVE AFTER MAX_TRIES RESEARCH!
+
    asset, candlesize = get_vars()
-   dataspan = 2600
+   dataspan = 3000
 
    adjufac = 100 if asset == "USDJPY" else 1  # adjustment factor for the USD/JPY pair which has a 100x higher pip-size!
    
@@ -40,7 +43,7 @@ def do_backtest(param):
    df['Low'] = df['Low'].apply(helpers.remove_nocomma_anomaly)
    df['Close'] = df['Close'].apply(helpers.remove_nocomma_anomaly)
 
-   df['Volume'] = helpers.adjust_volume_data(df['Volume']).set_axis(df.index)
+   df['Volume'] = adjust_volume_data(df['Volume']).set_axis(df.index)
 
 
    bt = Backtest(df, Hedgehog, cash=1000, 
@@ -50,27 +53,49 @@ def do_backtest(param):
 
    # stats = bt.run()
 
+   max_tries = 576  # reuse after max_tries research
+
+   exp_mean = 0.019012148513384307
+   exp_std = 0.04808627055440966
+   profac_mean = 14.490010494857216
+   profac_std = 11.552350553000696
+   SQN_mean = 1.3875184224268642
+   SQN_std = 0.5773432587895901
+
+
    stats = bt.optimize(
-                  MACD_shortwin = [3,25],
-                  MACD_longwin = [4,50],
-                  MACD_signalwin = [2,20],
+                  MACD_shortwin = [3,10],
+                  MACD_longwin = [4,13],
+                  MACD_signalwin = [2,7],
                   MACD_chwin = [3,8],
-                  maximize = 'Expectancy [%]',
-               #    maximize = lambda stats: stats['Profit Factor'] 
+                  # RSI_win = range(5,51),
+                  # RSI_chwin = range(3,11),
+                  # maximize = 'Expectancy [%]',
+                  # maximize = 'Profit Factor',
+                  # maximize = 'SQN',
+                  maximize = lambda stats: (stats["Expectancy [%]"]-exp_mean)/exp_std + \
+                                           (stats["Profit Factor"]-profac_mean)/profac_std + \
+                                           (stats["SQN"]-SQN_mean)/SQN_std,
                #    if stats['# Trades'] >= 100 else -np.inf,
-                  # method='sambo',
-                  # max_tries=500,
+                  method='sambo',
+                  max_tries=max_tries,
                   constraint=lambda p: p.MACD_signalwin < p.MACD_shortwin < p.MACD_longwin
                )
+   
+   print(f'{param} done.')
 
-   bt.plot()
+   # bt.plot()
 
    return {'asset': asset, 'candlesize': candlesize, 'pastshift': pastshift, "stats": stats}
    
 
 
 
-paramlist = [0,1,2,3,4]
+paramlist = [0,1,
+             2,3,4,5,6,7,8,9,10,
+             11,12,13,14,15,16,17,18,19,20,21,
+             22,23,24,25,26,27,28,29,30,31,32]
+
 
 if __name__ == '__main__':
 

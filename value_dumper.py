@@ -31,3 +31,6 @@ def dump_SQN(SQN):
    with open('.\\optimization_files\\SQNs.txt', 'a') as SQNs:
       SQNs.write(str(SQN)+"\n")
 
+def tradelog(typ, action, price):
+   with open('.\\tradelog.txt', 'a') as logs:
+      logs.write(f"{typ} Trade {action} @ {price}\n")

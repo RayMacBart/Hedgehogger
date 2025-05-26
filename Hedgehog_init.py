@@ -1,5 +1,3 @@
-import os
-import pandas as pd
 import pandas_ta as ta
 import helpers
 import indicator_setups
@@ -9,34 +7,20 @@ import sizegap
 import sizepeak
 import TSL
 from power import powers
-from helpers import convert2VMMT_dict
-from var_config import get_vars
 
 
 def __init__(self):
-
-   # self.asset, self.candlesize = get_vars()
-   self.adjufac = 100 if self.asset == "USDJPY" else 1  # adjustment factor for the USD/JPY pair which has a 100x higher pip-size!
-   self.clims = 60 if self.candlesize == 'H1' else int(self.candlesize[1:])  # clims = candle length in minutes
-   self.impact_counter = {'MACD': 0, 'MACD-zeroX': 0, 'MACD-sigX': 0, 'VWAP': 0, 'FIBO': 0, 'RSI': 0, 'RSI-abs': 0, 'RSI-dyn': 0,
-                     'CCI': 0, 'CCI-abs': 0, 'CCI-dyn': 0, 'BB-out': 0, 'BB-trend': 0, 'ADX': 0, 'ADX-abs': 0, 'ADX-dyn': 0,
-                     'VOL': 0, 'CAMA': 0, 'GAP': 0, 'PEAK': 0, 'ATR': 0, 'ATR-abs': 0, 'ATR-dyn': 0}
-   try:
-      file_path2 = os.path.join("volmean_data", f"volmean_{self.asset}_{self.candlesize}.csv")
-      if not os.path.exists(file_path2):
-         raise FileNotFoundError(f"File not found: {file_path2}")
-      volmean_df = pd.read_csv(file_path2, sep="\t")
-      print("Volmean Data successfully loaded!")
-   except Exception as e:
-      print('Error occured during loading VOLUME MEAN data:', e)
-   self.volmean_movetimes = convert2VMMT_dict(volmean_df)
+   
+   self.impact_counter = {'MACD': 0, 'MACD-zeroX': 0, 'MACD-sigX': 0, 'MACD-combo': 0, 'VWAP': 0, 'FIBO': 0, 'RSI': 0, 'RSI-abs': 0, 
+                          'RSI-dyn': 0,'CCI': 0, 'CCI-abs': 0, 'CCI-dyn': 0, 'BB-out': 0, 'BB-trend': 0, 'ADX': 0, 'ADX-abs': 0,
+                     'ADX-dyn': 0, 'VOL': 0, 'CAMA': 0, 'GAP': 0, 'PEAK': 0, 'ATR': 0, 'ATR-abs': 0, 'ATR-dyn': 0}
 
    self.minTSLdist = 0.0001*self.adjufac  # opt steps:  0.00005, 0.0001, 0.00015, 0.0002, 0.00025 ...
 
    self.PSAR_df = ta.psar(self.data.High.s, self.data.Low.s, self.data.Close.s)
    self.PSAR = self.I(indicator_setups.PSAR, self.PSAR_df[f'PSARl_{self.PSAR_af0}_{self.PSAR_max_af}'], 
                         self.PSAR_df[f'PSARs_{self.PSAR_af0}_{self.PSAR_max_af}'], self.data.Close, name='PSAR')
-   #   self.RSI = self.I(ta.rsi, self.data.Close.s, self.RSI_win)
+   # self.RSI = self.I(ta.rsi, self.data.Close.s, self.RSI_win)
    #   self.CCI = self.I(ta.cci, self.data.High.s, self.data.Low.s, self.data.Close.s, self.CCI_win)
    self.MACD_df = ta.macd(self.data.Close.s, self.MACD_shortwin, self.MACD_longwin, self.MACD_signalwin)
    self.MACD_macd = self.I(lambda: self.MACD_df[f'MACD_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='MACD')
@@ -92,7 +76,8 @@ def __init__(self):
                         'MACD': {'macd': self.MACD_macd, 'histo': self.MACD_histogram,
                                  #'signal': self.MACD_signalline, # not used (yet?)
                                  'macd_chwin': self.MACD_chwin, 'histo_chwin': self.histo_chwin,
-                                 'zeroweight': self.MACD_zeroweight, 'histoweight': self.MACD_histoweight},
+                                 'zeroweight': self.MACD_zeroweight, 'histoweight': self.MACD_histoweight,
+                                 'comboweight': self.MACD_comboweight},
                      #  'BB': {'low': self.lowerband, 'high': self.upperband,'mid': self.middleband,
                      #         'width': self.bandwidth, 'chwin-out': self.bbands_chwin_out, 'chwin-trend': self.bbands_chwin_trend,
                      #         'weight-out': self.bbands_weight_out, 'weight-trend': self.bbands_weight_trend, 'TSL-weight': self.bbands_TSL_weight,

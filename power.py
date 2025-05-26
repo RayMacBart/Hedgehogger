@@ -8,7 +8,7 @@ import numpy as np
 
 def MACD_calcpower(macd, histo, 
                    # signal,  #--> not used (yet?) 
-                   zeroweight, histoweight, impact_counter):
+                   zeroweight, histoweight, comboweight, impact_counter):
    shift = 0
    if rises(macd, 0):
       shift += zeroweight
@@ -16,12 +16,18 @@ def MACD_calcpower(macd, histo,
    elif falls(macd, 0):
       shift -= zeroweight
       impact_counter['MACD-zeroX'] += 1
-   if rises(histo, 0):
-      shift += histoweight
-      impact_counter['MACD-sigX'] += 1
-   elif falls(histo, 0):
-      shift -= histoweight
-      impact_counter['MACD-sigX'] += 1
+   # if rises(histo, 0):
+   #    shift += histoweight
+   #    impact_counter['MACD-sigX'] += 1
+   # elif falls(histo, 0):
+   #    shift -= histoweight
+   #    impact_counter['MACD-sigX'] += 1
+   # if rises(macd) and rises(histo):
+   #    shift += comboweight
+   #    impact_counter['MACD-combo'] += 1
+   # if falls(macd) and falls(histo):
+   #    shift -= comboweight
+   #    impact_counter['MACD-combo'] += 1
    return shift
 
 
@@ -361,7 +367,7 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
          power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['macd_chwin']-1):idx+1], 
                                  T['MACD']['histo'][idx-(T['MACD']['histo_chwin']-1):idx+1], 
                                  # T['MACD']['signal'][idx-(T['MACD']['signal_chwin']-1):idx+1], # not used (yet?)
-                                 T['MACD']['zeroweight'], T['MACD']['histoweight'], impact_counter)
+                                 T['MACD']['zeroweight'], T['MACD']['histoweight'], T['MACD']['comboweight'], impact_counter)
          lastpower = detect_impact(impact_counter, power, lastpower, 'MACD')
 
          # power += VWAP_calcpower(Data.Close[idx-(T['VWAP']['chwin']):idx], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1],
