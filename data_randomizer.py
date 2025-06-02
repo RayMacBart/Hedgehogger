@@ -1,4 +1,5 @@
 from random import randrange
+from random import choice
 import os
 import numpy as np
 import pandas as pd
@@ -54,7 +55,20 @@ def get_shadowsize_distribution_ranges(df, sidiras):
          if abs(row.Close - row.Open)*100000 in range(sidiras[idx][0]*100000, sidiras[idx][1]*100000):
             if bullish:
                bullup_shadows[idx].append(row.High - row.Close)
-         # ... CONTINUE THIS LOGIC HERE ...
+               bulldown_shadows[idx].append(row.Open - row.Low)
+            else:
+               bearup_shadows[idx].append(row.High - row.Open)
+               beardown_shadows[idx].append(row.Close - row.Low)
+            break
+   for idx in range(20):
+      shadow_vals['bullups']['means'].append(np.mean(bullup_shadows[idx]))
+      shadow_vals['bullups']['stds'].append(np.std(bullup_shadows[idx]))
+      shadow_vals['bulldowns']['means'].append(np.mean(bulldown_shadows[idx]))
+      shadow_vals['bulldowns']['stds'].append(np.std(bulldown_shadows[idx]))
+      shadow_vals['bearups']['means'].append(np.mean(bearup_shadows[idx]))
+      shadow_vals['bearups']['stds'].append(np.std(bearup_shadows[idx]))
+      shadow_vals['beardowns']['means'].append(np.mean(beardown_shadows[idx]))
+      shadow_vals['beardowns']['stds'].append(np.std(beardown_shadows[idx]))
    return shadow_vals
 
 
@@ -108,7 +122,7 @@ def get_randomized_df(df, asset, candlesize):
       if not is_after_break(idx):
          randopen = lastclose + randrange(-3, 4, 1)/100000 if lastclose else row['Open']
       else:
-         randopen = lastclose + randrange(int((-infos['pricespan']/3)*100000), int((infos['pricespan']/5)*100000+1), 1)/100000 if lastclose else row['Open']
+         randopen = lastclose + randrange(int((-infos['pricespan']/3)*100000), int((infos['pricespan']/3)*100000+1), 1)/100000 if lastclose else row['Open']
 
       fractional_pos = (randopen - infos['minprice'])/infos['pricespan']
       if fractional_pos < 0:
@@ -116,16 +130,29 @@ def get_randomized_df(df, asset, candlesize):
       elif fractional_pos > 1:
          fractional_pos = 1
 
-      infos['sidiras']  # random choose one item of this (with same chances!) - and determine close by randrange inside this range
-
-      randclose = randrange(int((randopen - (infos['maxpriceabsmove']+0.00003)*fractional_pos)*100000),
-                            int((randopen + (infos['maxpriceabsmove']+0.00003)*abs(fractional_pos-1))*100000)+1,
+      rand_candlesize = choice(infos['sidiras'])
+      randclose = randrange(int((randopen - (rand_candlesize[1]-rand_candlesize[0])*fractional_pos)*100000),
+                            int((randopen + (rand_candlesize[1]-rand_candlesize[0])*abs(fractional_pos-1))*100000)+1,
                             1)/100000
+      
       lastclose = randclose
-      randwidth = randrange(0, int(infos['maxwidth']*100000+3), 1)/100000
-      randcenter = randrange(int(min([randopen, randclose])*100000), int(max([randopen, randclose])*100000+1), 1)/100000
-      randhigh =  randcenter + randwidth/2
-      randlow =  randcenter - randwidth/2
+
+      candle_animal = 'bull' if randclose >= randopen else 'bear'
+      for sc_idx in range(20):  # 'sizeclass index'
+         if abs(randclose-randopen)*100000 in range(infos['sidiras'][sc_idx][0]*100000, infos['sidiras'][sc_idx][1]*100000):
+            upshadow_mean = infos['shadow_vals'][f'{candle_animal}ups']['means'][sc_idx]
+            upshadow_std = infos['shadow_vals'][f'{candle_animal}ups']['stds'][sc_idx]
+            downshadow_mean = infos['shadow_vals'][f'{candle_animal}downs']['means'][sc_idx]
+            downshadow_std = infos['shadow_vals'][f'{candle_animal}downs']['stds'][sc_idx]
+      rand_upshadow_size = randrange(((upshadow_mean-2*upshadow_std) if (upshadow_mean-2*upshadow_std) >= 0 else 0)*100000,
+                                     (upshadow_mean+2*upshadow_std)*100000+1)/100000
+      randhigh = randclose + rand_upshadow_size if candle_animal == 'bull' else randopen + rand_upshadow_size
+      rand_downshadow_size = randrange(((downshadow_mean-2*downshadow_std) if (downshadow_mean-2*downshadow_std) >= 0 else 0)*100000,
+                                     (downshadow_mean+2*downshadow_std)*100000+1)/100000
+      randlow = randopen - rand_downshadow_size if candle_animal == 'bull' else randclose - rand_downshadow_size
+
+
+      # LET MAXVOLDEV BE INFLUENCED BY CANDLESIZE SOMEHOW
       maxvoldev = row['Volume']//2 if row['Volume'] >= 2 else 1
       randvol = randrange(int(row['Volume']-maxvoldev) if row['Volume']-maxvoldev > 0 else 1,
                           int(row['Volume']+maxvoldev) if row['Volume']+maxvoldev < infos['maxvol']*1.2 else int(infos['maxvol']*1.2),
