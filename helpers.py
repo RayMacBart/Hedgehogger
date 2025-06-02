@@ -29,7 +29,7 @@ def fill_inclomplete_data(data, ref, name):
 def remove_nocomma_anomaly(x):
     if pd.isna(x) or not isinstance(x, (int, float)):
         return x
-    return x / 1000 if x > 350 else x  # 350: a value even usdjpy wouldn't reach
+    return abs(x) / 1000 if ((x > 350) or (x < -350)) else abs(x)  # 350: a value even usdjpy wouldn't reach
 
 
 def defuse(val, lvl):

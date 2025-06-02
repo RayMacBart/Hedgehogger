@@ -31,7 +31,7 @@ def print_results(results):
 
 def dump_results(results):
    for r in results:
-      with open('.\\optimization_files\\sambo_MACD_zero_2880_norm3.txt', 'a') as paramfile:
+      with open('.\\optimization_files\\grid_MACD_ALL_384wi2we2otp6_norm3.txt', 'a') as paramfile:
          for k, v in r['stats']._strategy._params.items():
             paramfile.write(f"{k}:{v}|")
          paramfile.write('\n')
@@ -39,9 +39,9 @@ def dump_results(results):
       valdump.dump_profac(r['stats']["Profit Factor"])
       valdump.dump_SQN(r['stats']["SQN"])
       # valdump.dump_return(r['stats']["Return [%]"])
-      # valdump.dump_sharpe(r['stats']["Sharpe Ratio"])
-      # valdump.dump_sortino(r['stats']["Sortino Ratio"])
-      # valdump.dump_calmar(r['stats']["Calmar Ratio"])
+      valdump.dump_sharpe(r['stats']["Sharpe Ratio"])
+      valdump.dump_sortino(r['stats']["Sortino Ratio"])
+      valdump.dump_calmar(r['stats']["Calmar Ratio"])
       # valdump.dump_avgtrade(r['stats']["Avg. Trade [%]"])
 
       

@@ -8,24 +8,25 @@ from volfuncs import adjust_volume_data
 from var_config import get_vars
 import printer
 import sambo
+from data_randomizer import get_randomized_df
 # from multiprocessing import Pool  
 # multiprocessing.Pool only makes sense with huge datasets used with 'run()'
 # since 'optimize()' automatically comes with multiprocessing by default
 
 
-def do_backtest(param):
+def do_backtest(param, randomized):
 
-   # pastshift = param  # the only automatically iterated value   # REUSE AFTER MAX_TRIES RESEARCH!
-   pastshift = 0  # REMOVE AFTER MAX_TRIES RESEARCH!
+   pastshift = param  # the only automatically iterated value   # REUSE AFTER MAX_TRIES RESEARCH!
 
    asset, candlesize = get_vars()
-   dataspan = 3000
+   dataspan = 10000
 
    adjufac = 100 if asset == "USDJPY" else 1  # adjustment factor for the USD/JPY pair which has a 100x higher pip-size!
    
    if dataspan*(pastshift+1) > 100000:
       raise helpers.insufficientDataError("Can't handle given dataspan and pastshift due to insufficient amount of data.")
 
+   
    try:
       file_path = os.path.join("data", f"{asset}_{candlesize}.csv")
       if not os.path.exists(file_path):
@@ -35,6 +36,12 @@ def do_backtest(param):
       print("Data successfully loaded!")
    except Exception as e:
       print('Error occured during loading MAIN PRICE CHART data:\n', e)
+   
+   if randomized:
+      print('size before randomizing:', len(list(df.iterrows())))
+      print('row 42 before randomizing:\n', list(df.iterrows())[41])
+      print('row 78 before randomizing:\n', list(df.iterrows())[77])
+      print('row 111 before randomizing:\n', list(df.iterrows())[110])
 
 
    # df = df.map(helpers.remove_nocomma_anomaly)   --> leads to false manipulation of Volume data
@@ -45,66 +52,97 @@ def do_backtest(param):
 
    df['Volume'] = adjust_volume_data(df['Volume']).set_axis(df.index)
 
+   if randomized:
+      df = get_randomized_df(df, asset, candlesize)
+
+      print('size after randomizing:', len(list(df.iterrows())))
+      print('row 42 after randomizing:\n', list(df.iterrows())[41])
+      print('row 78 after randomizing:\n', list(df.iterrows())[77])
+      print('row 111 after randomizing:\n', list(df.iterrows())[110])
 
    bt = Backtest(df, Hedgehog, cash=1000, 
                commission=0.00012*adjufac,
                margin=0.033, hedging=True)
 
 
-   # stats = bt.run()
-
-   max_tries = 576  # reuse after max_tries research
-
-   exp_mean = 0.019012148513384307
-   exp_std = 0.04808627055440966
-   profac_mean = 14.490010494857216
-   profac_std = 11.552350553000696
-   SQN_mean = 1.3875184224268642
-   SQN_std = 0.5773432587895901
+   stats = bt.run()
 
 
-   stats = bt.optimize(
-                  MACD_shortwin = [3,10],
-                  MACD_longwin = [4,13],
-                  MACD_signalwin = [2,7],
-                  MACD_chwin = [3,8],
-                  # RSI_win = range(5,51),
-                  # RSI_chwin = range(3,11),
-                  # maximize = 'Expectancy [%]',
-                  # maximize = 'Profit Factor',
-                  # maximize = 'SQN',
-                  maximize = lambda stats: (stats["Expectancy [%]"]-exp_mean)/exp_std + \
-                                           (stats["Profit Factor"]-profac_mean)/profac_std + \
-                                           (stats["SQN"]-SQN_mean)/SQN_std,
-               #    if stats['# Trades'] >= 100 else -np.inf,
-                  method='sambo',
-                  max_tries=max_tries,
-                  constraint=lambda p: p.MACD_signalwin < p.MACD_shortwin < p.MACD_longwin
-               )
+   # exp_mean = 0.04478376247033701
+   # exp_std = 0.0785345476064135
+   # profac_mean = 10.646798066188657
+   # profac_std = 11.569063820793623
+   # SQN_mean = 1.1334995423126992
+   # SQN_std = 0.45195832041663986
+
+
+   # max_tries = 52
+
+   # stats = bt.optimize(
+   #                #SAMBO:
+   #                # MACD_shortwin = [3,10],
+   #                # MACD_longwin = [4,13],
+   #                # MACD_signalwin = [2,7],
+   #                # MACD_chwin = [3,8],
+
+   #                #GRID:
+   #                # MACD_shortwin = [4,7],
+   #                MACD_longwin = [9,12],
+   #                # MACD_signalwin = [3,6],
+   #                # MACD_chwin = [3,6],
+   #                MACD_zeroweight = [1,4],
+   #                MACD_histoweight = [1,4],
+   #                MACD_comboweight = [1,4],
+   #                # order_triggerpower = [1,4],
+
+   #                # RSI_win = range(5,129),
+   #                # RSI_chwin = range(3,10),
+
+   #                # maximize = 'Expectancy [%]',
+   #                # maximize = 'Profit Factor',
+   #                maximize = 'SQN',
+   #                # maximize = lambda stats: (stats["Expectancy [%]"]-exp_mean)/exp_std + \
+   #                #                          (stats["Profit Factor"]-profac_mean)/profac_std + \
+   #                #                          (stats["SQN"]-SQN_mean)/SQN_std,
+   #             #    if stats['# Trades'] >= 100 else -np.inf,
+
+   #                method='sambo',
+   #                max_tries=max_tries,
+   #                # constraint=lambda p: p.MACD_signalwin <= p.MACD_shortwin < p.MACD_longwin
+   #                # constraint=lambda p: p.MACD_shortwin < p.MACD_longwin
+   #             )
    
-   print(f'{param} done.')
+   # print(f'{param} done.')
 
-   # bt.plot()
+   # print(stats)
+
+   bt.plot()
 
    return {'asset': asset, 'candlesize': candlesize, 'pastshift': pastshift, "stats": stats}
    
 
 
 
-paramlist = [0,1,
-             2,3,4,5,6,7,8,9,10,
-             11,12,13,14,15,16,17,18,19,20,21,
-             22,23,24,25,26,27,28,29,30,31,32]
+paramlist = [0,0
+            # 1,2,3,4,5,6,7,8,9,10,
+            # 11,12,13,14,15,16,17,18,19,20,21,
+            # 22,23,24,25,26,27,28,29,30,31,32
+            ]
+            #  33,34,35,36,37  # for using dataspan 2600
+
+synthswitch = [False, True]
 
 
 if __name__ == '__main__':
+
+
 
    start_time = time.time()
 
    # with Pool() as p:                            # This only makes sense with huge datasets used with 'run()'
    #    results = p.map(do_backtest, paramlist)   # since 'optimize()' automatically comes with multiprocessing by default
 
-   results = list(map(do_backtest, paramlist))
+   results = list(map(do_backtest, paramlist, synthswitch))
 
    time_taken = time.time() - start_time
    print(f'The backtesting took {time_taken} seconds.')

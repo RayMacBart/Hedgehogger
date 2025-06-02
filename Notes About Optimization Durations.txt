@@ -1,0 +1,15 @@
+Notes About Optimization Durations:
+
+SAMBO 5 MACD-pars, 3024 combis (7x6x6x4x3), 20% = 605 max_tries, 3333 dataspan  (incl. constraint!):            112s
+SAMBO 6 MACD-pars, 3024 combis (7x6x4x3x3x2), 20% = 605 max_tries, 3333 dataspan  (NO constraint!):             141s (170s busy | 185s hot & busy)
+SAMBO 3 MACD-pars, 3000 combis (20x15x10), 20% = 600 max_tries, 3333 dataspan  (incl. constraint!):             72s
+
+SAMBO 4 MACD-pars, 1008 combis (7x6x6x4), 20% = 202 max_tries, 9999 dataspan  (incl. constraint!):              162s
+SAMBO 5 MACD-pars, 1024 combis (4x4x4x4x4), 20% = 205 max_tries, 9999 dataspan  (incl. constraint!):            166s
+SAMBO 5 MACD-pars, 1024 combis (4x4x4x4x4), 20% = 205 max_tries, 9999 dataspan  (NO constraint!):               205s
+
+
+SAMBO 2 RSI-pars, 1000 combis (125x8), 20% = 200 max_tries, 9999 dataspan:                                      132s
+
+
+

@@ -16,18 +16,18 @@ def MACD_calcpower(macd, histo,
    elif falls(macd, 0):
       shift -= zeroweight
       impact_counter['MACD-zeroX'] += 1
-   # if rises(histo, 0):
-   #    shift += histoweight
-   #    impact_counter['MACD-sigX'] += 1
-   # elif falls(histo, 0):
-   #    shift -= histoweight
-   #    impact_counter['MACD-sigX'] += 1
-   # if rises(macd) and rises(histo):
-   #    shift += comboweight
-   #    impact_counter['MACD-combo'] += 1
-   # if falls(macd) and falls(histo):
-   #    shift -= comboweight
-   #    impact_counter['MACD-combo'] += 1
+   if rises(histo, 0):
+      shift += histoweight
+      impact_counter['MACD-sigX'] += 1
+   elif falls(histo, 0):
+      shift -= histoweight
+      impact_counter['MACD-sigX'] += 1
+   if rises(macd) and rises(histo):
+      shift += comboweight
+      impact_counter['MACD-combo'] += 1
+   if falls(macd) and falls(histo):
+      shift -= comboweight
+      impact_counter['MACD-combo'] += 1
    return shift
 
 
