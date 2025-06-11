@@ -9,6 +9,8 @@ from var_config import get_vars
 import printer
 import sambo
 from data_randomizer import get_randomized_df
+from messager import send_msg
+from copy import deepcopy
 # from multiprocessing import Pool  
 # multiprocessing.Pool only makes sense with huge datasets used with 'run()'
 # since 'optimize()' automatically comes with multiprocessing by default
@@ -36,12 +38,6 @@ def do_backtest(param, randomized):
       print("Data successfully loaded!")
    except Exception as e:
       print('Error occured during loading MAIN PRICE CHART data:\n', e)
-   
-   if randomized:
-      print('size before randomizing:', len(list(df.iterrows())))
-      print('row 42 before randomizing:\n', list(df.iterrows())[41])
-      print('row 78 before randomizing:\n', list(df.iterrows())[77])
-      print('row 111 before randomizing:\n', list(df.iterrows())[110])
 
 
    # df = df.map(helpers.remove_nocomma_anomaly)   --> leads to false manipulation of Volume data
@@ -53,15 +49,11 @@ def do_backtest(param, randomized):
    df['Volume'] = adjust_volume_data(df['Volume']).set_axis(df.index)
 
    if randomized:
-      df = get_randomized_df(df, asset, candlesize)
+      df = get_randomized_df(df, asset, candlesize, dataspan*(pastshift+1))
 
-      print('size after randomizing:', len(list(df.iterrows())))
-      print('row 42 after randomizing:\n', list(df.iterrows())[41])
-      print('row 78 after randomizing:\n', list(df.iterrows())[77])
-      print('row 111 after randomizing:\n', list(df.iterrows())[110])
 
-   bt = Backtest(df, Hedgehog, cash=1000, 
-               commission=0.00012*adjufac,
+   bt = Backtest(df, Hedgehog, cash=1000,
+               commission=0.00012, # *adjufac,
                margin=0.033, hedging=True)
 
 
@@ -123,14 +115,6 @@ def do_backtest(param, randomized):
 
 
 
-paramlist = [0,0
-            # 1,2,3,4,5,6,7,8,9,10,
-            # 11,12,13,14,15,16,17,18,19,20,21,
-            # 22,23,24,25,26,27,28,29,30,31,32
-            ]
-            #  33,34,35,36,37  # for using dataspan 2600
-
-synthswitch = [False, True]
 
 
 # USE 20 AS DIFFERENT AS POSSIBLE STRATEGY CONFIGURATIONS, AND FOR EACH ONE, LOOP THROUGH ALL 10 PASTSHIFTS (dataspan=10.000 each),
@@ -151,22 +135,45 @@ synthswitch = [False, True]
 #    4. COMBINE THE RESULTS OF 1-3.
 
 
+paramlist = [4,
+             4
+            # 1,2,3,4,5,6,7,8,9,10,
+            # 11,12,13,14,15,16,17,18,19,20,21,
+            # 22,23,24,25,26,27,28,29,30,31,32
+            ]
+            #  33,34,35,36,37  # for using dataspan 2600
+
+synthswitch = [False, 
+               True
+               ]
+
+
 if __name__ == '__main__':
 
-
-
+   time_taken = None
    start_time = time.time()
+   try:
 
-   # with Pool() as p:                            # This only makes sense with huge datasets used with 'run()'
-   #    results = p.map(do_backtest, paramlist)   # since 'optimize()' automatically comes with multiprocessing by default
+      # with Pool() as p:                            # This only makes sense with huge datasets used with 'run()'
+      #    results = p.map(do_backtest, paramlist)   # since 'optimize()' automatically comes with multiprocessing by default
 
-   results = list(map(do_backtest, paramlist, synthswitch))
+      results = list(map(do_backtest, paramlist, synthswitch))
 
-   time_taken = time.time() - start_time
-   print(f'The backtesting took {time_taken} seconds.')
+      time_taken = time.time() - start_time
 
-   printer.print_results(results)
-   printer.dump_results(results)
+      printer.print_results(results)
+      printer.dump_results(results)
+
+      time_repr = f'{int(time_taken)} sec' if time_taken < 60 else f'{int(time_taken//60)} mins  {int(time_taken%60)} secs'
+      print(f'The backtesting took  {time_repr}')
+      send_msg(f'Calculations finished successfully!\nDuration (in seconds):\n{time_repr}')
+
+   except Exception as e:
+      time_taken = time.time() - start_time
+      time_repr = f'{int(time_taken)} sec' if time_taken < 60 else f'{int(time_taken//60)} mins   {int(time_taken%60)} secs'
+      send_msg(f'Calculations finished due to Error:\n{str(e)}\nDuration (in seconds):\n{time_repr}')
+      raise e
+
 
 
 

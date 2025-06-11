@@ -11,7 +11,7 @@ from power import powers
 
 def __init__(self):
    
-   self.impact_counter = {'MACD': 0, 'MACD-zeroX': 0, 'MACD-sigX': 0, 'MACD-combo': 0, 'VWAP': 0, 'FIBO': 0, 'RSI': 0, 'RSI-abs': 0, 
+   self.impact_counter = {'CSP': 0, 'MACD': 0, 'MACD-zeroX': 0, 'MACD-sigX': 0, 'MACD-combo': 0, 'VWAP': 0, 'FIBO': 0, 'RSI': 0, 'RSI-abs': 0, 
                           'RSI-dyn': 0,'CCI': 0, 'CCI-abs': 0, 'CCI-dyn': 0, 'BB-out': 0, 'BB-trend': 0, 'ADX': 0, 'ADX-abs': 0,
                      'ADX-dyn': 0, 'VOL': 0, 'CAMA': 0, 'GAP': 0, 'PEAK': 0, 'ATR': 0, 'ATR-abs': 0, 'ATR-dyn': 0}
 
@@ -20,12 +20,12 @@ def __init__(self):
    self.PSAR_df = ta.psar(self.data.High.s, self.data.Low.s, self.data.Close.s)
    self.PSAR = self.I(indicator_setups.PSAR, self.PSAR_df[f'PSARl_{self.PSAR_af0}_{self.PSAR_max_af}'], 
                         self.PSAR_df[f'PSARs_{self.PSAR_af0}_{self.PSAR_max_af}'], self.data.Close, name='PSAR')
-   self.RSI = self.I(ta.rsi, self.data.Close.s, self.RSI_win)
+   # self.RSI = self.I(ta.rsi, self.data.Close.s, self.RSI_win)
    #   self.CCI = self.I(ta.cci, self.data.High.s, self.data.Low.s, self.data.Close.s, self.CCI_win)
-   self.MACD_df = ta.macd(self.data.Close.s, self.MACD_shortwin, self.MACD_longwin, self.MACD_signalwin)
-   self.MACD_macd = self.I(lambda: self.MACD_df[f'MACD_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='MACD')
-   self.MACD_histogram = self.I(lambda: self.MACD_df[f'MACDh_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Histogram')
-   # self.MACD_signalline = self.I(lambda: self.MACD_df[f'MACDs_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Signalline')
+   # self.MACD_df = ta.macd(self.data.Close.s, self.MACD_shortwin, self.MACD_longwin, self.MACD_signalwin)
+   # self.MACD_macd = self.I(lambda: self.MACD_df[f'MACD_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='MACD')
+   # self.MACD_histogram = self.I(lambda: self.MACD_df[f'MACDh_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Histogram')
+   ## self.MACD_signalline = self.I(lambda: self.MACD_df[f'MACDs_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Signalline')
    #   self.VWAP = self.I(ta.vwap, self.data.High.s, self.data.Low.s, self.data.Close.s, self.data.Volume.s, name='VWAP')
    #   self.bbands_df = ta.bbands(self.data.Close.s, self.bbands_win)
    #   self.lowerband = self.I(indicator_setups.lowerband, self.bbands_df[f'BBL_{self.bbands_win}_2.0'], name='lower bband')
@@ -73,11 +73,14 @@ def __init__(self):
                      #          'chwin': self.RSI_chwin, 'weight': self.RSI_weight},
                      #  'CCI': {'cci': self.CCI, 'low': self.CCI_lower_treshold, 'high': self.CCI_upper_treshold,
                      #          'chwin': self.CCI_chwin, 'weight': self.CCI_weight},
-                        'MACD': {'macd': self.MACD_macd, 'histo': self.MACD_histogram,
-                                 #'signal': self.MACD_signalline, # not used (yet?)
-                                 'macd_chwin': self.MACD_chwin, 'histo_chwin': self.histo_chwin,
-                                 'zeroweight': self.MACD_zeroweight, 'histoweight': self.MACD_histoweight,
-                                 'comboweight': self.MACD_comboweight},
+                        'CSP': {'reaction_win': self.CSP_reaction_win, 'bodyshrink_factor': self.CSP_bodyshrink_factor, 
+                                'shadow2body_factor': self.CSP_shadow2body_factor, 'shadowdiff_factor': self.CSP_shadowdiff_factor,
+                                'weight': self.CSP_weight}, # 'CSP': Candle Stick Pattern
+                        # 'MACD': {'macd': self.MACD_macd, 'histo': self.MACD_histogram,
+                        #          #'signal': self.MACD_signalline, # not used (yet?)
+                        #          'macd_chwin': self.MACD_chwin, 'histo_chwin': self.histo_chwin,
+                        #          'zeroweight': self.MACD_zeroweight, 'histoweight': self.MACD_histoweight,
+                        #          'comboweight': self.MACD_comboweight},
                      #  'BB': {'low': self.lowerband, 'high': self.upperband,'mid': self.middleband,
                      #         'width': self.bandwidth, 'chwin-out': self.bbands_chwin_out, 'chwin-trend': self.bbands_chwin_trend,
                      #         'weight-out': self.bbands_weight_out, 'weight-trend': self.bbands_weight_trend, 'TSL-weight': self.bbands_TSL_weight,

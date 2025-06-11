@@ -24,9 +24,9 @@ def print_results(results):
       # print("r['stats']._strategy._maximize:\n", r['stats']._strategy._maximize)
       # print('____________________________________________________________')
 
-      # print('POWER IMPACT COUNTER:')
-      # for k, v in impact_counter.items():
-      #    print(f"{k}: {v}")
+      print('POWER IMPACT COUNTER:')
+      for k, v in r['stats']._strategy.impact_counter.items():
+         print(f"{k}: {v}")
 
 
 def dump_results(results):

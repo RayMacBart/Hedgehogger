@@ -6,6 +6,29 @@ import numpy as np
 # import pdb
 
 
+def CSP_calcpower(Data, bodyshrink_factor, shadow2body_factor, shadowdiff_factor, weight):
+   shift = 0
+   idx = 0
+   for row in Data.itertuples():
+      if not idx: # needed 'pre'-candle
+         idx += 1
+         continue
+      else:
+         if abs(row.Close - row.Open) <= abs(Data.Close.iloc[idx-1] - Data.Open.iloc[idx-1]) / bodyshrink_factor:
+            upshadow = row.High - row.Close if row.Close - row.Open >= 0 else row.High - row.Open
+            downshadow = row.Open - row.Low if row.Close - row.Open >= 0 else row.Close - row.Low
+            if Data.Close.iloc[idx-1] - Data.Open.iloc[idx-1] > 0:  # price was moving up
+               if upshadow >= abs(row.Close - row.Open) * shadow2body_factor and upshadow >= downshadow * shadowdiff_factor:
+                  shift -= weight
+            else: # price was moving down
+               if downshadow >= abs(row.Close - row.Open) * shadow2body_factor and downshadow >= upshadow * shadowdiff_factor:
+                  shift += weight
+                  # Note the direct impact upon every matching row (No general 'shifting' variable)
+                  # - but this is good: multiple occurences should count more.
+         idx += 1
+   return shift
+
+
 def MACD_calcpower(macd, histo, 
                    # signal,  #--> not used (yet?) 
                    zeroweight, histoweight, comboweight, impact_counter):
@@ -344,7 +367,7 @@ def detect_impact(impact_counter, power, lastpower, tech_ind):
    if power != lastpower:
       impact_counter[tech_ind] += 1
    # if power - lastpower:
-      # print(f'impact of {tech_ind}:', power - lastpower)
+   #    print(f'impact of {tech_ind}:', power - lastpower)
       # if tech_ind == 'ATR':
       #    print(f'impact of {tech_ind}:', power - lastpower)
    return power
@@ -364,11 +387,16 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
       # if using Close for calculation, don't forget to use -1 or lower index than current.
       if idx > 15:
          # and idx % 10 == 0:
-         power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['macd_chwin']-1):idx+1], 
-                                 T['MACD']['histo'][idx-(T['MACD']['histo_chwin']-1):idx+1], 
-                                 # T['MACD']['signal'][idx-(T['MACD']['signal_chwin']-1):idx+1], # not used (yet?)
-                                 T['MACD']['zeroweight'], T['MACD']['histoweight'], T['MACD']['comboweight'], impact_counter)
-         lastpower = detect_impact(impact_counter, power, lastpower, 'MACD')
+         power += CSP_calcpower(Data.df.iloc[idx-T['CSP']['reaction_win']-1:idx],  T['CSP']['bodyshrink_factor'], # changed 'data' object to df via '.df'
+                                T['CSP']['shadow2body_factor'], T['CSP']['shadowdiff_factor'], T['CSP']['weight'])
+                                 # Amount of focussed on candles is 1 more than action_win because 1 'pre'-candle is needed.  
+         lastpower = detect_impact(impact_counter, power, lastpower, 'CSP')
+
+         # power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['macd_chwin']-1):idx+1], 
+         #                         T['MACD']['histo'][idx-(T['MACD']['histo_chwin']-1):idx+1], 
+         #                         # T['MACD']['signal'][idx-(T['MACD']['signal_chwin']-1):idx+1], # not used (yet?)
+         #                         T['MACD']['zeroweight'], T['MACD']['histoweight'], T['MACD']['comboweight'], impact_counter)
+         # lastpower = detect_impact(impact_counter, power, lastpower, 'MACD')
 
          # power += VWAP_calcpower(Data.Close[idx-(T['VWAP']['chwin']):idx], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1],
          #                         T['VWAP']['expfac'], T['VWAP']['weight'])  # --> vwap misuse?

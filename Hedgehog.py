@@ -4,7 +4,6 @@ import Hedgehog_next
 from var_config import get_vars
 from volfuncs import get_vmmts
 
-# pairs to use with IG.com due to their low spreads:  EURUSD,  AUDUSD,  USDJPY
 
 
 class Hedgehog(Strategy):
@@ -36,6 +35,11 @@ class Hedgehog(Strategy):
    sizegap_win = 100
    sizepeak_win = 100
 
+   CSP_bodyshrink_factor = 7
+   CSP_shadow2body_factor = 7
+   CSP_shadowdiff_factor = 7
+   CSP_weight = 1
+
    # 'expfac:' expansion factors that shall be reacted upon - the lower the more sensitive/reactive. use 0.1 steps
    vwap_expfac = 1.2  # difference between price and vwap 
    bbands_expfac = 1.3  # width between outer bands
@@ -52,6 +56,7 @@ class Hedgehog(Strategy):
    peak_accuracy = 5  # area of peak value recognition in % --> the lower, the more accurate!
 
    # change measure windows:
+   CSP_reaction_win = 3
    MACD_chwin = 3 # 3-8 
    histo_chwin = 5 # 3-8
    VWAP_chwin = 8 # 3-8
