@@ -11,9 +11,9 @@ from power import powers
 
 def __init__(self):
    
-   self.impact_counter = {'CSP': 0, 'MACD': 0, 'MACD-zeroX': 0, 'MACD-sigX': 0, 'MACD-combo': 0, 'VWAP': 0, 'FIBO': 0, 'RSI': 0, 'RSI-abs': 0, 
-                          'RSI-dyn': 0,'CCI': 0, 'CCI-abs': 0, 'CCI-dyn': 0, 'BB-out': 0, 'BB-trend': 0, 'ADX': 0, 'ADX-abs': 0,
-                     'ADX-dyn': 0, 'VOL': 0, 'CAMA': 0, 'GAP': 0, 'PEAK': 0, 'ATR': 0, 'ATR-abs': 0, 'ATR-dyn': 0}
+   self.impact_counter = {'DIR': 0, 'CSP': 0, 'MACD': 0, 'MACD-zeroX': 0, 'MACD-sigX': 0, 'MACD-combo': 0, 'VWAP': 0, 'FIBO': 0,
+                          'RSI': 0, 'RSI-abs': 0, 'RSI-dyn': 0,'CCI': 0, 'CCI-abs': 0, 'CCI-dyn': 0, 'BB-out': 0, 'BB-trend': 0,
+                          'ADX': 0, 'ADX-abs': 0, 'ADX-dyn': 0, 'VOL': 0, 'CAMA': 0, 'GAP': 0, 'PEAK': 0, 'ATR': 0, 'ATR-abs': 0, 'ATR-dyn': 0}
 
    self.minTSLdist = 0.0001*self.adjufac  # opt steps:  0.00005, 0.0001, 0.00015, 0.0002, 0.00025 ...
 
@@ -60,7 +60,8 @@ def __init__(self):
    #   self.fibo_dist8 = self.I(fibofuncs.fibo_dist8, self.data.Close, self.last_swing, self.seclast_swing)
    # DISCOVERY: Breaking these fibos indicates overall trend in that direction where it broke through!
    self.dirs = self.I(helpers.dir, self.data.Close, self.last_swing, self.seclast_swing)
-   self.indicators = {'PSAR': self.PSAR, 'DIR': self.dirs,
+   self.indicators = {'PSAR': self.PSAR,
+                      'DIR': {'dir' :self.dirs, 'weight': self.DIR_weight},
                      #  'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin, 'mdfpwi': self.vol_mdfpwi,
                      #          'max_impact_zscore': self.vol_max_impact_zscore, 'weight': self.volume_weight},
                      #  'VWAP': {'vwap': self.VWAP, 'chwin': self.VWAP_chwin, 'weight': self.VWAP_weight,
@@ -98,6 +99,6 @@ def __init__(self):
                         self.volmean_movetimes, self.clims, self.impact_counter)
 
 
-   self.abs_SL_dists = self.I(TSL.stoplosses, self.data.Close, self.indicators, self.powers, self.power_TSL_chwin, 
-                              self.minTSLdist, self.power_TSL_weight)
-   self.current_sl = self.data.Close[0]
+   self.abs_SL_dists = self.I(TSL.stoplosses, self.data.Close, self.data.High, self.data.Low, self.indicators, self.SL_formerspans_win, 
+                              self.SLdist_redufac, self.powers, self.power_TSL_chwin, self.minTSLdist, self.power_TSL_weight)
+   # self.current_sl = self.data.Close[0]

@@ -6,6 +6,15 @@ import numpy as np
 # import pdb
 
 
+def DIR_calcpower(dirs, weight):  # there are just two values in this 'dirs': the current and the last
+   shift = 0
+   if dirs[-1] > 0 and dirs[0] < 0:
+      shift += weight
+   elif dirs[-1] < 0 and dirs[0] > 0:
+      shift -= weight
+   return shift
+
+
 def CSP_calcpower(Data, bodyshrink_factor, shadow2body_factor, shadowdiff_factor, weight):
    shift = 0
    idx = 0
@@ -387,10 +396,14 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
       # if using Close for calculation, don't forget to use -1 or lower index than current.
       if idx > 15:
          # and idx % 10 == 0:
-         power += CSP_calcpower(Data.df.iloc[idx-T['CSP']['reaction_win']-1:idx],  T['CSP']['bodyshrink_factor'], # changed 'data' object to df via '.df'
-                                T['CSP']['shadow2body_factor'], T['CSP']['shadowdiff_factor'], T['CSP']['weight'])
-                                 # Amount of focussed on candles is 1 more than action_win because 1 'pre'-candle is needed.  
-         lastpower = detect_impact(impact_counter, power, lastpower, 'CSP')
+
+         power += DIR_calcpower(T['DIR']['dir'][idx-1:idx+1], T['DIR']['weight'])
+         lastpower = detect_impact(impact_counter, power, lastpower, 'DIR')
+
+         # power += CSP_calcpower(Data.df.iloc[idx-(T['CSP']['reaction_win']-1):idx+1],  T['CSP']['bodyshrink_factor'], # changed 'data' object to df via '.df'
+         #                        T['CSP']['shadow2body_factor'], T['CSP']['shadowdiff_factor'], T['CSP']['weight'])
+         #                         # Amount of focussed on candles is 1 more than action_win because 1 'pre'-candle is needed.  
+         # lastpower = detect_impact(impact_counter, power, lastpower, 'CSP')
 
          # power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['macd_chwin']-1):idx+1], 
          #                         T['MACD']['histo'][idx-(T['MACD']['histo_chwin']-1):idx+1], 
@@ -403,7 +416,7 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
          # lastpower = detect_impact(impact_counter, power, lastpower, 'VWAP')
 
          # # I 'misuse' the fibonacci points in a unconventional way as breakthrough indicator.
-         # power += FIBO_calcpower(Data.Close[idx-(T['FIBO']['chwin']):idx], T['DIR'][idx], T['FIBO'][2][idx], T['FIBO'][4][idx],
+         # power += FIBO_calcpower(Data.Close[idx-(T['FIBO']['chwin']):idx], T['DIR']['dir'][idx], T['FIBO'][2][idx], T['FIBO'][4][idx],
          #                              T['FIBO'][6][idx], T['FIBO'][8][idx], T['FIBO']['weight'])
          # lastpower = detect_impact(impact_counter, power, lastpower, 'FIBO')
 
@@ -421,7 +434,7 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
 
          # power += BB_outer_touch_calcpower(T['BB']['low'][idx-(T['BB']['chwin-out']-1):idx+1], T['BB']['mid'][idx-(T['BB']['chwin-out']-1):idx+1],
          #                        T['BB']['high'][idx-(T['BB']['chwin-out']-1):idx+1], Data.High[idx-(T['BB']['chwin-out']):idx], 
-         #                        Data.Low[idx-(T['BB']['chwin-out']):idx], T['DIR'][idx], T['BB']['weight-out'])
+         #                        Data.Low[idx-(T['BB']['chwin-out']):idx], T['DIR']['dir'][idx], T['BB']['weight-out'])
          # lastpower = detect_impact(impact_counter, power, lastpower, 'BB-out')
          # power *= BB_trend_calcpower(power, T['BB']['mid'][idx-(T['BB']['chwin-trend']-1):idx+1], 
          #                             T['BB']['width'][idx-(T['BB']['chwin-trend']-1):idx+1], T['BB']['expfac'], T['BB']['weight-trend'])
@@ -440,12 +453,12 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
          # #                         T['CAMA']['S4'][idx], T['CAMA']['3weight'], T['CAMA']['4weight'])
          # # lastpower = detect_impact(impact_counter, power, lastpower, 'CAMA')
 
-         # power *= GAP_calcpower(power, T['DIR'][idx], T['GAP']['+'][idx], T['GAP']['-'][idx],
+         # power *= GAP_calcpower(power, T['DIR']['dir'][idx], T['GAP']['+'][idx], T['GAP']['-'][idx],
          #                         T['GAP']['accuracy'], T['GAP']['weight'], last[idx], Data.Close[idx-1] #, T['GAP']['swingdist']
          # )
          # lastpower = detect_impact(impact_counter, power, lastpower, 'GAP')
 
-         # power *= PEAK_calcpower(power, T['DIR'][idx], T['PEAK']['+'][idx], T['PEAK']['-'][idx],
+         # power *= PEAK_calcpower(power, T['DIR']['dir'][idx], T['PEAK']['+'][idx], T['PEAK']['-'][idx],
          #                         T['PEAK']['accuracy'], T['PEAK']['weight'], last[idx], Data.Close[idx-1] #, T['PEAK']['swingdist']
          # )
          # lastpower = detect_impact(impact_counter, power, lastpower, 'PEAK')

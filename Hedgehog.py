@@ -35,10 +35,9 @@ class Hedgehog(Strategy):
    sizegap_win = 100
    sizepeak_win = 100
 
-   CSP_bodyshrink_factor = 7
-   CSP_shadow2body_factor = 7
-   CSP_shadowdiff_factor = 7
-   CSP_weight = 1
+   CSP_bodyshrink_factor = 6
+   CSP_shadow2body_factor = 8
+   CSP_shadowdiff_factor = 8
 
    # 'expfac:' expansion factors that shall be reacted upon - the lower the more sensitive/reactive. use 0.1 steps
    vwap_expfac = 1.2  # difference between price and vwap 
@@ -56,7 +55,7 @@ class Hedgehog(Strategy):
    peak_accuracy = 5  # area of peak value recognition in % --> the lower, the more accurate!
 
    # change measure windows:
-   CSP_reaction_win = 3
+   CSP_reaction_win = 2
    MACD_chwin = 3 # 3-8 
    histo_chwin = 5 # 3-8
    VWAP_chwin = 8 # 3-8
@@ -69,33 +68,41 @@ class Hedgehog(Strategy):
    ATR_mincalcwin = 100  # minimum of used data for zscore calculation for absolute valued indications
    bbands_chwin_out = 5 #?
    bbands_chwin_trend = 5 # 3-8
+
+   SL_formerspans_win = 1
+
    bbands_TSL_chwin = 5  # 2-?
    power_TSL_chwin = 5
    # peak_swingdist = 2 # 2-?
 
    # indicator weights
-   volume_weight = 1
-   ADX_abs_weight = 1
-   ADX_dyn_weight = 1
-   RSI_weight = 1
-   CCI_weight = 1
+
+   DIR_weight = 1
+   CSP_weight = 1
    MACD_zeroweight = 1
    MACD_histoweight = 1
    MACD_comboweight = 1
-   bbands_weight_out = 1
-   bbands_weight_trend = 1
+   VWAP_weight = 1
+   fibo_weight = 1
    cama3_weight = 1
    cama4_weight = 1
-   VWAP_weight = 1
-   ATR_abs_weight = 1
-   ATR_dyn_weight = 1
+   RSI_weight = 1
+   CCI_weight = 1
+   bbands_weight_out = 1
+   bbands_weight_trend = 1
+   volume_weight = 1
+   ADX_abs_weight = 1
+   ADX_dyn_weight = 1
    gap_weight = 1
    peak_weight = 1
-   fibo_weight = 1
+   ATR_abs_weight = 1
+   ATR_dyn_weight = 1
 
    bbands_TSL_weight = 1
    ATR_TSL_weight = 1
    power_TSL_weight = 1
+
+   SLdist_redufac = 12  # StopLoss distance reduction factor * 10  (to have integers for sambo optimization)
 
    # following values must not be greater than 60
    neworder_stoptime_dist = 20

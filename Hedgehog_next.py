@@ -13,17 +13,21 @@ def next(self):
          if order_closetime:
             trade.close()
             # valdump.tradelog('Long', 'closed', self.data.Close[-1])
-         elif self.data.Close[-1] - self.abs_SL_dists[-1] > self.current_sl:
-            self.current_sl = self.data.Close[-1] - self.abs_SL_dists[-1]
-            trade.sl = self.current_sl
+         elif self.data.Close[-1] - self.abs_SL_dists[-1] > trade.sl:
+            trade.sl = self.data.Close[-1] - self.abs_SL_dists[-1]
+         # elif self.data.Close[-1] - self.abs_SL_dists[-1] > self.current_sl:
+         #    self.current_sl = self.data.Close[-1] - self.abs_SL_dists[-1]
+         #    trade.sl = self.current_sl
    if shorts:
       for trade in shorts:
          if order_closetime:
             trade.close()
             # valdump.tradelog('Short', 'closed', self.data.Close[-1])
-         elif self.data.Close[-1] + self.abs_SL_dists[-1] < self.current_sl:
-            self.current_sl = self.data.Close[-1] + self.abs_SL_dists[-1]
-            trade.sl = self.current_sl
+         elif self.data.Close[-1] + self.abs_SL_dists[-1] < trade.sl:
+            trade.sl = self.data.Close[-1] + self.abs_SL_dists[-1]
+         # elif self.data.Close[-1] + self.abs_SL_dists[-1] < self.current_sl:
+         #    self.current_sl = self.data.Close[-1] + self.abs_SL_dists[-1]
+         #    trade.sl = self.current_sl
    else:
       if self.powers[-1] <= -self.close_triggerpower:
          if longs:

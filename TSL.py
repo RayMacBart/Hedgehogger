@@ -35,13 +35,29 @@ def add_power_impact(reldist, powers, minTSLdist, TSLweight):
    return shift
 
 
+def former_spans_impact(Highs, Lows):
+   dist = 0
+   amount = len(Highs)
+   for idx in range(amount):
+      dist += (Highs[idx]-Lows[idx])
+   dist /= amount
+   return dist
+
 
 # indis for stopdist calc: PSAR, ATR, BB width, GAP
-def stoplosses(Close, T, powers, power_TSL_chwin, minTSLdist, power_TSL_weight):
+def stoplosses(Close, High, Low, T, spanswin, SLdist_redufac, powers, power_TSL_chwin, minTSLdist, power_TSL_weight):
    abs_SL_dists = []
    for idx in range(len(Close)):
       # if using Close for calculation, don't forget to use -1 or lower index than current.
-      reldist = T['PSAR'][idx] - Close[idx-1]
+
+      # new:
+      if idx > 8:
+         reldist = former_spans_impact(High[idx-spanswin:idx], Low[idx-spanswin:idx])
+      else:
+         reldist = 0.0005
+      # the orignal:
+      # reldist = T['PSAR'][idx] - Close[idx-1]
+
       # reldist += add_ATR_impact(reldist, T['ATR']['atr'][:idx+1], T['ATR']['mincalcwin'], T['ATR']['chwin'], T['ATR']['win'], T['ATR']['TSL-weight'])
       # if idx > 20:
       #    reldist += add_BB_width_impact(reldist, T['BB']['width'][idx-(T['BB']['TSL-chwin']-1):idx+1], T['BB']['TSL-weight'])
@@ -49,7 +65,7 @@ def stoplosses(Close, T, powers, power_TSL_chwin, minTSLdist, power_TSL_weight):
       
       # ! until this point, distance calcs were only regarding absolute value - now determine direction pos/neg by applying 'decision' val
          
-      abs_SL_dists.append(abs(reldist))
+      abs_SL_dists.append(abs(reldist)/(SLdist_redufac/10))
    abs_SL_dists = helpers.trans_list_to_BT_array(abs_SL_dists, 'stop loss values')
    return abs_SL_dists
    # --> why returning absolute distances and not the "ready" stoploss values (Close[idx-1] + reldist)?

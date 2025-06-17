@@ -1,4 +1,21 @@
 
+def dump_results(params):
+   with open('.\\optimization_files\\result_values.txt', 'a') as paramfile:
+      for k, v in params.items():
+         paramfile.write(f"{k}:{v}|")
+      paramfile.write('\n')
+
+def dump_paramlog(logdict, resultdict):
+   with open('.\\optimization_files\\param_log.txt', 'a') as logfile:
+      for k, v in logdict.items():
+         logfile.write(f"{k}: range={v}, results={resultdict[k]}\n")
+      logfile.write('---------------------------------')
+
+def dump_datachoices(obj, asset, cs, span, past, rand):
+   nature = 'SYNTHETIC' if rand else 'normal'
+   with open('.\\optimization_files\\datachoice_log.txt', 'a') as choicefile:
+      choicefile.write(f"{obj} | {asset}  {cs} | {span}  (-{past}) | {nature}\n")
+
 def dump_return(returnval):
    with open('.\\optimization_files\\returns.txt', 'a') as returns:
       returns.write(str(returnval)+"\n")

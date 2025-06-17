@@ -21,8 +21,8 @@ def print_results(results):
       print('____________________________________________________________')
       # print("stopdist:", r['stats']._strategy.stopdist)
       # print('r['stats']._trades:\n', r['stats']._trades)
-      # print("r['stats']._strategy._maximize:\n", r['stats']._strategy._maximize)
-      # print('____________________________________________________________')
+      print("optimized objective: ", r['objective'])
+      print('____________________________________________________________')
 
       print('POWER IMPACT COUNTER:')
       for k, v in r['stats']._strategy.impact_counter.items():
@@ -30,11 +30,14 @@ def print_results(results):
 
 
 def dump_results(results):
+   resultdict = {}
+   for k in results[0]['stats']._strategy._params.keys():
+      resultdict[k] = []
    for r in results:
-      with open('.\\optimization_files\\grid_MACD_ALL_384wi2we2otp6_norm3.txt', 'a') as paramfile:
-         for k, v in r['stats']._strategy._params.items():
-            paramfile.write(f"{k}:{v}|")
-         paramfile.write('\n')
+      for k, v in r['stats']._strategy._params.items():
+         resultdict[k].append(v)
+      valdump.dump_results(r['stats']._strategy._params)
+      valdump.dump_datachoices(r['objective'], r['asset'], r['candlesize'], r['dataspan'],r['pastshift'], r['randomized'])
       valdump.dump_expectancy(r['stats']["Expectancy [%]"])
       valdump.dump_profac(r['stats']["Profit Factor"])
       valdump.dump_SQN(r['stats']["SQN"])
@@ -43,5 +46,8 @@ def dump_results(results):
       valdump.dump_sortino(r['stats']["Sortino Ratio"])
       valdump.dump_calmar(r['stats']["Calmar Ratio"])
       # valdump.dump_avgtrade(r['stats']["Avg. Trade [%]"])
+   with open('.\\optimization_files\\datachoice_log.txt', 'a') as choicefile:
+      choicefile.write("-----------------------------------\n")
+   valdump.dump_paramlog(results[0]['param_opt_log_dict'], resultdict)
 
       

@@ -116,3 +116,29 @@ MACD_longwin:10|MACD_zeroweight:3|MACD_histoweight:4|MACD_comboweight:3|
 
 
 
+
+
+
+
+
+
+
+
+
+
+SL_formerspans_win:5|SLdist_redufac:1.5|
+SL_formerspans_win:1|SLdist_redufac:12|CSP_bodyshrink_factor:6|CSP_shadow2body_factor:8|CSP_shadowdiff_factor:8|
+SL_formerspans_win:1|SLdist_redufac:20|
+SLdist_redufac:12|
+SL_formerspans_win:8|SLdist_redufac:3|
+SL_formerspans_win:2|SLdist_redufac:30|
+SL_formerspans_win:5|SLdist_redufac:30|
+SL_formerspans_win:8|SLdist_redufac:30|
+SL_formerspans_win:3|SLdist_redufac:3|
+SL_formerspans_win:4|SLdist_redufac:3|
+SL_formerspans_win:8|SLdist_redufac:3|
+SL_formerspans_win:3|SLdist_redufac:3|
+SL_formerspans_win:1|SLdist_redufac:30|
+SL_formerspans_win:8|SLdist_redufac:30|
+SL_formerspans_win:8|SLdist_redufac:30|
+SL_formerspans_win:8|SLdist_redufac:3|

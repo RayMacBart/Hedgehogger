@@ -2,6 +2,7 @@ import os
 import time
 import pandas as pd
 import helpers
+import random
 from backtesting import Backtest
 from Hedgehog import Hedgehog
 from volfuncs import adjust_volume_data
@@ -16,12 +17,22 @@ from copy import deepcopy
 # since 'optimize()' automatically comes with multiprocessing by default
 
 
-def do_backtest(param, randomized):
+def do_backtest(param):
 
-   pastshift = param  # the only automatically iterated value   # REUSE AFTER MAX_TRIES RESEARCH!
+   # for objective result data collection:
+   randomized = random.choice([False, False, False])
+   objective = random.choice(['SQN', 'Expectancy [%]', 'Profit Factor', 'Calmar Ratio', 'Sortino Ratio', 'Return [%]',
+                              'Sharpe Ratio', 'Avg. Trade [%]', 'Equity Peak [$]', 'Win Rate [%]'])
+   dataspan = random.randrange(2600, 10000)
+   pastshift = random.randrange(0, 100000//dataspan)
+   asset = random.choice(['EURUSD', 'AUDUSD', 'USDJPY'])
+   candlesize = random.choice(['M1', 'M5', 'M15', 'M30', 'H1'])
+   
 
-   asset, candlesize = get_vars()
-   dataspan = 10000
+   # pastshift = param  # the only automatically iterated value   # REUSE AFTER MAX_TRIES RESEARCH!
+
+   # asset, candlesize = get_vars()
+   # dataspan = 10000
 
    adjufac = 100 if asset == "USDJPY" else 1  # adjustment factor for the USD/JPY pair which has a 100x higher pip-size!
    
@@ -57,7 +68,7 @@ def do_backtest(param, randomized):
                margin=0.033, hedging=True)
 
 
-   stats = bt.run()
+   # stats = bt.run()
 
 
    # exp_mean = 0.04478376247033701
@@ -68,53 +79,61 @@ def do_backtest(param, randomized):
    # SQN_std = 0.45195832041663986
 
 
-   # max_tries = 52
+   max_tries = 26
+   # MAKE PARAMETER RANGES RESULTING IN ABOUT >1000 POSSIBLE COMBINATIONS.
+   # WAYS TO DO THIS:   4 x 4 x 4 x 4 x 4 = 1024   |   4 x 6 x 6 x 7 = 1008   |   5 x 6 x 6 x 6 = 1080   |   5 x 5 x 6 x 7 = 1050   
+   #                    3 x 3 x 4 x 5 x 6 = 1080   |   3 x 6 x 7 x 8 = 1008   |   3 x 7 x 7 x 7 = 1029   |   10 x 10 x 10 = 1000
 
-   # stats = bt.optimize(
-   #                #SAMBO:
-   #                # MACD_shortwin = [3,10],
-   #                # MACD_longwin = [4,13],
-   #                # MACD_signalwin = [2,7],
-   #                # MACD_chwin = [3,8],
+   stats = bt.optimize(
+                  # order_triggerpower = [1,4],
 
-   #                #GRID:
-   #                # MACD_shortwin = [4,7],
-   #                MACD_longwin = [9,12],
-   #                # MACD_signalwin = [3,6],
-   #                # MACD_chwin = [3,6],
-   #                MACD_zeroweight = [1,4],
-   #                MACD_histoweight = [1,4],
-   #                MACD_comboweight = [1,4],
-   #                # order_triggerpower = [1,4],
+                  SL_formerspans_win = [1,8], # 8
+                  SLdist_redufac = [5,20], # 16
 
-   #                # RSI_win = range(5,129),
-   #                # RSI_chwin = range(3,10),
+                  maximize = objective,
+                  # maximize = lambda stats: (stats["Expectancy [%]"]-exp_mean)/exp_std + \
+                  #                          (stats["Profit Factor"]-profac_mean)/profac_std + \
+                  #                          (stats["SQN"]-SQN_mean)/SQN_std,
+               #    if stats['# Trades'] >= 100 else -np.inf,
 
-   #                # maximize = 'Expectancy [%]',
-   #                # maximize = 'Profit Factor',
-   #                maximize = 'SQN',
-   #                # maximize = lambda stats: (stats["Expectancy [%]"]-exp_mean)/exp_std + \
-   #                #                          (stats["Profit Factor"]-profac_mean)/profac_std + \
-   #                #                          (stats["SQN"]-SQN_mean)/SQN_std,
-   #             #    if stats['# Trades'] >= 100 else -np.inf,
-
-   #                method='sambo',
-   #                max_tries=max_tries,
-   #                # constraint=lambda p: p.MACD_signalwin <= p.MACD_shortwin < p.MACD_longwin
-   #                # constraint=lambda p: p.MACD_shortwin < p.MACD_longwin
-   #             )
+                  method='sambo',
+                  max_tries=max_tries,
+                  # constraint=lambda p: p.MACD_signalwin <= p.MACD_shortwin < p.MACD_longwin
+                  # constraint=lambda p: p.MACD_shortwin < p.MACD_longwin
+               )
+   param_opt_log_dict = {'SL_formerspans_win': [1,8], 'SLdist_redufac': [5,20]}
    
-   # print(f'{param} done.')
+   print(f'{param} done.')
 
    # print(stats)
 
    bt.plot()
 
-   return {'asset': asset, 'candlesize': candlesize, 'pastshift': pastshift, "stats": stats}
+   return {'asset': asset, 'candlesize': candlesize, 'pastshift': pastshift, 'dataspan': dataspan, 'stats': stats,
+           'randomized': randomized, 'objective': objective, 'param_opt_log_dict': param_opt_log_dict}
    
 
 
+   
+                  # maximize = 'Expectancy [%]',
+                  # maximize = 'Profit Factor',
+                  # maximize = 'SQN',
 
+
+                  # MACD_shortwin = [4,7],
+                  # MACD_longwin = [9,12],
+                  # MACD_signalwin = [3,6],
+                  # MACD_chwin = [3,6],
+                  # MACD_zeroweight = [1,4],
+                  # MACD_histoweight = [1,4],
+                  # MACD_comboweight = [1,4],
+
+                  # CSP_bodyshrink_factor = [5,8], # 4
+                  # CSP_shadow2body_factor = [6,9], # 4
+                  # CSP_shadowdiff_factor = [6,9], # 4
+
+                  # RSI_win = range(5,129),
+                  # RSI_chwin = range(3,10),
 
 
 # USE 20 AS DIFFERENT AS POSSIBLE STRATEGY CONFIGURATIONS, AND FOR EACH ONE, LOOP THROUGH ALL 10 PASTSHIFTS (dataspan=10.000 each),
@@ -135,18 +154,37 @@ def do_backtest(param, randomized):
 #    4. COMBINE THE RESULTS OF 1-3.
 
 
-paramlist = [4,
-             4
-            # 1,2,3,4,5,6,7,8,9,10,
+paramlist = [1,2,3,
+            #  4,5,6,7,8,9,10
+             ]
             # 11,12,13,14,15,16,17,18,19,20,21,
             # 22,23,24,25,26,27,28,29,30,31,32
-            ]
+            # ]
             #  33,34,35,36,37  # for using dataspan 2600
 
-synthswitch = [False, 
-               True
-               ]
+# synthswitch = [False, 
+#                # True,
+#                # False,
+#                # False,
+#                # True,
+#                # False,
+#                # False,
+#                # True,
+#                # False,
+#                # False,
+#                ]
 
+# objective_list = ['SQN',
+#                   # 'Expectancy [%]',
+#                   # 'Profit Factor',
+#                   # 'Calmar Ratio',
+#                   # 'Sortino Ratio',
+#                   # 'Return [%]',
+#                   # 'Sharpe Ratio',
+#                   # 'Avg. Trade [%]',
+#                   # 'Equity Peak [$],
+#                   # 'Win Rate [%]'
+#                   ] 
 
 if __name__ == '__main__':
 
@@ -157,7 +195,7 @@ if __name__ == '__main__':
       # with Pool() as p:                            # This only makes sense with huge datasets used with 'run()'
       #    results = p.map(do_backtest, paramlist)   # since 'optimize()' automatically comes with multiprocessing by default
 
-      results = list(map(do_backtest, paramlist, synthswitch))
+      results = list(map(do_backtest, paramlist))
 
       time_taken = time.time() - start_time
 
