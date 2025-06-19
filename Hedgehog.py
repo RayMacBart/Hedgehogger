@@ -55,7 +55,7 @@ class Hedgehog(Strategy):
    peak_accuracy = 5  # area of peak value recognition in % --> the lower, the more accurate!
 
    # change measure windows:
-   CSP_reaction_win = 2
+   CSP_reaction_win = 2  # recommended to STAY like this
    MACD_chwin = 3 # 3-8 
    histo_chwin = 5 # 3-8
    VWAP_chwin = 8 # 3-8
@@ -69,10 +69,10 @@ class Hedgehog(Strategy):
    bbands_chwin_out = 5 #?
    bbands_chwin_trend = 5 # 3-8
 
-   SL_formerspans_win = 1
+   SL_formerspans_win = 1 # keep
 
    bbands_TSL_chwin = 5  # 2-?
-   power_TSL_chwin = 5
+   power_TSL_chwin = 5 # DEPRECATED: NOT NEEDED ANYMORE
    # peak_swingdist = 2 # 2-?
 
    # indicator weights
@@ -98,18 +98,19 @@ class Hedgehog(Strategy):
    ATR_abs_weight = 1
    ATR_dyn_weight = 1
 
-   bbands_TSL_weight = 1
-   ATR_TSL_weight = 1
-   power_TSL_weight = 1
+   PSAR_weight = 2
+   bbands_TSL_weight = 2
+   ATR_TSL_weight = 3
+   power_TSL_weight = 3
 
-   SLdist_redufac = 12  # StopLoss distance reduction factor * 10  (to have integers for sambo optimization)
+   SLdist_redufac = 10  # StopLoss distance reduction factor * 10  (to have integers for sambo optimization)
 
    # following values must not be greater than 60
    neworder_stoptime_dist = 20
    order_closetime_dist = 5
    reenter_time_dist = 5
 
-   close_triggerpower = 1
+   close_triggerpower = 1 # close_triggerpower must always be <= order_triggerpower. It also can be negative ( --> closes before power reaches 0!).
    order_triggerpower =  1
 
    size = 0.1  # of buy/sell orders

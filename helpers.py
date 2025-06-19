@@ -167,7 +167,7 @@ def get_tradetype_amounts(trades):
 
 # def get_current_indicator_data(ti, cc):
 #    T = {}
-#    T['PSAR'] = ti['PSAR'][cc]
+#    T['PSAR']['psar'] = ti['PSAR']['psar'][cc]
 #    T['VWAP'] = ti['VWAP'][cc]
 #    T['ATR'] = ti['ATR'][cc]
 #    T['ADX'] = {}

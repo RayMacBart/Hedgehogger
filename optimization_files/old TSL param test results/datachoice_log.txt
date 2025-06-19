@@ -1,0 +1,16 @@
+Optimization Loop ID:  "A"
+Win Rate [%] | AUDUSD  M5 | 11687  (-6) | normal
+-----------------------------------
+Optimization Loop ID:  "B"
+Sortino Ratio | EURUSD  M15 | 5056  (-5) | SYNTHETIC
+-----------------------------------
+Optimization Loop ID:  "C"
+Expectancy [%] | EURUSD  M5 | 5847  (-8) | SYNTHETIC
+-----------------------------------
+Optimization Loop ID:  "D"
+Avg. Trade [%] | AUDUSD  H1 | 6409  (-11) | SYNTHETIC
+Profit Factor | EURUSD  H1 | 12117  (-2) | normal
+Profit Factor | USDJPY  M5 | 11266  (-4) | normal
+SQN | USDJPY  M1 | 8547  (-8) | SYNTHETIC
+SQN | USDJPY  M30 | 6373  (-10) | SYNTHETIC
+-----------------------------------

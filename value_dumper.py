@@ -5,11 +5,12 @@ def dump_results(params):
          paramfile.write(f"{k}:{v}|")
       paramfile.write('\n')
 
-def dump_paramlog(logdict, resultdict):
+def dump_paramlog(loop_id, logdict, resultdict):
    with open('.\\optimization_files\\param_log.txt', 'a') as logfile:
+      logfile.write(f'Optimization Loop ID:  "{loop_id}"\n')
       for k, v in logdict.items():
-         logfile.write(f"{k}: range={v}, results={resultdict[k]}\n")
-      logfile.write('---------------------------------')
+         logfile.write(f'{k}: range={v}, results={resultdict[k]}\n')
+      logfile.write('---------------------------------\n')
 
 def dump_datachoices(obj, asset, cs, span, past, rand):
    nature = 'SYNTHETIC' if rand else 'normal'
@@ -43,6 +44,10 @@ def dump_expectancy(expec):
 def dump_avgtrade(avgtrade):
    with open('.\\optimization_files\\avg_trades.txt', 'a') as avg_trades:
       avg_trades.write(str(avgtrade)+"\n")
+
+def dump_winrate(winrate):
+   with open('.\\optimization_files\\winrates.txt', 'a') as win_rates:
+      win_rates.write(str(winrate)+"\n")
 
 def dump_SQN(SQN):
    with open('.\\optimization_files\\SQNs.txt', 'a') as SQNs:

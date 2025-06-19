@@ -1,4 +1,5 @@
 import value_dumper as valdump
+import id_handler
 
 def print_results(results):
    for r in results:
@@ -30,9 +31,12 @@ def print_results(results):
 
 
 def dump_results(results):
+   loop_id = id_handler.get_and_increment_loop_id()
    resultdict = {}
    for k in results[0]['stats']._strategy._params.keys():
       resultdict[k] = []
+   with open('.\\optimization_files\\datachoice_log.txt', 'a') as choicefile:
+      choicefile.write(f'Optimization Loop ID:  "{loop_id}"\n')
    for r in results:
       for k, v in r['stats']._strategy._params.items():
          resultdict[k].append(v)
@@ -41,13 +45,14 @@ def dump_results(results):
       valdump.dump_expectancy(r['stats']["Expectancy [%]"])
       valdump.dump_profac(r['stats']["Profit Factor"])
       valdump.dump_SQN(r['stats']["SQN"])
-      # valdump.dump_return(r['stats']["Return [%]"])
+      valdump.dump_return(r['stats']["Return [%]"])
       valdump.dump_sharpe(r['stats']["Sharpe Ratio"])
       valdump.dump_sortino(r['stats']["Sortino Ratio"])
       valdump.dump_calmar(r['stats']["Calmar Ratio"])
-      # valdump.dump_avgtrade(r['stats']["Avg. Trade [%]"])
+      valdump.dump_avgtrade(r['stats']["Avg. Trade [%]"])
+      valdump.dump_winrate(r['stats']["Win Rate [%]"])
    with open('.\\optimization_files\\datachoice_log.txt', 'a') as choicefile:
       choicefile.write("-----------------------------------\n")
-   valdump.dump_paramlog(results[0]['param_opt_log_dict'], resultdict)
+   valdump.dump_paramlog(loop_id, results[0]['param_opt_log_dict'], resultdict)
 
       

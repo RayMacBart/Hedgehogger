@@ -1,0 +1,14 @@
+SL_formerspans_win:8|SLdist_redufac:5|
+SL_formerspans_win:7|SLdist_redufac:8|
+SL_formerspans_win:8|SLdist_redufac:5|
+SL_formerspans_win:8|SLdist_redufac:5|
+SL_formerspans_win:8|SLdist_redufac:6|
+SL_formerspans_win:4|SLdist_redufac:5|
+order_triggerpower:2|MACD_shortwin:3|MACD_longwin:7|MACD_signalwin:2|CSP_bodyshrink_factor:6|CSP_shadow2body_factor:8|CSP_shadowdiff_factor:8|SLdist_redufac:7|bbands_TSL_chwin:6|ATR_chwin:8|
+order_triggerpower:4|MACD_shortwin:3|MACD_longwin:7|MACD_signalwin:2|CSP_bodyshrink_factor:6|CSP_shadow2body_factor:8|CSP_shadowdiff_factor:8|SLdist_redufac:9|bbands_TSL_chwin:6|ATR_chwin:7|
+order_triggerpower:4|MACD_shortwin:3|MACD_longwin:7|MACD_signalwin:2|CSP_bodyshrink_factor:6|CSP_shadow2body_factor:8|CSP_shadowdiff_factor:8|SLdist_redufac:10|bbands_TSL_chwin:6|ATR_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:4|power_TSL_weight:1|
+order_triggerpower:4|MACD_shortwin:3|MACD_longwin:7|MACD_signalwin:2|CSP_bodyshrink_factor:6|CSP_shadow2body_factor:8|CSP_shadowdiff_factor:8|SLdist_redufac:10|bbands_TSL_chwin:6|ATR_chwin:7|PSAR_weight:0|bbands_TSL_weight:0|ATR_TSL_weight:4|power_TSL_weight:5|
+order_triggerpower:4|MACD_shortwin:3|MACD_longwin:7|MACD_signalwin:2|CSP_bodyshrink_factor:6|CSP_shadow2body_factor:8|CSP_shadowdiff_factor:8|SLdist_redufac:10|bbands_TSL_chwin:6|ATR_chwin:7|PSAR_weight:5|bbands_TSL_weight:4|ATR_TSL_weight:4|power_TSL_weight:3|
+order_triggerpower:4|MACD_shortwin:3|MACD_longwin:7|MACD_signalwin:2|CSP_bodyshrink_factor:6|CSP_shadow2body_factor:8|CSP_shadowdiff_factor:8|SLdist_redufac:10|bbands_TSL_chwin:6|ATR_chwin:7|PSAR_weight:0|bbands_TSL_weight:0|ATR_TSL_weight:5|power_TSL_weight:5|
+order_triggerpower:4|MACD_shortwin:3|MACD_longwin:7|MACD_signalwin:2|CSP_bodyshrink_factor:6|CSP_shadow2body_factor:8|CSP_shadowdiff_factor:8|SLdist_redufac:10|bbands_TSL_chwin:6|ATR_chwin:7|PSAR_weight:4|bbands_TSL_weight:1|ATR_TSL_weight:0|power_TSL_weight:3|
+order_triggerpower:4|MACD_shortwin:3|MACD_longwin:7|MACD_signalwin:2|CSP_bodyshrink_factor:6|CSP_shadow2body_factor:8|CSP_shadowdiff_factor:8|SLdist_redufac:10|bbands_TSL_chwin:6|ATR_chwin:7|PSAR_weight:0|bbands_TSL_weight:1|ATR_TSL_weight:3|power_TSL_weight:5|

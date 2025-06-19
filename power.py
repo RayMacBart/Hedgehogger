@@ -57,7 +57,7 @@ def MACD_calcpower(macd, histo,
    if rises(macd) and rises(histo):
       shift += comboweight
       impact_counter['MACD-combo'] += 1
-   if falls(macd) and falls(histo):
+   elif falls(macd) and falls(histo):
       shift -= comboweight
       impact_counter['MACD-combo'] += 1
    return shift
@@ -397,19 +397,20 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
       if idx > 15:
          # and idx % 10 == 0:
 
-         power += DIR_calcpower(T['DIR']['dir'][idx-1:idx+1], T['DIR']['weight'])
-         lastpower = detect_impact(impact_counter, power, lastpower, 'DIR')
+         # DIR_calcpower is for experimental purposes only (not recommended)
+         # power += DIR_calcpower(T['DIR']['dir'][idx-1:idx+1], T['DIR']['weight'])
+         # lastpower = detect_impact(impact_counter, power, lastpower, 'DIR')
 
-         # power += CSP_calcpower(Data.df.iloc[idx-(T['CSP']['reaction_win']-1):idx+1],  T['CSP']['bodyshrink_factor'], # changed 'data' object to df via '.df'
-         #                        T['CSP']['shadow2body_factor'], T['CSP']['shadowdiff_factor'], T['CSP']['weight'])
-         #                         # Amount of focussed on candles is 1 more than action_win because 1 'pre'-candle is needed.  
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'CSP')
+         power += CSP_calcpower(Data.df.iloc[idx-(T['CSP']['reaction_win']-1):idx+1],  T['CSP']['bodyshrink_factor'], # changed 'data' object to df via '.df'
+                                T['CSP']['shadow2body_factor'], T['CSP']['shadowdiff_factor'], T['CSP']['weight'])
+                                 # Amount of focussed on candles is 1 more than action_win because 1 'pre'-candle is needed.  
+         lastpower = detect_impact(impact_counter, power, lastpower, 'CSP')
 
-         # power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['macd_chwin']-1):idx+1], 
-         #                         T['MACD']['histo'][idx-(T['MACD']['histo_chwin']-1):idx+1], 
-         #                         # T['MACD']['signal'][idx-(T['MACD']['signal_chwin']-1):idx+1], # not used (yet?)
-         #                         T['MACD']['zeroweight'], T['MACD']['histoweight'], T['MACD']['comboweight'], impact_counter)
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'MACD')
+         power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['macd_chwin']-1):idx+1], 
+                                 T['MACD']['histo'][idx-(T['MACD']['histo_chwin']-1):idx+1], 
+                                 # T['MACD']['signal'][idx-(T['MACD']['signal_chwin']-1):idx+1], # not used (yet?)
+                                 T['MACD']['zeroweight'], T['MACD']['histoweight'], T['MACD']['comboweight'], impact_counter)
+         lastpower = detect_impact(impact_counter, power, lastpower, 'MACD')
 
          # power += VWAP_calcpower(Data.Close[idx-(T['VWAP']['chwin']):idx], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1],
          #                         T['VWAP']['expfac'], T['VWAP']['weight'])  # --> vwap misuse?

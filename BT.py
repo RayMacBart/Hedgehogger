@@ -20,10 +20,13 @@ from copy import deepcopy
 def do_backtest(param):
 
    # for objective result data collection:
-   randomized = random.choice([False, False, False])
-   objective = random.choice(['SQN', 'Expectancy [%]', 'Profit Factor', 'Calmar Ratio', 'Sortino Ratio', 'Return [%]',
-                              'Sharpe Ratio', 'Avg. Trade [%]', 'Equity Peak [$]', 'Win Rate [%]'])
-   dataspan = random.randrange(2600, 10000)
+   randomized = random.choice([False, False, False, True])
+   objective = random.choice(['SQN', 'SQN', 'SQN', 'SQN', 'Expectancy [%]', 'Expectancy [%]', 'Expectancy [%]',
+                              'Profit Factor', 'Profit Factor', 'Profit Factor', 'Avg. Trade [%]', 'Avg. Trade [%]',
+                              'Calmar Ratio', 'Calmar Ratio', 'Sortino Ratio', 'Sortino Ratio', 'Sharpe Ratio', 'Sharpe Ratio',
+                              'Return [%]', 'Equity Final [$]', 'Equity Peak [$]', 'Win Rate [%]'
+                              ])
+   dataspan = random.randrange(2000, 15000)
    pastshift = random.randrange(0, 100000//dataspan)
    asset = random.choice(['EURUSD', 'AUDUSD', 'USDJPY'])
    candlesize = random.choice(['M1', 'M5', 'M15', 'M30', 'H1'])
@@ -79,16 +82,39 @@ def do_backtest(param):
    # SQN_std = 0.45195832041663986
 
 
-   max_tries = 26
+   max_tries = 162
    # MAKE PARAMETER RANGES RESULTING IN ABOUT >1000 POSSIBLE COMBINATIONS.
    # WAYS TO DO THIS:   4 x 4 x 4 x 4 x 4 = 1024   |   4 x 6 x 6 x 7 = 1008   |   5 x 6 x 6 x 6 = 1080   |   5 x 5 x 6 x 7 = 1050   
    #                    3 x 3 x 4 x 5 x 6 = 1080   |   3 x 6 x 7 x 8 = 1008   |   3 x 7 x 7 x 7 = 1029   |   10 x 10 x 10 = 1000
 
    stats = bt.optimize(
-                  # order_triggerpower = [1,4],
-
-                  SL_formerspans_win = [1,8], # 8
-                  SLdist_redufac = [5,20], # 16
+                  order_triggerpower = [3,6], #4
+                  close_triggerpower = [-1,1], #3
+                  MACD_shortwin = [3,7], #5
+                  MACD_longwin = [7,12], #6
+                  MACD_signalwin = [2,4], #3
+                  MACD_zeroweight = 1,
+                  MACD_histoweight = 1,
+                  MACD_comboweight = 1,
+                  MACD_chwin = 3,
+                  histo_chwin = 3, # was 5
+                  CSP_bodyshrink_factor = 6,
+                  CSP_shadow2body_factor = 8,
+                  CSP_shadowdiff_factor = 8,
+                  CSP_weight = 1,
+                  RSI_win = 20,
+                  RSI_chwin = 3, # was 5
+                  RSI_weight = 1,
+                  CCI_win = 20,
+                  CCI_chwin = 3, # was 5
+                  CCI_weight = 1,
+                  SLdist_redufac = 10,
+                  bbands_TSL_chwin = 6,
+                  ATR_chwin = 7,
+                  PSAR_weight = 2,
+                  bbands_TSL_weight = 2,
+                  ATR_TSL_weight = 3,
+                  power_TSL_weight = 3,
 
                   maximize = objective,
                   # maximize = lambda stats: (stats["Expectancy [%]"]-exp_mean)/exp_std + \
@@ -101,45 +127,54 @@ def do_backtest(param):
                   # constraint=lambda p: p.MACD_signalwin <= p.MACD_shortwin < p.MACD_longwin
                   # constraint=lambda p: p.MACD_shortwin < p.MACD_longwin
                )
-   param_opt_log_dict = {'SL_formerspans_win': [1,8], 'SLdist_redufac': [5,20]}
+   param_opt_log_dict = {
+                  'order_triggerpower': [3,6], #4
+                  'close_triggerpower': [-1,1], #3
+                  'MACD_shortwin': [3,7], #5
+                  'MACD_longwin': [7,12], #6
+                  'MACD_signalwin': [2,4], #3
+                  'MACD_zeroweight': 1,
+                  'MACD_histoweight': 1,
+                  'MACD_comboweight': 1,
+                  'MACD_chwin': 3,
+                  'histo_chwin': 3, # was 5
+                  'CSP_bodyshrink_factor': 6,
+                  'CSP_shadow2body_factor': 8,
+                  'CSP_shadowdiff_factor': 8,
+                  'CSP_weight': 1,
+                  'RSI_win': 20,
+                  'RSI_chwin': 3, # was 5
+                  'RSI_weight': 1,
+                  'CCI_win': 20,
+                  'CCI_chwin': 3, # was 5
+                  'CCI_weight': 1,
+                  'SLdist_redufac': 10,
+                  'bbands_TSL_chwin': 6,
+                  'ATR_chwin': 7,
+                  'PSAR_weight': 2,
+                  'bbands_TSL_weight': 2,
+                  'ATR_TSL_weight': 3,
+                  'power_TSL_weight': 3,
+   }
    
+
    print(f'{param} done.')
 
    # print(stats)
 
-   bt.plot()
+   # bt.plot()
 
    return {'asset': asset, 'candlesize': candlesize, 'pastshift': pastshift, 'dataspan': dataspan, 'stats': stats,
            'randomized': randomized, 'objective': objective, 'param_opt_log_dict': param_opt_log_dict}
    
 
 
-   
-                  # maximize = 'Expectancy [%]',
-                  # maximize = 'Profit Factor',
-                  # maximize = 'SQN',
 
-
-                  # MACD_shortwin = [4,7],
-                  # MACD_longwin = [9,12],
-                  # MACD_signalwin = [3,6],
-                  # MACD_chwin = [3,6],
-                  # MACD_zeroweight = [1,4],
-                  # MACD_histoweight = [1,4],
-                  # MACD_comboweight = [1,4],
-
-                  # CSP_bodyshrink_factor = [5,8], # 4
-                  # CSP_shadow2body_factor = [6,9], # 4
-                  # CSP_shadowdiff_factor = [6,9], # 4
-
-                  # RSI_win = range(5,129),
-                  # RSI_chwin = range(3,10),
-
-
-# USE 20 AS DIFFERENT AS POSSIBLE STRATEGY CONFIGURATIONS, AND FOR EACH ONE, LOOP THROUGH ALL 10 PASTSHIFTS (dataspan=10.000 each),
+# USE 25 AS DIFFERENT AS POSSIBLE STRATEGY CONFIGURATIONS, AND FOR EACH ONE, LOOP THROUGH ALL 10 PASTSHIFTS (dataspan=10.000 each),
 # WITH DIFFERENT OBJECTIVES OPTIMIZED FOR EACH PASTSHIFT. WHEN CHANGING THE STRATEGY CONFIGURATIONS, ALSO CHANGE THE ORDER OF THE USED
 # OBJECTIVES OVER THE PASTSHIFTS. THE DIFFERENT STRATEGY CONFIGURATIONS SHALL SAMBO OPTIMIZE 1.000 POSSIBLE COMBINATIONS WITH MAX_TRIES
 # SET TO 200 (=20%) EACH. FOR EVERY SINGLE OPTIMIZATION, COLLECT RESULT DATA FROM ALL OBJECTIVES FOR LATER Z-SCORE USE.
+
 
 # WHEN IT COMES TO THE REAL OPTIMIZATION, USE A ZSCORE NORMALIZED COMBINATION OF OBJECTIVES WITH 5 OBJECTIVES MELTED TOGETHER IN WEIGHTED WAY:
 # SQN: 38%,   EXPECTANCY: 22%,   CALMAR RATIO: 16%,   SORTINO RATIO: 13%,   PROFIT FACTOR: 11%
@@ -154,37 +189,11 @@ def do_backtest(param):
 #    4. COMBINE THE RESULTS OF 1-3.
 
 
-paramlist = [1,2,3,
-            #  4,5,6,7,8,9,10
+paramlist = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,
+            #  17,18,19,20
              ]
-            # 11,12,13,14,15,16,17,18,19,20,21,
-            # 22,23,24,25,26,27,28,29,30,31,32
-            # ]
-            #  33,34,35,36,37  # for using dataspan 2600
+            # for using dataspan 2600 but usage of full data (100.000): use here up to 37
 
-# synthswitch = [False, 
-#                # True,
-#                # False,
-#                # False,
-#                # True,
-#                # False,
-#                # False,
-#                # True,
-#                # False,
-#                # False,
-#                ]
-
-# objective_list = ['SQN',
-#                   # 'Expectancy [%]',
-#                   # 'Profit Factor',
-#                   # 'Calmar Ratio',
-#                   # 'Sortino Ratio',
-#                   # 'Return [%]',
-#                   # 'Sharpe Ratio',
-#                   # 'Avg. Trade [%]',
-#                   # 'Equity Peak [$],
-#                   # 'Win Rate [%]'
-#                   ] 
 
 if __name__ == '__main__':
 
@@ -214,29 +223,6 @@ if __name__ == '__main__':
 
 
 
-
-   # for optimization, include the objectives return%, profit factor, sharpe ratio, sortino ratio and calmar ratio
-   # and give each the same weight resulting into one single value to be optimized. This is done by calculating the
-   # z score - normalization of 30 optimization results of each objective. Then, the mean of all z scores (of every
-   # objective) is the final result to be used for the optimization functions.
-   # try your best regarding optimization of every objective when collecting the 30 needed results, but use the same
-   # inputs in the optimize() functions for every objective - this ensures a cross-objective consistent normalization 
-   # on a high, fastidious niveau.
-
-
-
-
-      #    stopdist = [
-         # 0.00001, 0.00002, 0.00003, 0.00004, 0.00005, 0.00006, 0.00007, 0.00008, 0.00009, 0.0001, 
-         #          0.00011, 0.00012, 0.00013, 0.00014, 0.00015, 0.00016, 0.00017, 0.00018, 0.00019, 0.0002,
-         #          0.00021, 0.00022, 0.00023, 0.00024, 0.00025, 0.00026, 0.00027, 0.00028, 0.00029, 0.0003,
-                  # 0.00031, 0.00032, 0.00033, 0.00034, 0.00035, 0.00036, 0.00037, 0.00038, 0.00039, 0.0004,
-                  # 0.00041, 0.00042, 0.00043, 0.00044, 0.00045, 0.00046, 0.00047, 0.00048, 0.00049, 0.0005,
-                  # 0.00051, 0.00052, 0.00053, 0.00054, 0.00055, 0.00056, 0.00057, 0.00058, 0.00059, 0.0006,
-                  # 0.00061, 0.00062, 0.00063, 0.00064, 0.00065, 0.00066, 0.00067, 0.00068, 0.00069, 0.0007,
-                  # 0.00071, 0.00072, 0.00073, 0.00074, 0.00075, 0.00076, 0.00077, 0.00078, 0.00079, 0.0008,
-                  # 0.00081, 0.00082, 0.00083, 0.00084, 0.00085, 0.00086, 0.00087, 0.00088, 0.00089, 0.0009
-                  # ],
 
 
 ###### old idea but has complications so far:  #####
