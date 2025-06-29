@@ -22,6 +22,20 @@ def get_gapmid(swidata, gran):
    return swimin+swistep*(minlevel)+swistep/2
 
 
+# def get_current_upgap(last, seclast, gran):
+#    ups = {}
+#    firstup_done = False
+#    up_index = 0
+#    current_up_index = 0
+#    for idx in range(len(last)):
+#       if last[idx] >= seclast[idx] and firstup_done:
+#          if not ups[current_up_index]:
+#             ups.append(last[idx] - seclast[idx])
+#             currentup = ups[-1]
+#    upgap = get_gapmid(ups, gran)
+#    return upgap
+
+
 def get_current_upgap(last, seclast, gran):
    ups = []
    currentup = 0
@@ -30,6 +44,8 @@ def get_current_upgap(last, seclast, gran):
          if not (last[idx] - seclast[idx]) == currentup:
             ups.append(last[idx] - seclast[idx])
             currentup = ups[-1]
+   if not ups:
+      ups = [0,]
    upgap = get_gapmid(ups, gran)
    return upgap
 
@@ -42,6 +58,8 @@ def get_current_downgap(last, seclast, gran):
          if not (seclast[idx] - last[idx]) == currentdown:
             downs.append(seclast[idx] - last[idx])
             currentdown = downs[-1]
+   if not downs:
+      downs = [0,]
    downgap = get_gapmid(downs, gran)
    return downgap
 

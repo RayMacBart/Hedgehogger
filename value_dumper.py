@@ -17,6 +17,25 @@ def dump_datachoices(obj, asset, cs, span, past, rand):
    with open('.\\optimization_files\\datachoice_log.txt', 'a') as choicefile:
       choicefile.write(f"{obj} | {asset}  {cs} | {span}  (-{past}) | {nature}\n")
 
+def dump_score(SQN, expec, calmar, sortino, profac):
+   sqn_mean = -0.3785497274953901
+   sqn_std = 4.747979983466789
+   expec_mean = 0.004989103069792843
+   expec_std = 0.01702601309891024
+   calmar_mean = -2.69410745786783
+   calmar_std = 9.168788078754021
+   sortino_mean = -4.2496372733703796
+   sortino_std = 3.8935756666689505
+   profac_mean = 2.2252850374777347
+   profac_std = 4.455342645663837
+   SCORE = ((SQN-sqn_mean)/sqn_std)*38 + \
+           ((expec-expec_mean)/expec_std)*22 + \
+           ((calmar-calmar_mean)/calmar_std)*16 + \
+           ((sortino-sortino_mean)/sortino_std)*13 + \
+           ((profac-profac_mean)/profac_std)*11
+   with open('.\\optimization_files\\SCORES.txt', 'a') as scores:
+      scores.write(str(SCORE)+"\n")
+
 def dump_return(returnval):
    with open('.\\optimization_files\\returns.txt', 'a') as returns:
       returns.write(str(returnval)+"\n")

@@ -64,6 +64,8 @@ def create_cama(Close, dailydata, starts, initday_usable, func, initval_factor, 
          for i in range(len(camas), s):
             camas.append(current_R4_cama)
          dayidx += 1
+   while dayidx > len(dailydata)-1:
+      dayidx -= 1
    last_R4_cama = func(dailydata[dayidx]['High'], dailydata[dayidx]['Low'], dailydata[dayidx]['Close'])
    for i in range(len(camas), len(Close)):
       camas.append(last_R4_cama)

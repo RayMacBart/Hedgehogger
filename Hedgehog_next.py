@@ -14,7 +14,8 @@ def next(self):
             trade.close()
             # valdump.tradelog('Long', 'closed', self.data.Close[-1])
          elif self.data.Close[-1] - self.abs_SL_dists[-1] > trade.sl:
-            trade.sl = self.data.Close[-1] - self.abs_SL_dists[-1]
+            trade.sl = self.data.Close[-1] - self.abs_SL_dists[-1] if self.data.Close[-1] - self.abs_SL_dists[-1] >= 0 else \
+               self.data.Close[-1] - 0.0005*self.adjufac
          # elif self.data.Close[-1] - self.abs_SL_dists[-1] > self.current_sl:
          #    self.current_sl = self.data.Close[-1] - self.abs_SL_dists[-1]
          #    trade.sl = self.current_sl
@@ -44,6 +45,9 @@ def next(self):
             trade.close()
             # valdump.tradelog('Short', 'closed', self.data.Close[-1])
       if (self.powers[-1] >= self.order_triggerpower) and not neworder_stoptime:
-         self.buy(size=self.size, sl=((self.data.Close[-1] - self.abs_SL_dists[-1]) if (self.abs_SL_dists[-1] > 0.0001*self.adjufac) else 
-                                       (self.data.Close[-1] - 0.0001*self.adjufac)))  # multiple buy order accumulation intended!
+         if self.data.Close[-1] - self.abs_SL_dists[-1] >= 0:
+            self.buy(size=self.size, sl=((self.data.Close[-1] - self.abs_SL_dists[-1]) if (self.abs_SL_dists[-1] > 0.0001*self.adjufac) else 
+                                          (self.data.Close[-1] - 0.0001*self.adjufac)))  # multiple buy order accumulation intended!
+         else:
+            self.buy(size=self.size, sl=((self.data.Close[-1] - 0.0005*self.adjufac)))  # multiple buy order accumulation intended!
          # valdump.tradelog('Long', 'opened', self.data.Close[-1])

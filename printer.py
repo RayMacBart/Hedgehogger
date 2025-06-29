@@ -37,11 +37,18 @@ def dump_results(results):
       resultdict[k] = []
    with open('.\\optimization_files\\datachoice_log.txt', 'a') as choicefile:
       choicefile.write(f'Optimization Loop ID:  "{loop_id}"\n')
+   with open('.\\optimization_files\\datachoice_log.txt', 'a') as choicefile:
+      choicefile.write(f'Optimization Loop ID:  "{loop_id}"\n')
+   with open('.\\optimization_files\\result_values.txt', 'a') as resultfile:
+      resultfile.write(f'Optimization Loop ID:  "{loop_id}"\n')
    for r in results:
       for k, v in r['stats']._strategy._params.items():
          resultdict[k].append(v)
       valdump.dump_results(r['stats']._strategy._params)
-      valdump.dump_datachoices(r['objective'], r['asset'], r['candlesize'], r['dataspan'],r['pastshift'], r['randomized'])
+      valdump.dump_datachoices(r['asset'], r['candlesize'], r['dataspan'],r['pastshift'], r['randomized'])
+      # note about line above, formerly, during objective collection also included: "r['objective']"
+      valdump.dump_score(r['stats']["SQN"], r['stats']["Expectancy [%]"], r['stats']["Calmar Ratio"], \
+                         r['stats']["Sortino Ratio"], r['stats']["Profit Factor"])
       valdump.dump_expectancy(r['stats']["Expectancy [%]"])
       valdump.dump_profac(r['stats']["Profit Factor"])
       valdump.dump_SQN(r['stats']["SQN"])
@@ -53,6 +60,10 @@ def dump_results(results):
       valdump.dump_winrate(r['stats']["Win Rate [%]"])
    with open('.\\optimization_files\\datachoice_log.txt', 'a') as choicefile:
       choicefile.write("-----------------------------------\n")
+   with open('.\\optimization_files\\SCORES.txt', 'a') as scorefile:
+      scorefile.write('-----------------------------------\n')
+   with open('.\\optimization_files\\result_values.txt', 'a') as resultfile:
+      resultfile.write('-----------------------------------\n')
    valdump.dump_paramlog(loop_id, results[0]['param_opt_log_dict'], resultdict)
 
       

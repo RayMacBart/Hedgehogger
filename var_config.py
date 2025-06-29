@@ -7,8 +7,8 @@ def get_vars():
    # asset = 'AUDUSD'
    # asset = 'USDJPY'
 
-   # candlesize = 'M1'
-   candlesize = 'M5'
+   candlesize = 'M1'
+   # candlesize = 'M5'
    # candlesize = 'M15'
    # candlesize = 'M30'
    # candlesize = 'H1'

@@ -64,6 +64,7 @@ def MACD_calcpower(macd, histo,
 
 
 def VWAP_calcpower(Closes, vwap, expfac, weight):
+   real_expfac = (expfac/10)+1  # only 'expfac' is adjusted version to be integers usable with sambo opt.
    shifting = 0
    for i in range(-1, -len(Closes)-1, -1):
       if rises(Closes, vwap[i]):
@@ -73,10 +74,10 @@ def VWAP_calcpower(Closes, vwap, expfac, weight):
       else:
          diff_widths = [Closes[i]-vwap[i] for i in range(len(Closes))]
          if diff_widths[0] > 0:
-            if rises(diff_widths, diff_widths[0]*expfac):
+            if rises(diff_widths, diff_widths[0]*real_expfac):
                shifting += 1
          elif diff_widths[0] < 0:
-            if falls(diff_widths, diff_widths[0]*expfac):
+            if falls(diff_widths, diff_widths[0]*real_expfac):
                shifting -= 1
    shift = 0
    if shifting > 0:
@@ -209,8 +210,9 @@ def BB_outer_touch_calcpower(low, mid, high, Highs, Lows, dir, weight):
    # (and compare effectiveness with old version)
 
 def BB_trend_calcpower(pow, mids, widths, expfac, weight):  # expfac: width expansion factor
+   real_expfac = (expfac/10)+1  # only 'expfac' is adjusted version to be integers usable with sambo opt.
    factor = 1
-   if (((pow > 0) and rises(mids)) or ((pow < 0) and falls(mids))) and rises(widths, widths[0]*expfac):
+   if (((pow > 0) and rises(mids)) or ((pow < 0) and falls(mids))) and rises(widths, widths[0]*real_expfac):
       abs_prct_change = abs((widths[-1]/(widths[0]/100)-100))
       DAPC = helpers.calc_special_defusion(abs_prct_change, 100, 560)  # Defused Absolute Percentual Change
       factor += (DAPC/100)*weight
@@ -221,6 +223,8 @@ def BB_trend_calcpower(pow, mids, widths, expfac, weight):  # expfac: width expa
 def VOL_calcpower(vols, mdfpwi, max_impact_zscore, weight, TS, VMMTs, clims):  
    # mdfpwi: "max decreasing factor per weight impact"
    # mpfpw: "max positive factor per weight"
+   real_mdfpwi = mdfpwi/20  # only 'mdfpwi' is adjusted version to be integers usable with sambo opt.
+   real_max_impact_zscore = max_impact_zscore/2
    zscore_volstart = (vols[0]-VMMTs['mean'])/VMMTs['std']
    zscore_volend = (vols[-1]-VMMTs['mean'])/VMMTs['std']
    zvoldiff = zscore_volend - zscore_volstart  # this is possible because absolute values are used here
@@ -229,13 +233,13 @@ def VOL_calcpower(vols, mdfpwi, max_impact_zscore, weight, TS, VMMTs, clims):
    factor = 1
    if ZSDFM < 0:
       zsmin = (VMMTs['min']-VMMTs['mean'])/VMMTs['std']
-      factor -= mdfpwi*(ZSDFM/zsmin)*weight
+      factor -= real_mdfpwi*(ZSDFM/zsmin)*weight
       # the old idea - nice, but a little unclear (and why this way at all?):
       # if factor < 1 / abs(zsmin)*weight:
       #    factor = 1 / abs(zsmin)*weight
    elif ZSDFM > 0:
-      expodenom = helpers.get_zscore_defusion_expodenom(max_impact_zscore)  # 'expodenom' = exponent denominator
-      DPZC = helpers.calc_special_defusion(ZSDFM, max_impact_zscore, expodenom)  # Defused Positive Z-Score Change
+      expodenom = helpers.get_zscore_defusion_expodenom(real_max_impact_zscore)  # 'expodenom' = exponent denominator
+      DPZC = helpers.calc_special_defusion(ZSDFM, real_max_impact_zscore, expodenom)  # Defused Positive Z-Score Change
       factor += DPZC*weight
       # old, hard cutting version:
       # factor += ZSDFM*weight   # use variable "max logarithmic zscore goal (?) with helpers function "get_defuse_formula_val"
@@ -394,7 +398,7 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
       power = 0
       lastpower = 0
       # if using Close for calculation, don't forget to use -1 or lower index than current.
-      if idx > 15:
+      if idx > 20:
          # and idx % 10 == 0:
 
          # DIR_calcpower is for experimental purposes only (not recommended)
@@ -412,62 +416,62 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
                                  T['MACD']['zeroweight'], T['MACD']['histoweight'], T['MACD']['comboweight'], impact_counter)
          lastpower = detect_impact(impact_counter, power, lastpower, 'MACD')
 
-         # power += VWAP_calcpower(Data.Close[idx-(T['VWAP']['chwin']):idx], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1],
-         #                         T['VWAP']['expfac'], T['VWAP']['weight'])  # --> vwap misuse?
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'VWAP')
+         power += VWAP_calcpower(Data.Close[idx-(T['VWAP']['chwin']):idx], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1],
+                                 T['VWAP']['expfac'], T['VWAP']['weight'])  # --> vwap misuse?
+         lastpower = detect_impact(impact_counter, power, lastpower, 'VWAP')
 
          # # I 'misuse' the fibonacci points in a unconventional way as breakthrough indicator.
-         # power += FIBO_calcpower(Data.Close[idx-(T['FIBO']['chwin']):idx], T['DIR']['dir'][idx], T['FIBO'][2][idx], T['FIBO'][4][idx],
-         #                              T['FIBO'][6][idx], T['FIBO'][8][idx], T['FIBO']['weight'])
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'FIBO')
+         power += FIBO_calcpower(Data.Close[idx-(T['FIBO']['chwin']):idx], T['DIR']['dir'][idx], T['FIBO'][2][idx], T['FIBO'][4][idx],
+                                      T['FIBO'][6][idx], T['FIBO'][8][idx], T['FIBO']['weight'])
+         lastpower = detect_impact(impact_counter, power, lastpower, 'FIBO')
 
-         # power += CAMA_calcpower(Data.Close[idx-1], T['CAMA']['R4'][idx], T['CAMA']['R3'][idx], T['CAMA']['S3'][idx],
-         #                         T['CAMA']['S4'][idx], T['CAMA']['3weight'], T['CAMA']['4weight'])
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'CAMA')
+         power += CAMA_calcpower(Data.Close[idx-1], T['CAMA']['R4'][idx], T['CAMA']['R3'][idx], T['CAMA']['S3'][idx],
+                                 T['CAMA']['S4'][idx], T['CAMA']['3weight'], T['CAMA']['4weight'])
+         lastpower = detect_impact(impact_counter, power, lastpower, 'CAMA')
 
-         # power += RSI_calcpower(T['RSI']['rsi'][idx-(T['RSI']['chwin']-1):idx+1], T['RSI']['low'],
-         #                        T['RSI']['high'], T['RSI']['weight'], impact_counter)
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'RSI')
+         power += RSI_calcpower(T['RSI']['rsi'][idx-(T['RSI']['chwin']-1):idx+1], T['RSI']['low'],
+                                T['RSI']['high'], T['RSI']['weight'], impact_counter)
+         lastpower = detect_impact(impact_counter, power, lastpower, 'RSI')
 
-         # power += CCI_calcpower(T['CCI']['cci'][idx-(T['CCI']['chwin']-1):idx+1], T['CCI']['low'],
-         #                        T['CCI']['high'], T['CCI']['weight'], impact_counter)
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'CCI')
+         power += CCI_calcpower(T['CCI']['cci'][idx-(T['CCI']['chwin']-1):idx+1], T['CCI']['low'],
+                                T['CCI']['high'], T['CCI']['weight'], impact_counter)
+         lastpower = detect_impact(impact_counter, power, lastpower, 'CCI')
 
-         # power += BB_outer_touch_calcpower(T['BB']['low'][idx-(T['BB']['chwin-out']-1):idx+1], T['BB']['mid'][idx-(T['BB']['chwin-out']-1):idx+1],
-         #                        T['BB']['high'][idx-(T['BB']['chwin-out']-1):idx+1], Data.High[idx-(T['BB']['chwin-out']):idx], 
-         #                        Data.Low[idx-(T['BB']['chwin-out']):idx], T['DIR']['dir'][idx], T['BB']['weight-out'])
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'BB-out')
-         # power *= BB_trend_calcpower(power, T['BB']['mid'][idx-(T['BB']['chwin-trend']-1):idx+1], 
-         #                             T['BB']['width'][idx-(T['BB']['chwin-trend']-1):idx+1], T['BB']['expfac'], T['BB']['weight-trend'])
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'BB-trend')
+         power += BB_outer_touch_calcpower(T['BB']['low'][idx-(T['BB']['chwin-out']-1):idx+1], T['BB']['mid'][idx-(T['BB']['chwin-out']-1):idx+1],
+                                T['BB']['high'][idx-(T['BB']['chwin-out']-1):idx+1], Data.High[idx-(T['BB']['chwin-out']):idx], 
+                                Data.Low[idx-(T['BB']['chwin-out']):idx], T['DIR']['dir'][idx], T['BB']['weight-out'])
+         lastpower = detect_impact(impact_counter, power, lastpower, 'BB-out')
+         power *= BB_trend_calcpower(power, T['BB']['mid'][idx-(T['BB']['chwin-trend']-1):idx+1], 
+                                     T['BB']['width'][idx-(T['BB']['chwin-trend']-1):idx+1], T['BB']['expfac'], T['BB']['weight-trend'])
+         lastpower = detect_impact(impact_counter, power, lastpower, 'BB-trend')
 
-         # power *= VOL_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['mdfpwi'],
-         #                        T['VOL']['max_impact_zscore'], T['VOL']['weight'], timestamps[idx-1], VMMTs, clims)
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'VOL')
+         power *= VOL_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['mdfpwi'],
+                                T['VOL']['max_impact_zscore'], T['VOL']['weight'], timestamps[idx-1], VMMTs, clims)
+         lastpower = detect_impact(impact_counter, power, lastpower, 'VOL')
 
-         # power *= ADX_calcpower(power, T['ADX']['adx'][idx-(T['ADX']['chwin']-1):idx+1], T['ADX']['DM+'][idx], T['ADX']['DM-'][idx],
-         #                        T['ADX']['treshold'], T['ADX']['abs-weight'], T['ADX']['dyn-weight'], impact_counter)
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'ADX')
+         power *= ADX_calcpower(power, T['ADX']['adx'][idx-(T['ADX']['chwin']-1):idx+1], T['ADX']['DM+'][idx], T['ADX']['DM-'][idx],
+                                T['ADX']['treshold'], T['ADX']['abs-weight'], T['ADX']['dyn-weight'], impact_counter)
+         lastpower = detect_impact(impact_counter, power, lastpower, 'ADX')
 
          # # old: (CHECK IF IT WORKS BETTER THAN CAMA VERSION ABOVE!)
          # # power *= CAMA_calcpower(power, Data.Close[idx-1], T['CAMA']['R4'][idx], T['CAMA']['R3'][idx], T['CAMA']['S3'][idx],
          # #                         T['CAMA']['S4'][idx], T['CAMA']['3weight'], T['CAMA']['4weight'])
          # # lastpower = detect_impact(impact_counter, power, lastpower, 'CAMA')
 
-         # power *= GAP_calcpower(power, T['DIR']['dir'][idx], T['GAP']['+'][idx], T['GAP']['-'][idx],
-         #                         T['GAP']['accuracy'], T['GAP']['weight'], last[idx], Data.Close[idx-1] #, T['GAP']['swingdist']
-         # )
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'GAP')
+         power *= GAP_calcpower(power, T['DIR']['dir'][idx], T['GAP']['+'][idx], T['GAP']['-'][idx],
+                                 T['GAP']['accuracy'], T['GAP']['weight'], last[idx], Data.Close[idx-1] #, T['GAP']['swingdist']
+         )
+         lastpower = detect_impact(impact_counter, power, lastpower, 'GAP')
 
-         # power *= PEAK_calcpower(power, T['DIR']['dir'][idx], T['PEAK']['+'][idx], T['PEAK']['-'][idx],
-         #                         T['PEAK']['accuracy'], T['PEAK']['weight'], last[idx], Data.Close[idx-1] #, T['PEAK']['swingdist']
-         # )
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'PEAK')
+         power *= PEAK_calcpower(power, T['DIR']['dir'][idx], T['PEAK']['+'][idx], T['PEAK']['-'][idx],
+                                 T['PEAK']['accuracy'], T['PEAK']['weight'], last[idx], Data.Close[idx-1] #, T['PEAK']['swingdist']
+         )
+         lastpower = detect_impact(impact_counter, power, lastpower, 'PEAK')
 
 
-         # power *= ATR_calcpower(T['ATR']['atr'][:idx+1], T['ATR']['mincalcwin'], T['ATR']['chwin'], T['ATR']['win'], 
-         #                        T['ATR']['abs-weight'], T['ATR']['dyn-weight'], impact_counter)
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'ATR')
+         power *= ATR_calcpower(T['ATR']['atr'][:idx+1], T['ATR']['mincalcwin'], T['ATR']['chwin'], T['ATR']['win'], 
+                                T['ATR']['abs-weight'], T['ATR']['dyn-weight'], impact_counter)
+         lastpower = detect_impact(impact_counter, power, lastpower, 'ATR')
 
          # print('_______________________________')
       # print(power)

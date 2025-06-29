@@ -1,0 +1,306 @@
+Optimization Loop ID:  "A"
+SQN | USDJPY  M30 | 9403  (-8) | SYNTHETIC
+Expectancy [%] | AUDUSD  M1 | 11751  (-2) | normal
+Sortino Ratio | EURUSD  M15 | 14292  (-4) | normal
+Profit Factor | EURUSD  H1 | 4806  (-11) | normal
+Return [%] | AUDUSD  H1 | 5426  (-2) | normal
+Equity Final [$] | USDJPY  M5 | 3116  (-2) | SYNTHETIC
+Return [%] | AUDUSD  M15 | 2418  (-11) | SYNTHETIC
+SQN | AUDUSD  H1 | 14161  (-6) | normal
+Expectancy [%] | EURUSD  H1 | 10233  (-6) | normal
+SQN | USDJPY  H1 | 12010  (-2) | normal
+Expectancy [%] | USDJPY  H1 | 3946  (-8) | normal
+Avg. Trade [%] | EURUSD  M15 | 4994  (-19) | SYNTHETIC
+Expectancy [%] | AUDUSD  M1 | 11286  (-1) | normal
+Profit Factor | EURUSD  H1 | 8551  (-2) | normal
+SQN | AUDUSD  M1 | 11753  (-5) | normal
+Sortino Ratio | USDJPY  M15 | 11982  (-2) | normal
+-----------------------------------
+Optimization Loop ID:  "B"
+Sortino Ratio | AUDUSD  M15 | 11914  (-0) | SYNTHETIC
+Equity Final [$] | USDJPY  M5 | 5908  (-14) | normal
+Profit Factor | AUDUSD  M30 | 13019  (-0) | normal
+Calmar Ratio | USDJPY  M15 | 4500  (-0) | SYNTHETIC
+Win Rate [%] | USDJPY  M15 | 9855  (-8) | normal
+Win Rate [%] | AUDUSD  M5 | 7409  (-12) | normal
+Sharpe Ratio | USDJPY  M15 | 6240  (-10) | normal
+Equity Final [$] | USDJPY  M15 | 13902  (-0) | SYNTHETIC
+Avg. Trade [%] | AUDUSD  M1 | 8778  (-8) | normal
+Sharpe Ratio | EURUSD  M5 | 2381  (-32) | normal
+Win Rate [%] | EURUSD  M30 | 3156  (-10) | normal
+Calmar Ratio | EURUSD  H1 | 13035  (-6) | normal
+SQN | EURUSD  M5 | 5029  (-13) | normal
+Sharpe Ratio | USDJPY  M15 | 8563  (-4) | normal
+Sharpe Ratio | EURUSD  M15 | 11145  (-4) | SYNTHETIC
+Sortino Ratio | EURUSD  M15 | 10031  (-3) | normal
+-----------------------------------
+Optimization Loop ID:  "C"
+Sortino Ratio | EURUSD  M30 | 8321  (-5) | normal
+SQN | USDJPY  M5 | 7801  (-0) | normal
+Expectancy [%] | AUDUSD  H1 | 3323  (-0) | normal
+Equity Peak [$] | EURUSD  M15 | 10901  (-8) | normal
+Avg. Trade [%] | AUDUSD  M30 | 13432  (-2) | SYNTHETIC
+Win Rate [%] | USDJPY  H1 | 3349  (-27) | normal
+SQN | EURUSD  M15 | 5395  (-6) | normal
+Equity Peak [$] | USDJPY  M5 | 4300  (-2) | SYNTHETIC
+Win Rate [%] | AUDUSD  M1 | 8284  (-11) | normal
+Equity Peak [$] | AUDUSD  M15 | 6558  (-1) | SYNTHETIC
+SQN | AUDUSD  M5 | 5634  (-1) | normal
+Sortino Ratio | USDJPY  M5 | 12915  (-0) | normal
+Win Rate [%] | USDJPY  M30 | 3746  (-25) | normal
+Return [%] | USDJPY  H1 | 14902  (-4) | normal
+Expectancy [%] | USDJPY  M15 | 2651  (-28) | normal
+Return [%] | EURUSD  M15 | 4302  (-1) | normal
+-----------------------------------
+Optimization Loop ID:  "D"
+Profit Factor | AUDUSD  M30 | 7271  (-3) | normal
+Equity Final [$] | USDJPY  M15 | 5876  (-4) | SYNTHETIC
+Avg. Trade [%] | USDJPY  H1 | 3518  (-8) | normal
+Equity Peak [$] | USDJPY  M30 | 3253  (-20) | normal
+Profit Factor | EURUSD  M15 | 7737  (-0) | normal
+SQN | EURUSD  M5 | 4161  (-16) | normal
+Profit Factor | EURUSD  H1 | 7687  (-12) | normal
+Expectancy [%] | USDJPY  H1 | 4324  (-20) | normal
+Equity Peak [$] | USDJPY  M15 | 6639  (-2) | normal
+SQN | USDJPY  M30 | 6985  (-1) | normal
+Avg. Trade [%] | EURUSD  M15 | 6671  (-7) | SYNTHETIC
+Expectancy [%] | EURUSD  M30 | 3827  (-18) | SYNTHETIC
+Avg. Trade [%] | EURUSD  M1 | 3963  (-1) | normal
+Expectancy [%] | USDJPY  M30 | 11632  (-1) | normal
+Profit Factor | EURUSD  H1 | 14795  (-5) | normal
+SQN | AUDUSD  M5 | 11121  (-3) | normal
+-----------------------------------
+Optimization Loop ID:  "E"
+Equity Peak [$] | EURUSD  M1 | 6696  (-5) | normal
+Expectancy [%] | USDJPY  H1 | 11260  (-1) | normal
+Sharpe Ratio | USDJPY  H1 | 7841  (-4) | normal
+Sharpe Ratio | EURUSD  M15 | 8821  (-1) | normal
+Equity Final [$] | EURUSD  H1 | 5217  (-1) | SYNTHETIC
+Expectancy [%] | EURUSD  H1 | 9755  (-9) | normal
+Profit Factor | AUDUSD  M1 | 11088  (-2) | normal
+Profit Factor | AUDUSD  M5 | 4307  (-3) | normal
+Sortino Ratio | AUDUSD  H1 | 14624  (-5) | normal
+Avg. Trade [%] | USDJPY  M30 | 9924  (-9) | normal
+Expectancy [%] | AUDUSD  M15 | 11347  (-5) | normal
+SQN | EURUSD  M30 | 12792  (-1) | normal
+Profit Factor | AUDUSD  M15 | 13580  (-5) | SYNTHETIC
+Calmar Ratio | USDJPY  M5 | 2033  (-6) | SYNTHETIC
+Expectancy [%] | AUDUSD  H1 | 12194  (-5) | normal
+SQN | AUDUSD  M5 | 12116  (-0) | normal
+-----------------------------------
+Optimization Loop ID:  "F"
+Equity Final [$] | EURUSD  H1 | 2582  (-17) | SYNTHETIC
+Expectancy [%] | EURUSD  M1 | 12667  (-3) | normal
+Equity Peak [$] | EURUSD  H1 | 12042  (-4) | normal
+SQN | AUDUSD  M30 | 3962  (-19) | normal
+Calmar Ratio | AUDUSD  M30 | 9102  (-2) | normal
+Calmar Ratio | EURUSD  M1 | 11373  (-1) | SYNTHETIC
+SQN | USDJPY  M30 | 6494  (-3) | normal
+Sharpe Ratio | EURUSD  M5 | 9283  (-7) | normal
+Win Rate [%] | AUDUSD  M5 | 10238  (-7) | normal
+SQN | AUDUSD  M5 | 4594  (-18) | normal
+SQN | AUDUSD  M15 | 5778  (-4) | normal
+Equity Peak [$] | EURUSD  M5 | 2734  (-34) | normal
+SQN | AUDUSD  M15 | 13829  (-3) | SYNTHETIC
+Calmar Ratio | AUDUSD  M5 | 3287  (-0) | normal
+Expectancy [%] | USDJPY  H1 | 8238  (-0) | normal
+Expectancy [%] | USDJPY  M15 | 7268  (-3) | normal
+-----------------------------------
+Optimization Loop ID:  "G"
+Calmar Ratio | AUDUSD  M1 | 10356  (-4) | normal
+Equity Peak [$] | USDJPY  M5 | 13779  (-0) | normal
+Sharpe Ratio | EURUSD  M5 | 9946  (-9) | normal
+Expectancy [%] | EURUSD  M15 | 6133  (-2) | normal
+Sortino Ratio | AUDUSD  M15 | 12292  (-0) | normal
+Calmar Ratio | AUDUSD  M30 | 2552  (-23) | normal
+Sortino Ratio | EURUSD  M5 | 6492  (-13) | normal
+Win Rate [%] | EURUSD  M5 | 12438  (-6) | normal
+SQN | AUDUSD  M30 | 8150  (-3) | normal
+Avg. Trade [%] | EURUSD  M1 | 7547  (-4) | SYNTHETIC
+Profit Factor | AUDUSD  M1 | 3549  (-11) | normal
+Profit Factor | USDJPY  M1 | 6573  (-6) | SYNTHETIC
+Sharpe Ratio | AUDUSD  H1 | 8950  (-7) | normal
+Expectancy [%] | USDJPY  M30 | 13825  (-5) | normal
+Expectancy [%] | USDJPY  M15 | 14102  (-5) | normal
+Expectancy [%] | EURUSD  M1 | 7966  (-7) | normal
+-----------------------------------
+Optimization Loop ID:  "H"
+Sharpe Ratio | AUDUSD  M15 | 13167  (-6) | normal
+Avg. Trade [%] | AUDUSD  M5 | 2855  (-22) | normal
+Profit Factor | USDJPY  M5 | 6761  (-3) | normal
+Win Rate [%] | AUDUSD  M1 | 11287  (-4) | normal
+Sharpe Ratio | USDJPY  M1 | 12167  (-0) | normal
+Avg. Trade [%] | USDJPY  H1 | 4478  (-19) | normal
+Sortino Ratio | USDJPY  H1 | 12003  (-0) | normal
+SQN | AUDUSD  M5 | 13668  (-4) | SYNTHETIC
+Expectancy [%] | AUDUSD  M30 | 11173  (-2) | normal
+Calmar Ratio | USDJPY  M30 | 12490  (-7) | normal
+Return [%] | USDJPY  M1 | 7134  (-11) | normal
+SQN | AUDUSD  M5 | 6650  (-14) | normal
+Win Rate [%] | USDJPY  H1 | 13764  (-3) | normal
+Sortino Ratio | AUDUSD  M30 | 4720  (-18) | normal
+Return [%] | AUDUSD  M30 | 10611  (-8) | normal
+Expectancy [%] | EURUSD  M1 | 11504  (-1) | normal
+-----------------------------------
+Optimization Loop ID:  "I"
+Return [%] | AUDUSD  M15 | 10160  (-3) | SYNTHETIC
+Sortino Ratio | USDJPY  M5 | 8822  (-1) | normal
+Return [%] | USDJPY  H1 | 8438  (-2) | SYNTHETIC
+Expectancy [%] | EURUSD  M15 | 4545  (-6) | normal
+Sharpe Ratio | AUDUSD  M15 | 9532  (-0) | SYNTHETIC
+Profit Factor | AUDUSD  M1 | 4639  (-3) | normal
+Sharpe Ratio | USDJPY  M5 | 12895  (-0) | normal
+Equity Final [$] | USDJPY  M30 | 14763  (-3) | normal
+Equity Final [$] | AUDUSD  H1 | 2365  (-35) | normal
+Sortino Ratio | USDJPY  M1 | 13036  (-0) | SYNTHETIC
+Win Rate [%] | AUDUSD  M15 | 3958  (-17) | normal
+Return [%] | AUDUSD  M5 | 5384  (-11) | normal
+Calmar Ratio | EURUSD  M15 | 6168  (-4) | SYNTHETIC
+SQN | EURUSD  H1 | 5539  (-13) | normal
+SQN | AUDUSD  H1 | 14764  (-3) | SYNTHETIC
+Expectancy [%] | EURUSD  M5 | 9278  (-4) | normal
+-----------------------------------
+Optimization Loop ID:  "J"
+Avg. Trade [%] | AUDUSD  M5 | 12540  (-5) | normal
+Sharpe Ratio | EURUSD  M1 | 10685  (-7) | normal
+Profit Factor | AUDUSD  H1 | 13407  (-1) | normal
+Equity Final [$] | USDJPY  M5 | 7537  (-6) | normal
+Calmar Ratio | EURUSD  M5 | 7632  (-6) | normal
+Calmar Ratio | USDJPY  M15 | 10597  (-6) | SYNTHETIC
+Sortino Ratio | AUDUSD  M30 | 2062  (-47) | SYNTHETIC
+Sortino Ratio | USDJPY  M5 | 2261  (-24) | normal
+Return [%] | EURUSD  M5 | 11829  (-2) | normal
+Equity Peak [$] | EURUSD  H1 | 3313  (-17) | normal
+Sortino Ratio | EURUSD  M30 | 3913  (-19) | SYNTHETIC
+SQN | AUDUSD  M1 | 12879  (-6) | normal
+Win Rate [%] | USDJPY  M5 | 14047  (-4) | normal
+Calmar Ratio | AUDUSD  M1 | 2611  (-5) | normal
+Profit Factor | EURUSD  M5 | 13097  (-1) | SYNTHETIC
+Sharpe Ratio | EURUSD  M30 | 8037  (-9) | normal
+-----------------------------------
+Optimization Loop ID:  "K"
+Profit Factor | USDJPY  M1 | 3152  (-18) | normal
+Profit Factor | USDJPY  M30 | 9430  (-5) | normal
+Calmar Ratio | EURUSD  H1 | 2506  (-11) | normal
+Equity Final [$] | USDJPY  H1 | 7319  (-3) | normal
+Return [%] | AUDUSD  M1 | 5296  (-10) | normal
+Return [%] | USDJPY  H1 | 11220  (-1) | normal
+SQN | AUDUSD  H1 | 5215  (-17) | SYNTHETIC
+Expectancy [%] | USDJPY  M30 | 11557  (-1) | normal
+Expectancy [%] | USDJPY  M30 | 4189  (-0) | normal
+SQN | AUDUSD  M30 | 14438  (-1) | normal
+SQN | EURUSD  M15 | 4172  (-7) | normal
+Sharpe Ratio | EURUSD  H1 | 7761  (-8) | normal
+Win Rate [%] | EURUSD  M1 | 14453  (-5) | normal
+Avg. Trade [%] | USDJPY  M5 | 11274  (-6) | normal
+Sortino Ratio | USDJPY  M1 | 13068  (-5) | normal
+Win Rate [%] | AUDUSD  M5 | 2849  (-21) | normal
+-----------------------------------
+Optimization Loop ID:  "L"
+Expectancy [%] | USDJPY  M5 | 10765  (-5) | SYNTHETIC
+Return [%] | AUDUSD  M30 | 6512  (-0) | normal
+Sortino Ratio | USDJPY  M5 | 9219  (-9) | normal
+Sharpe Ratio | EURUSD  H1 | 12367  (-1) | normal
+Expectancy [%] | AUDUSD  M1 | 3632  (-25) | normal
+Calmar Ratio | AUDUSD  M15 | 2919  (-33) | normal
+Avg. Trade [%] | AUDUSD  H1 | 13993  (-4) | normal
+Win Rate [%] | EURUSD  H1 | 10126  (-4) | SYNTHETIC
+Expectancy [%] | AUDUSD  M5 | 5968  (-7) | normal
+Profit Factor | AUDUSD  M1 | 13692  (-0) | normal
+Expectancy [%] | AUDUSD  M30 | 7900  (-8) | SYNTHETIC
+Calmar Ratio | AUDUSD  M30 | 3573  (-15) | SYNTHETIC
+Expectancy [%] | EURUSD  M1 | 14188  (-4) | normal
+SQN | AUDUSD  M15 | 5410  (-7) | SYNTHETIC
+Expectancy [%] | AUDUSD  M1 | 11509  (-2) | normal
+Calmar Ratio | AUDUSD  M15 | 3674  (-14) | normal
+-----------------------------------
+Optimization Loop ID:  "M"
+Avg. Trade [%] | EURUSD  M5 | 5939  (-11) | normal
+SQN | AUDUSD  M1 | 13300  (-0) | normal
+SQN | USDJPY  M5 | 14748  (-4) | normal
+Calmar Ratio | AUDUSD  M30 | 11147  (-4) | normal
+Return [%] | USDJPY  M15 | 3513  (-1) | normal
+Sortino Ratio | EURUSD  M5 | 5420  (-6) | normal
+SQN | AUDUSD  M5 | 4494  (-1) | normal
+Win Rate [%] | USDJPY  H1 | 7875  (-2) | SYNTHETIC
+Avg. Trade [%] | USDJPY  M5 | 3131  (-28) | normal
+Calmar Ratio | AUDUSD  H1 | 9523  (-3) | SYNTHETIC
+Return [%] | USDJPY  M5 | 5567  (-11) | normal
+Calmar Ratio | AUDUSD  H1 | 8823  (-1) | normal
+Expectancy [%] | AUDUSD  H1 | 7733  (-7) | normal
+Sortino Ratio | EURUSD  M1 | 12021  (-2) | normal
+Calmar Ratio | USDJPY  H1 | 3926  (-12) | normal
+Avg. Trade [%] | EURUSD  M1 | 5251  (-17) | SYNTHETIC
+-----------------------------------
+Optimization Loop ID:  "N"
+Sortino Ratio | USDJPY  M30 | 10215  (-3) | normal
+Profit Factor | EURUSD  M5 | 4493  (-4) | normal
+Profit Factor | EURUSD  M5 | 3176  (-20) | normal
+Profit Factor | USDJPY  M30 | 10099  (-5) | normal
+SQN | USDJPY  M5 | 9420  (-6) | SYNTHETIC
+Sortino Ratio | EURUSD  M30 | 14452  (-2) | normal
+Sharpe Ratio | USDJPY  M5 | 4821  (-2) | SYNTHETIC
+Equity Final [$] | USDJPY  H1 | 10183  (-7) | SYNTHETIC
+Calmar Ratio | USDJPY  M15 | 8691  (-1) | SYNTHETIC
+Sortino Ratio | USDJPY  M30 | 7235  (-10) | normal
+Equity Final [$] | USDJPY  M15 | 9287  (-1) | normal
+SQN | AUDUSD  M1 | 10894  (-7) | normal
+Sharpe Ratio | USDJPY  M1 | 14045  (-2) | SYNTHETIC
+Sortino Ratio | EURUSD  H1 | 4183  (-15) | SYNTHETIC
+Calmar Ratio | AUDUSD  M5 | 2917  (-2) | SYNTHETIC
+Sortino Ratio | USDJPY  M1 | 9462  (-8) | normal
+-----------------------------------
+Optimization Loop ID:  "O"
+Win Rate [%] | EURUSD  H1 | 9416  (-2) | normal
+Profit Factor | AUDUSD  M15 | 8138  (-2) | normal
+SQN | USDJPY  M15 | 13721  (-2) | normal
+Return [%] | USDJPY  M1 | 3817  (-1) | normal
+Calmar Ratio | USDJPY  M30 | 7204  (-10) | normal
+Profit Factor | EURUSD  H1 | 3369  (-2) | normal
+Calmar Ratio | USDJPY  M30 | 11815  (-6) | normal
+Profit Factor | AUDUSD  M30 | 9510  (-0) | normal
+Return [%] | EURUSD  M30 | 5371  (-14) | normal
+Profit Factor | AUDUSD  M30 | 11757  (-7) | SYNTHETIC
+Equity Final [$] | EURUSD  M5 | 12555  (-3) | normal
+Equity Final [$] | USDJPY  M30 | 8775  (-2) | normal
+Return [%] | AUDUSD  H1 | 10673  (-5) | normal
+SQN | AUDUSD  M30 | 11655  (-1) | normal
+Win Rate [%] | USDJPY  M30 | 5095  (-6) | normal
+Avg. Trade [%] | EURUSD  M5 | 2289  (-28) | normal
+-----------------------------------
+Optimization Loop ID:  "P"
+Win Rate [%] | USDJPY  M5 | 7976  (-8) | normal
+Sharpe Ratio | AUDUSD  M15 | 11486  (-0) | normal
+Expectancy [%] | EURUSD  M30 | 4417  (-21) | normal
+Calmar Ratio | AUDUSD  M5 | 14785  (-2) | normal
+Equity Peak [$] | AUDUSD  H1 | 8556  (-3) | SYNTHETIC
+Profit Factor | AUDUSD  M15 | 6050  (-0) | normal
+Return [%] | AUDUSD  M5 | 2673  (-8) | normal
+Sharpe Ratio | USDJPY  M15 | 11798  (-0) | normal
+Calmar Ratio | USDJPY  M30 | 13969  (-1) | normal
+Profit Factor | EURUSD  M30 | 14843  (-0) | normal
+Equity Peak [$] | USDJPY  M1 | 2931  (-17) | SYNTHETIC
+Equity Peak [$] | AUDUSD  M15 | 2602  (-5) | normal
+Profit Factor | AUDUSD  M30 | 10649  (-1) | SYNTHETIC
+Expectancy [%] | EURUSD  M15 | 2384  (-19) | normal
+Equity Final [$] | USDJPY  M5 | 5705  (-16) | normal
+Win Rate [%] | AUDUSD  M15 | 14727  (-0) | normal
+-----------------------------------
+Optimization Loop ID:  "Q"
+Sortino Ratio | AUDUSD  M5 | 9634  (-4) | normal
+Expectancy [%] | USDJPY  M5 | 2689  (-22) | SYNTHETIC
+Equity Peak [$] | USDJPY  M1 | 6480  (-12) | normal
+Sharpe Ratio | USDJPY  M1 | 8657  (-4) | normal
+Profit Factor | AUDUSD  M15 | 2660  (-34) | normal
+Return [%] | AUDUSD  H1 | 9433  (-4) | normal
+SQN | AUDUSD  M5 | 8088  (-4) | normal
+Win Rate [%] | USDJPY  M30 | 13044  (-1) | normal
+Return [%] | USDJPY  M15 | 2514  (-26) | normal
+Profit Factor | AUDUSD  H1 | 7820  (-1) | normal
+Calmar Ratio | AUDUSD  M30 | 8117  (-4) | normal
+Win Rate [%] | AUDUSD  M15 | 14531  (-1) | SYNTHETIC
+SQN | EURUSD  M15 | 13608  (-3) | SYNTHETIC
+SQN | USDJPY  H1 | 10289  (-7) | normal
+Sortino Ratio | AUDUSD  H1 | 10201  (-4) | normal
+SQN | EURUSD  M15 | 13203  (-2) | normal
+-----------------------------------

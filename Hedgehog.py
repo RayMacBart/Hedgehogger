@@ -21,17 +21,17 @@ class Hedgehog(Strategy):
    ADX_treshold = 25
 
    # indicator calculation windows
-   RSI_win = 20
-   CCI_win = 20
-   MACD_shortwin = 3
-   MACD_longwin = 7
+   RSI_win = 11
+   CCI_win = 11
+   MACD_shortwin = 6
+   MACD_longwin = 15
    MACD_signalwin = 2
    PSAR_af0 = 0.02
    PSAR_af = 0.02
    PSAR_max_af = 0.2
    bbands_win = 20
    ATR_win = 14
-   ADX_win = 14
+   ADX_win = 20
    sizegap_win = 100
    sizepeak_win = 100
 
@@ -40,78 +40,78 @@ class Hedgehog(Strategy):
    CSP_shadowdiff_factor = 8
 
    # 'expfac:' expansion factors that shall be reacted upon - the lower the more sensitive/reactive. use 0.1 steps
-   vwap_expfac = 1.2  # difference between price and vwap 
-   bbands_expfac = 1.3  # width between outer bands
+   vwap_expfac = 7  # difference between price and vwap 
+   bbands_expfac = 3  # width between outer bands
 
    # mnfpwi: "max decreasing factor per weight impact"
-   vol_mdfpwi = 0.15  # 0.05 - 0.4  (in 0.05 steps)
-   vol_max_impact_zscore = 3  # steps:  2,  2.5,  3,  3.5,  4,  4.5,  5,  5.5,  6
+   vol_mdfpwi = 1
+   vol_max_impact_zscore = 4  # steps:  4 - 12
    # old:
    # mpfpw: "max positive factor per weight"
    # vol_mpfpw = 1.5  # 1.2 - 2 (in 0.1 steps) - 3 (in 0.2 steps) - 4.2 (in 0.4 steps), 5
-   sizegap_granularity = 10
-   sizepeak_granularity = 10
+   sizegap_granularity = 12
+   sizepeak_granularity = 12
    gap_accuracy = 5  # area of gap value recognition in % --> the lower, the more accurate!
-   peak_accuracy = 5  # area of peak value recognition in % --> the lower, the more accurate!
+   peak_accuracy = 6  # area of peak value recognition in % --> the lower, the more accurate!
 
    # change measure windows:
    CSP_reaction_win = 2  # recommended to STAY like this
    MACD_chwin = 3 # 3-8 
-   histo_chwin = 5 # 3-8
+   histo_chwin = 3 # 3-8
    VWAP_chwin = 8 # 3-8
-   fibo_chwin = 5 # 3-8
-   RSI_chwin = 5 # 3-10
-   CCI_chwin = 5 # 3-10
-   vol_chwin = 5 # 2-?
-   ADX_chwin = 5 #?
-   ATR_chwin = 5
+   fibo_chwin = 3 # 3-8
+   RSI_chwin = 4 # 3-10
+   CCI_chwin = 4 # 3-10
+   vol_chwin = 3 # 2-?
+   ADX_chwin = 7 #?
+   ATR_chwin = 3
    ATR_mincalcwin = 100  # minimum of used data for zscore calculation for absolute valued indications
-   bbands_chwin_out = 5 #?
-   bbands_chwin_trend = 5 # 3-8
+   bbands_chwin_out = 4 #?
+   bbands_chwin_trend = 4 # 3-8
 
    SL_formerspans_win = 1 # keep
 
-   bbands_TSL_chwin = 5  # 2-?
+   bbands_TSL_chwin = 7  # 2-?
    power_TSL_chwin = 5 # DEPRECATED: NOT NEEDED ANYMORE
    # peak_swingdist = 2 # 2-?
 
    # indicator weights
 
    DIR_weight = 1
-   CSP_weight = 1
+   CSP_weight = 2
    MACD_zeroweight = 1
    MACD_histoweight = 1
    MACD_comboweight = 1
    VWAP_weight = 1
-   fibo_weight = 1
+   fibo_weight = 4
    cama3_weight = 1
-   cama4_weight = 1
-   RSI_weight = 1
-   CCI_weight = 1
+   cama4_weight = 2
+   RSI_weight = 2
+   CCI_weight = 3
    bbands_weight_out = 1
    bbands_weight_trend = 1
    volume_weight = 1
    ADX_abs_weight = 1
    ADX_dyn_weight = 1
    gap_weight = 1
-   peak_weight = 1
-   ATR_abs_weight = 1
-   ATR_dyn_weight = 1
+   peak_weight = 3
+   ATR_abs_weight = 2
+   ATR_dyn_weight = 2
 
    PSAR_weight = 2
    bbands_TSL_weight = 2
    ATR_TSL_weight = 3
-   power_TSL_weight = 3
+   power_TSL_weight = 2
 
-   SLdist_redufac = 10  # StopLoss distance reduction factor * 10  (to have integers for sambo optimization)
+   SLdist_redufac = 8  # StopLoss distance reduction factor * 10  (to have integers for sambo optimization)
 
    # following values must not be greater than 60
    neworder_stoptime_dist = 20
    order_closetime_dist = 5
    reenter_time_dist = 5
 
-   close_triggerpower = 1 # close_triggerpower must always be <= order_triggerpower. It also can be negative ( --> closes before power reaches 0!).
-   order_triggerpower =  1
+   close_triggerpower = 2 # close_triggerpower must always be <= order_triggerpower. It also can be negative ( --> closes before power reaches 0!).
+   order_triggerpower =  28
 
    size = 0.1  # of buy/sell orders
 

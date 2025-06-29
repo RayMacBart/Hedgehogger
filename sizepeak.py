@@ -30,6 +30,8 @@ def get_current_uppeak(last, seclast, gran):
          if not (last[idx] - seclast[idx]) == currentup:
             ups.append(last[idx] - seclast[idx])
             currentup = ups[-1]
+   if not ups:
+      ups = [0,]
    uppeak = get_peakmid(ups, gran)
    return uppeak
 
@@ -42,6 +44,8 @@ def get_current_downpeak(last, seclast, gran):
          if not (seclast[idx] - last[idx]) == currentdown:
             downs.append(seclast[idx] - last[idx])
             currentdown = downs[-1]
+   if not downs:
+      downs = [0,]
    downpeak = get_peakmid(downs, gran)
    return downpeak
 
