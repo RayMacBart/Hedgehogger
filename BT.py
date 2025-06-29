@@ -162,11 +162,13 @@ def do_backtest(param):
                   ATR_TSL_weight = [2,4], #3 was 3
                   power_TSL_weight = [1,3], #3 was 2
 
-                  maximize = (((stats["SQN"]-sqn_mean)/sqn_std)*38 + \
-                              ((stats["Expectancy [%]"]-expec_mean)/expec_std)*22 + \
-                              ((stats["Calmar Ratio"]-calmar_mean)/calmar_std)*16 + \
-                              ((stats["Sortino Ratio"]-sortino_mean)/sortino_std)*13 + \
-                              ((stats["Profit Factor"]-profac_mean)/profac_std)*11)
+                  maximize = lambda stats: (
+                     ((stats["SQN"]-sqn_mean)/sqn_std)*38 +
+                     ((stats["Expectancy [%]"]-expec_mean)/expec_std)*22 +
+                     ((stats["Calmar Ratio"]-calmar_mean)/calmar_std)*16 +
+                     ((stats["Sortino Ratio"]-sortino_mean)/sortino_std)*13 +
+                     ((stats["Profit Factor"]-profac_mean)/profac_std)*11
+                  ),
 
                   # maximize = objective,
                   # maximize = lambda stats: (stats["Expectancy [%]"]-exp_mean)/exp_std + \
@@ -208,7 +210,7 @@ def do_backtest(param):
                   'CCI_win': 11,
                   'CCI_chwin': 4, # 3-10
                   'CCI_weight': 3,
-                  '############################
+                  ############################
                   'bbands_expfac': 3,
                   'bbands_win': 20,
                   'bbands_weight_out': 1,
