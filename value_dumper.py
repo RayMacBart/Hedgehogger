@@ -12,10 +12,10 @@ def dump_paramlog(loop_id, logdict, resultdict):
          logfile.write(f'{k}: range={v}, results={resultdict[k]}\n')
       logfile.write('---------------------------------\n')
 
-def dump_datachoices(obj, asset, cs, span, past, rand):
+def dump_datachoices(asset, cs, span, past, rand, nr_trades):
    nature = 'SYNTHETIC' if rand else 'normal'
    with open('.\\optimization_files\\datachoice_log.txt', 'a') as choicefile:
-      choicefile.write(f"{obj} | {asset}  {cs} | {span}  (-{past}) | {nature}\n")
+      choicefile.write(f"{asset}  {cs} | {span}  (-{past}) | {nature} | Trades: {nr_trades}\n")
 
 def dump_score(SQN, expec, calmar, sortino, profac):
    sqn_mean = -0.3785497274953901

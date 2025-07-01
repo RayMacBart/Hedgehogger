@@ -22,8 +22,8 @@ def print_results(results):
       print('____________________________________________________________')
       # print("stopdist:", r['stats']._strategy.stopdist)
       # print('r['stats']._trades:\n', r['stats']._trades)
-      print("optimized objective: ", r['objective'])
-      print('____________________________________________________________')
+      # print("optimized objective: ", r['objective'])
+      # print('____________________________________________________________')
 
       print('POWER IMPACT COUNTER:')
       for k, v in r['stats']._strategy.impact_counter.items():
@@ -45,7 +45,7 @@ def dump_results(results):
       for k, v in r['stats']._strategy._params.items():
          resultdict[k].append(v)
       valdump.dump_results(r['stats']._strategy._params)
-      valdump.dump_datachoices(r['asset'], r['candlesize'], r['dataspan'],r['pastshift'], r['randomized'])
+      valdump.dump_datachoices(r['asset'], r['candlesize'], r['dataspan'],r['pastshift'], r['randomized'], r['stats']["# Trades"])
       # note about line above, formerly, during objective collection also included: "r['objective']"
       valdump.dump_score(r['stats']["SQN"], r['stats']["Expectancy [%]"], r['stats']["Calmar Ratio"], \
                          r['stats']["Sortino Ratio"], r['stats']["Profit Factor"])

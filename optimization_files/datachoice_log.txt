@@ -1,0 +1,4 @@
+Optimization Loop ID:  "A"
+Optimization Loop ID:  "A"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 3545
+-----------------------------------

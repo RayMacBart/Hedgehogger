@@ -113,7 +113,7 @@ class Hedgehog(Strategy):
    close_triggerpower = 2 # close_triggerpower must always be <= order_triggerpower. It also can be negative ( --> closes before power reaches 0!).
    order_triggerpower =  28
 
-   size = 0.1  # of buy/sell orders
+   size = 0.001  # of buy/sell orders
 
    # cc = -1  # candle counter
    # stopdist = 0.0003

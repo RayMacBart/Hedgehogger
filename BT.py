@@ -69,7 +69,7 @@ def do_backtest(param):
       df = get_randomized_df(df, asset, candlesize, dataspan*(pastshift+1))
 
 
-   bt = Backtest(df, Hedgehog, cash=1000,
+   bt = Backtest(df, Hedgehog, cash=100000,
                commission=0.00012, # *adjufac,
                margin=0.033, hedging=True)
 
@@ -89,7 +89,7 @@ def do_backtest(param):
    # stats = bt.run()
 
 
-   max_tries = 260
+   max_tries = 116
    # MAKE PARAMETER RANGES RESULTING IN ABOUT >1000 POSSIBLE COMBINATIONS.
    # WAYS TO DO THIS:   4 x 4 x 4 x 4 x 4 = 1024   |   4 x 6 x 6 x 7 = 1008   |   5 x 6 x 6 x 6 = 1080   |   5 x 5 x 6 x 7 = 1050   
    #                    3 x 3 x 4 x 5 x 6 = 1080   |   3 x 6 x 7 x 8 = 1008   |   3 x 7 x 7 x 7 = 1029   |   10 x 10 x 10 = 1000
@@ -97,70 +97,71 @@ def do_backtest(param):
    #            2 x 2 x 2 x 3 x 3 x 3 x 5 = 1080   |   2 x 2 x 2 x 3 x 3 x 4 x 4 = 1152 (!)              |   4 x 4 x 6 x 11 = 1056
    #                                               |   2 ^ 10 = 1024                                     |   6 x 6 x 30 = 1080
 
+   # WARNING: I HAVE SET 'SIZE' @ HEDGEHOG.PY TO 0.001 (INSTEAD OF 0.1) AND CASH @ BACKTEST() ABOVE TO 100.000 (INSTEAD OF 1.000)!!!
    stats = bt.optimize(
                   candlesize = [candlesize],
-                  order_triggerpower = 28,
-                  close_triggerpower = 2,
-                  CSP_bodyshrink_factor = 6,
-                  CSP_shadow2body_factor = 8,
-                  CSP_shadowdiff_factor = 8,
+                  order_triggerpower = 1,
+                  close_triggerpower = [0,1], # was 2
+                  CSP_bodyshrink_factor = [5,10], #6  # was 6
+                  CSP_shadow2body_factor = [5,12], #8  # was 8
+                  CSP_shadowdiff_factor = [6,13], #8  # was 8
                   CSP_reaction_win = 2,
-                  CSP_weight = 2,
-                  MACD_zeroweight = 1,
-                  MACD_histoweight = 1,
-                  MACD_comboweight = 1,
-                  MACD_chwin = 3,
-                  histo_chwin = 3,
-                  MACD_shortwin = 6,
-                  MACD_longwin = 15,
-                  MACD_signalwin = 2,
-                  vwap_expfac = 7,
-                  VWAP_chwin = 8,
-                  VWAP_weight = 1,
-                  fibo_chwin = 3,
-                  fibo_weight = 4,
-                  cama3_weight = 1,
-                  cama4_weight = 2,
-                  RSI_win = 11,
-                  RSI_chwin = 4, # 3-10
-                  RSI_weight = 2,
-                  CCI_win = 11,
-                  CCI_chwin = 4, # 3-10
-                  CCI_weight = 3,
-                  ############################
-                  bbands_expfac = 3,
-                  bbands_win = 20,
-                  bbands_weight_out = 1,
-                  bbands_weight_trend = 1,
-                  bbands_chwin_out = 4,
-                  bbands_chwin_trend = 4,
-                  vol_mdfpwi = 1,
-                  vol_max_impact_zscore = 4,
-                  vol_chwin = 3, # 2-?
-                  volume_weight = 1,
-                  ADX_win = 20,
-                  ADX_chwin = 7,
-                  ADX_abs_weight = 3,
-                  ADX_dyn_weight = 1,
-                  sizegap_granularity = 12,
-                  sizepeak_granularity = 12,
-                  gap_accuracy = 5,  # area of gap value recognition in % --> the lower, the more accurate!
-                  peak_accuracy = 6,
-                  sizegap_win = 100,
-                  sizepeak_win = 100,
-                  gap_weight = 1,
-                  peak_weight = 3,
-                  ATR_win = 14,
-                  ATR_chwin = 3,
-                  ATR_mincalcwin = 100,
-                  ATR_abs_weight = 2,
-                  ATR_dyn_weight = 2,
-                  SLdist_redufac = [7,10], #4 was 8
-                  bbands_TSL_chwin = [5,8], #4 was 7
-                  PSAR_weight = [1,3],  #3 was 2
-                  bbands_TSL_weight = [1,3], #3 was 2
-                  ATR_TSL_weight = [2,4], #3 was 3
-                  power_TSL_weight = [1,3], #3 was 2
+                  CSP_weight = 1, # was 2
+                  # MACD_zeroweight = 1,
+                  # MACD_histoweight = 1,
+                  # MACD_comboweight = 1,
+                  # MACD_chwin = 3,
+                  # histo_chwin = 3,
+                  # MACD_shortwin = 6,
+                  # MACD_longwin = 15,
+                  # MACD_signalwin = 2,
+                  # vwap_expfac = 7,
+                  # VWAP_chwin = 8,
+                  # VWAP_weight = 1,
+                  # fibo_chwin = 3,
+                  # fibo_weight = 4,
+                  # cama3_weight = 1,
+                  # cama4_weight = 2,
+                  # RSI_win = 11,
+                  # RSI_chwin = 4, # 3-10
+                  # RSI_weight = 2,
+                  # CCI_win = 11,
+                  # CCI_chwin = 4, # 3-10
+                  # CCI_weight = 3,
+                  # ############################
+                  # bbands_expfac = 3,
+                  # bbands_win = 20,
+                  # bbands_weight_out = 1,
+                  # bbands_weight_trend = 1,
+                  # bbands_chwin_out = 4,
+                  # bbands_chwin_trend = 4,
+                  # vol_mdfpwi = 1,
+                  # vol_max_impact_zscore = 4,
+                  # vol_chwin = 3, # 2-?
+                  # volume_weight = 1,
+                  # ADX_win = 20,
+                  # ADX_chwin = 7,
+                  # ADX_abs_weight = 3,
+                  # ADX_dyn_weight = 1,
+                  # sizegap_granularity = 12,
+                  # sizepeak_granularity = 12,
+                  # gap_accuracy = 5,  # area of gap value recognition in % --> the lower, the more accurate!
+                  # peak_accuracy = 6,
+                  # sizegap_win = 100,
+                  # sizepeak_win = 100,
+                  # gap_weight = 1,
+                  # peak_weight = 3,
+                  # ATR_win = 14,
+                  # ATR_chwin = 3,
+                  # ATR_mincalcwin = 100,
+                  # ATR_abs_weight = 2,
+                  # ATR_dyn_weight = 2,
+                  SLdist_redufac = 9,
+                  bbands_TSL_chwin = 7,
+                  PSAR_weight = 1,
+                  bbands_TSL_weight = 1,
+                  ATR_TSL_weight = 2,
+                  power_TSL_weight = 3,
 
                   maximize = lambda stats: (
                      ((stats["SQN"]-sqn_mean)/sqn_std)*38 +
@@ -182,68 +183,19 @@ def do_backtest(param):
                   # constraint=lambda p: p.MACD_shortwin < p.MACD_longwin
                )
    param_opt_log_dict = {
-                  'order_triggerpower': 28,
-                  'close_triggerpower': 2,
-                  'CSP_bodyshrink_factor': 6,
-                  'CSP_shadow2body_factor': 8,
-                  'CSP_shadowdiff_factor': 8,
+                  'order_triggerpower': 16,
+                  'close_triggerpower': [0,1], # was 2
+                  'CSP_bodyshrink_factor': [5,10], #6  # was 6
+                  'CSP_shadow2body_factor': [5,12], #8  # was 8
+                  'CSP_shadowdiff_factor': [6,13], #8  # was 8
                   'CSP_reaction_win': 2,
                   'CSP_weight': 2,
-                  'MACD_zeroweight': 1,
-                  'MACD_histoweight': 1,
-                  'MACD_comboweight': 1,
-                  'MACD_chwin': 3,
-                  'histo_chwin': 3,
-                  'MACD_shortwin': 6,
-                  'MACD_longwin': 15,
-                  'MACD_signalwin': 2,
-                  'vwap_expfac': 7,
-                  'VWAP_chwin': 8,
-                  'VWAP_weight': 1,
-                  'fibo_chwin': 3,
-                  'fibo_weight': 4,
-                  'cama3_weight': 1,
-                  'cama4_weight': 2,
-                  'RSI_win': 11,
-                  'RSI_chwin': 4, # 3-10
-                  'RSI_weight': 2,
-                  'CCI_win': 11,
-                  'CCI_chwin': 4, # 3-10
-                  'CCI_weight': 3,
-                  ############################
-                  'bbands_expfac': 3,
-                  'bbands_win': 20,
-                  'bbands_weight_out': 1,
-                  'bbands_weight_trend': 1,
-                  'bbands_chwin_out': 4,
-                  'bbands_chwin_trend': 4,
-                  'vol_mdfpwi': 1,
-                  'vol_max_impact_zscore': 4,
-                  'vol_chwin': 3, # 2-?
-                  'volume_weight': 1,
-                  'ADX_win': 20,
-                  'ADX_chwin': 7,
-                  'ADX_abs_weight': 3,
-                  'ADX_dyn_weight': 1,
-                  'sizegap_granularity': 12,
-                  'sizepeak_granularity': 12,
-                  'gap_accuracy': 5,  # area of gap value recognition in % --> the lower, the more accurate!
-                  'peak_accuracy': 6,
-                  'sizegap_win': 100,
-                  'sizepeak_win': 100,
-                  'gap_weight': 1,
-                  'peak_weight': 3,
-                  'ATR_win': 14,
-                  'ATR_chwin': 3,
-                  'ATR_mincalcwin': 100,
-                  'ATR_abs_weight': 2,
-                  'ATR_dyn_weight': 2,
-                  'SLdist_redufac': [7,10], #4 was 8
-                  'bbands_TSL_chwin': [5,8], #4 was 7
-                  'PSAR_weight': [1,3],  #3 was 2
-                  'bbands_TSL_weight': [1,3], #3 was 2
-                  'ATR_TSL_weight': [2,4], #3 was 3
-                  'power_TSL_weight': [1,3], #3 was 2
+                  'SLdist_redufac': 9,
+                  'bbands_TSL_chwin': 7,
+                  'PSAR_weight': 1,
+                  'bbands_TSL_weight': 1,
+                  'ATR_TSL_weight': 2,
+                  'power_TSL_weight': 3,
    }
    
                   
@@ -258,7 +210,9 @@ def do_backtest(param):
    # bt.plot()
 
    return {'asset': asset, 'candlesize': candlesize, 'pastshift': pastshift, 'dataspan': dataspan, 'stats': stats,
-           'randomized': randomized, 'objective': objective, 'param_opt_log_dict': param_opt_log_dict}
+           'randomized': randomized,
+         #   'objective': objective,
+           'param_opt_log_dict': param_opt_log_dict}
    
 
 
