@@ -14,11 +14,11 @@ class Hedgehog(Strategy):
    clims = 60 if candlesize == 'H1' else int(candlesize[1:])  # clims = candle length in minutes
    
    # boundaries/tresholds:
-   RSI_upper_bound = 70
-   RSI_lower_bound = 30
-   CCI_upper_treshold = 100
-   CCI_lower_treshold = -100
+   RSI_bound_distance = 30
+   CCI_treshold_distance = 100
    ADX_treshold = 25
+
+   CHWIN = 3
 
    # indicator calculation windows
    RSI_win = 11
@@ -58,6 +58,7 @@ class Hedgehog(Strategy):
    CSP_reaction_win = 2  # recommended to STAY like this
    MACD_chwin = 3 # 3-8 
    histo_chwin = 3 # 3-8
+   combo_chwin = 6  # 3-10  # note that 'combo_chwin' always has to be higher than or equal 'macd_chwin' and 'histo_chwin'!
    VWAP_chwin = 8 # 3-8
    fibo_chwin = 3 # 3-8
    RSI_chwin = 4 # 3-10

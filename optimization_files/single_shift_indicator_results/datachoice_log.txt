@@ -1,0 +1,224 @@
+Optimization Loop ID:  "A"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 3545
+-----------------------------------
+Optimization Loop ID:  "B"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 1470
+-----------------------------------
+Optimization Loop ID:  "C"
+EURUSD  M1 | 8330  (-0) | normal | Trades: 112
+EURUSD  M1 | 8330  (-1) | normal | Trades: 160
+EURUSD  M1 | 8330  (-2) | normal | Trades: 96
+EURUSD  M1 | 8330  (-3) | normal | Trades: 117
+EURUSD  M1 | 8330  (-4) | normal | Trades: 86
+EURUSD  M1 | 8330  (-5) | normal | Trades: 110
+EURUSD  M1 | 8330  (-6) | normal | Trades: 174
+EURUSD  M1 | 8330  (-7) | normal | Trades: 164
+EURUSD  M1 | 8330  (-8) | normal | Trades: 132
+EURUSD  M1 | 8330  (-9) | normal | Trades: 123
+EURUSD  M1 | 8330  (-10) | normal | Trades: 167
+EURUSD  M1 | 8330  (-11) | normal | Trades: 112
+-----------------------------------
+Optimization Loop ID:  "D"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 99877
+-----------------------------------
+Optimization Loop ID:  "E"
+EURUSD  M1 | 8330  (-0) | normal | Trades: 8307
+EURUSD  M1 | 8330  (-1) | normal | Trades: 8306
+EURUSD  M1 | 8330  (-2) | normal | Trades: 8306
+EURUSD  M1 | 8330  (-3) | normal | Trades: 8303
+EURUSD  M1 | 8330  (-4) | normal | Trades: 8306
+EURUSD  M1 | 8330  (-5) | normal | Trades: 8294
+EURUSD  M1 | 8330  (-6) | normal | Trades: 8307
+EURUSD  M1 | 8330  (-7) | normal | Trades: 8305
+EURUSD  M1 | 8330  (-8) | normal | Trades: 8307
+EURUSD  M1 | 8330  (-9) | normal | Trades: 8302
+EURUSD  M1 | 8330  (-10) | normal | Trades: 8306
+EURUSD  M1 | 8330  (-11) | normal | Trades: 8307
+-----------------------------------
+Optimization Loop ID:  "F"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 99877
+-----------------------------------
+Optimization Loop ID:  "G"
+EURUSD  M1 | 8330  (-0) | normal | Trades: 8301
+EURUSD  M1 | 8330  (-1) | normal | Trades: 8306
+EURUSD  M1 | 8330  (-2) | normal | Trades: 8305
+EURUSD  M1 | 8330  (-3) | normal | Trades: 8306
+EURUSD  M1 | 8330  (-4) | normal | Trades: 8303
+EURUSD  M1 | 8330  (-5) | normal | Trades: 8306
+EURUSD  M1 | 8330  (-6) | normal | Trades: 8307
+EURUSD  M1 | 8330  (-7) | normal | Trades: 8305
+EURUSD  M1 | 8330  (-8) | normal | Trades: 8306
+EURUSD  M1 | 8330  (-9) | normal | Trades: 8301
+EURUSD  M1 | 8330  (-10) | normal | Trades: 8306
+EURUSD  M1 | 8330  (-11) | normal | Trades: 8306
+-----------------------------------
+Optimization Loop ID:  "H"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 78001
+-----------------------------------
+Optimization Loop ID:  "I"
+EURUSD  M1 | 8330  (-0) | normal | Trades: 6643
+EURUSD  M1 | 8330  (-1) | normal | Trades: 6494
+EURUSD  M1 | 8330  (-2) | normal | Trades: 6457
+EURUSD  M1 | 8330  (-3) | normal | Trades: 6453
+EURUSD  M1 | 8330  (-4) | normal | Trades: 6285
+EURUSD  M1 | 8330  (-5) | normal | Trades: 6176
+EURUSD  M1 | 8330  (-6) | normal | Trades: 6449
+EURUSD  M1 | 8330  (-7) | normal | Trades: 6439
+EURUSD  M1 | 8330  (-8) | normal | Trades: 6610
+EURUSD  M1 | 8330  (-9) | normal | Trades: 6286
+EURUSD  M1 | 8330  (-10) | normal | Trades: 6246
+EURUSD  M1 | 8330  (-11) | normal | Trades: 6411
+-----------------------------------
+Optimization Loop ID:  "J"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 17946
+-----------------------------------
+Optimization Loop ID:  "K"
+EURUSD  M1 | 8330  (-0) | normal | Trades: 822
+EURUSD  M1 | 8330  (-1) | normal | Trades: 688
+EURUSD  M1 | 8330  (-2) | normal | Trades: 391
+EURUSD  M1 | 8330  (-3) | normal | Trades: 938
+EURUSD  M1 | 8330  (-4) | normal | Trades: 997
+EURUSD  M1 | 8330  (-5) | normal | Trades: 1784
+EURUSD  M1 | 8330  (-6) | normal | Trades: 1747
+EURUSD  M1 | 8330  (-7) | normal | Trades: 1178
+EURUSD  M1 | 8330  (-8) | normal | Trades: 1752
+EURUSD  M1 | 8330  (-9) | normal | Trades: 1440
+EURUSD  M1 | 8330  (-10) | normal | Trades: 1039
+EURUSD  M1 | 8330  (-11) | normal | Trades: 612
+-----------------------------------
+Optimization Loop ID:  "L"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13387
+-----------------------------------
+Optimization Loop ID:  "M"
+EURUSD  M1 | 8330  (-0) | normal | Trades: 613
+EURUSD  M1 | 8330  (-1) | normal | Trades: 465
+EURUSD  M1 | 8330  (-2) | normal | Trades: 1546
+EURUSD  M1 | 8330  (-3) | normal | Trades: 1375
+EURUSD  M1 | 8330  (-4) | normal | Trades: 453
+EURUSD  M1 | 8330  (-5) | normal | Trades: 1457
+EURUSD  M1 | 8330  (-6) | normal | Trades: 470
+EURUSD  M1 | 8330  (-7) | normal | Trades: 739
+EURUSD  M1 | 8330  (-8) | normal | Trades: 546
+EURUSD  M1 | 8330  (-9) | normal | Trades: 443
+EURUSD  M1 | 8330  (-10) | normal | Trades: 752
+EURUSD  M1 | 8330  (-11) | normal | Trades: 555
+-----------------------------------
+Optimization Loop ID:  "N"         ONLY STATIC RSI
+EURUSD  M1 | 99900  (-0) | normal | Trades: 69580
+-----------------------------------
+Optimization Loop ID:  "O"         ONLY STATIC RSI
+EURUSD  M1 | 8330  (-0) | normal | Trades: 7002
+EURUSD  M1 | 8330  (-1) | normal | Trades: 7089
+EURUSD  M1 | 8330  (-2) | normal | Trades: 6532
+EURUSD  M1 | 8330  (-3) | normal | Trades: 6803
+EURUSD  M1 | 8330  (-4) | normal | Trades: 103
+EURUSD  M1 | 8330  (-5) | normal | Trades: 5694
+EURUSD  M1 | 8330  (-6) | normal | Trades: 7662
+EURUSD  M1 | 8330  (-7) | normal | Trades: 5708
+EURUSD  M1 | 8330  (-8) | normal | Trades: 6194
+EURUSD  M1 | 8330  (-9) | normal | Trades: 6113
+EURUSD  M1 | 8330  (-10) | normal | Trades: 5845
+EURUSD  M1 | 8330  (-11) | normal | Trades: 7410
+-----------------------------------
+Optimization Loop ID:  "P"          ONLY DYNAMIC RSI
+EURUSD  M1 | 99900  (-0) | normal | Trades: 55185
+-----------------------------------
+Optimization Loop ID:  "Q"          ONLY DYNAMIC RSI
+EURUSD  M1 | 8330  (-0) | normal | Trades: 7150
+EURUSD  M1 | 8330  (-1) | normal | Trades: 5944
+EURUSD  M1 | 8330  (-2) | normal | Trades: 6680
+EURUSD  M1 | 8330  (-3) | normal | Trades: 4090
+EURUSD  M1 | 8330  (-4) | normal | Trades: 7937
+EURUSD  M1 | 8330  (-5) | normal | Trades: 8205
+EURUSD  M1 | 8330  (-6) | normal | Trades: 7738
+EURUSD  M1 | 8330  (-7) | normal | Trades: 4054
+EURUSD  M1 | 8330  (-8) | normal | Trades: 5057
+EURUSD  M1 | 8330  (-9) | normal | Trades: 7721
+EURUSD  M1 | 8330  (-10) | normal | Trades: 7151
+EURUSD  M1 | 8330  (-11) | normal | Trades: 7964
+-----------------------------------
+Optimization Loop ID:  "R"         RSI BOTH STATIC & DYNAMIC
+EURUSD  M1 | 99900  (-0) | normal | Trades: 23829
+-----------------------------------
+Optimization Loop ID:  "S"         RSI BOTH STATIC & DYNAMIC
+EURUSD  M1 | 8330  (-0) | normal | Trades: 7
+EURUSD  M1 | 8330  (-1) | normal | Trades: 1
+EURUSD  M1 | 8330  (-2) | normal | Trades: 16
+EURUSD  M1 | 8330  (-3) | normal | Trades: 10
+EURUSD  M1 | 8330  (-4) | normal | Trades: 7
+EURUSD  M1 | 8330  (-5) | normal | Trades: 57
+EURUSD  M1 | 8330  (-6) | normal | Trades: 1937
+EURUSD  M1 | 8330  (-7) | normal | Trades: 15
+EURUSD  M1 | 8330  (-8) | normal | Trades: 9
+EURUSD  M1 | 8330  (-9) | normal | Trades: 6
+EURUSD  M1 | 8330  (-10) | normal | Trades: 1
+EURUSD  M1 | 8330  (-11) | normal | Trades: 5
+-----------------------------------
+Optimization Loop ID:  "T"             ONLY STATIC CCI
+EURUSD  M1 | 99900  (-0) | normal | Trades: 51517
+-----------------------------------
+Optimization Loop ID:  "U"             ONLY STATIC CCI
+EURUSD  M1 | 8330  (-0) | normal | Trades: 4589
+EURUSD  M1 | 8330  (-1) | normal | Trades: 2379
+EURUSD  M1 | 8330  (-2) | normal | Trades: 4222
+EURUSD  M1 | 8330  (-3) | normal | Trades: 4333
+EURUSD  M1 | 8330  (-4) | normal | Trades: 4574
+EURUSD  M1 | 8330  (-5) | normal | Trades: 4505
+EURUSD  M1 | 8330  (-6) | normal | Trades: 4579
+EURUSD  M1 | 8330  (-7) | normal | Trades: 4440
+EURUSD  M1 | 8330  (-8) | normal | Trades: 4569
+EURUSD  M1 | 8330  (-9) | normal | Trades: 4540
+EURUSD  M1 | 8330  (-10) | normal | Trades: 4631
+EURUSD  M1 | 8330  (-11) | normal | Trades: 4551
+-----------------------------------
+Optimization Loop ID:  "V"             ONLY DYNAMIC CCI
+EURUSD  M1 | 99900  (-0) | normal | Trades: 61224
+-----------------------------------
+Optimization Loop ID:  "W"             ONLY DYNAMIC CCI
+EURUSD  M1 | 8330  (-0) | normal | Trades: 5490
+EURUSD  M1 | 8330  (-1) | normal | Trades: 4845
+EURUSD  M1 | 8330  (-2) | normal | Trades: 5444
+EURUSD  M1 | 8330  (-3) | normal | Trades: 1841
+EURUSD  M1 | 8330  (-4) | normal | Trades: 4600
+EURUSD  M1 | 8330  (-5) | normal | Trades: 1761
+EURUSD  M1 | 8330  (-6) | normal | Trades: 4843
+EURUSD  M1 | 8330  (-7) | normal | Trades: 5485
+EURUSD  M1 | 8330  (-8) | normal | Trades: 5091
+EURUSD  M1 | 8330  (-9) | normal | Trades: 5400
+EURUSD  M1 | 8330  (-10) | normal | Trades: 2656
+EURUSD  M1 | 8330  (-11) | normal | Trades: 5464
+-----------------------------------
+Optimization Loop ID:  "X"             CCI BOTH STATIC & DYNAMIC
+EURUSD  M1 | 99900  (-0) | normal | Trades: 44513
+-----------------------------------
+Optimization Loop ID:  "Y"             CCI BOTH STATIC & DYNAMIC
+EURUSD  M1 | 8330  (-0) | normal | Trades: 3711
+EURUSD  M1 | 8330  (-1) | normal | Trades: 3734
+EURUSD  M1 | 8330  (-2) | normal | Trades: 3662
+EURUSD  M1 | 8330  (-3) | normal | Trades: 981
+EURUSD  M1 | 8330  (-4) | normal | Trades: 1110
+EURUSD  M1 | 8330  (-5) | normal | Trades: 2935
+EURUSD  M1 | 8330  (-6) | normal | Trades: 2845
+EURUSD  M1 | 8330  (-7) | normal | Trades: 1333
+EURUSD  M1 | 8330  (-8) | normal | Trades: 3700
+EURUSD  M1 | 8330  (-9) | normal | Trades: 3691
+EURUSD  M1 | 8330  (-10) | normal | Trades: 3187
+EURUSD  M1 | 8330  (-11) | normal | Trades: 3579
+-----------------------------------
+Optimization Loop ID:  "Z"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 27405
+-----------------------------------
+Optimization Loop ID:  "AA"
+EURUSD  M1 | 8330  (-0) | normal | Trades: 5494
+EURUSD  M1 | 8330  (-1) | normal | Trades: 6872
+EURUSD  M1 | 8330  (-2) | normal | Trades: 5918
+EURUSD  M1 | 8330  (-3) | normal | Trades: 2231
+EURUSD  M1 | 8330  (-4) | normal | Trades: 2484
+EURUSD  M1 | 8330  (-5) | normal | Trades: 6515
+EURUSD  M1 | 8330  (-6) | normal | Trades: 6379
+EURUSD  M1 | 8330  (-7) | normal | Trades: 2299
+EURUSD  M1 | 8330  (-8) | normal | Trades: 2245
+EURUSD  M1 | 8330  (-9) | normal | Trades: 5659
+EURUSD  M1 | 8330  (-10) | normal | Trades: 5824
+EURUSD  M1 | 8330  (-11) | normal | Trades: 7088
+-----------------------------------

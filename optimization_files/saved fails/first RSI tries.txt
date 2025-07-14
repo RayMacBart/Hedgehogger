@@ -1,0 +1,186 @@
+REASON FOR SORTING OUT:
+N & O:
+no boundaries included (fixed at 30/70)
+P & Q:
+- much to high sambo search spaces (wrongly specified like it would be grid)
+- didn't take advantage of single boundary distance from mid variable
+- lower Bound: wrong range (mistakly taken the same as upper bound!)
+
+
+
+PARAM_LOG:
+
+Optimization Loop ID:  "N"
+order_triggerpower: range=1, results=[1]
+close_triggerpower: range=1, results=[1]
+RSI_win: range=[8, 23], results=[8]
+RSI_chwin: range=[3, 10], results=[3]
+RSI_weight: range=1, results=[1]
+SLdist_redufac: range=9, results=[9]
+bbands_TSL_chwin: range=7, results=[7]
+PSAR_weight: range=1, results=[1]
+bbands_TSL_weight: range=1, results=[1]
+ATR_TSL_weight: range=2, results=[2]
+power_TSL_weight: range=3, results=[3]
+---------------------------------
+Optimization Loop ID:  "O"
+order_triggerpower: range=1, results=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+close_triggerpower: range=1, results=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+RSI_win: range=[8, 23], results=[23, 9, 15, 8, 23, 22, 14, 8, 9, 8, 8, 23]
+RSI_chwin: range=[3, 10], results=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+RSI_weight: range=1, results=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+SLdist_redufac: range=9, results=[9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
+bbands_TSL_chwin: range=7, results=[7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]
+PSAR_weight: range=1, results=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+bbands_TSL_weight: range=1, results=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+ATR_TSL_weight: range=2, results=[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+power_TSL_weight: range=3, results=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+---------------------------------
+Optimization Loop ID:  "P"
+order_triggerpower: range=1, results=[1]
+close_triggerpower: range=1, results=[1]
+RSI_win: range=[6, 15], results=[15]
+RSI_chwin: range=3, results=[3]
+RSI_weight: range=1, results=[1]
+RSI_upper_bound: range=[55, 57, 60, 63, 66, 69, 72, 75, 78, 80], results=[59]
+RSI_lower_bound: range=[55, 57, 60, 63, 66, 69, 72, 75, 78, 80], results=[80]
+SLdist_redufac: range=9, results=[9]
+bbands_TSL_chwin: range=7, results=[7]
+PSAR_weight: range=1, results=[1]
+bbands_TSL_weight: range=1, results=[1]
+ATR_TSL_weight: range=2, results=[2]
+power_TSL_weight: range=3, results=[3]
+---------------------------------
+Optimization Loop ID:  "Q"
+order_triggerpower: range=1, results=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+close_triggerpower: range=1, results=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+RSI_win: range=[6, 15], results=[14, 6, 7, 6, 15, 15, 11, 14, 14, 9, 9, 15]
+RSI_chwin: range=3, results=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+RSI_weight: range=1, results=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+RSI_upper_bound: range=[55, 57, 60, 63, 66, 69, 72, 75, 78, 80], results=[71, 58, 55, 55, 73, 80, 55, 55, 55, 56, 71, 80]
+RSI_lower_bound: range=[55, 57, 60, 63, 66, 69, 72, 75, 78, 80], results=[72, 80, 73, 61, 80, 80, 77, 57, 80, 55, 67, 80]
+SLdist_redufac: range=9, results=[9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
+bbands_TSL_chwin: range=7, results=[7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]
+PSAR_weight: range=1, results=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+bbands_TSL_weight: range=1, results=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+ATR_TSL_weight: range=2, results=[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+power_TSL_weight: range=3, results=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+---------------------------------
+
+
+
+DATACHOICE_LOG:
+
+Optimization Loop ID:  "N"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 21995
+-----------------------------------
+Optimization Loop ID:  "O"
+EURUSD  M1 | 8330  (-0) | normal | Trades: 161
+EURUSD  M1 | 8330  (-1) | normal | Trades: 1580
+EURUSD  M1 | 8330  (-2) | normal | Trades: 702
+EURUSD  M1 | 8330  (-3) | normal | Trades: 1703
+EURUSD  M1 | 8330  (-4) | normal | Trades: 329
+EURUSD  M1 | 8330  (-5) | normal | Trades: 363
+EURUSD  M1 | 8330  (-6) | normal | Trades: 686
+EURUSD  M1 | 8330  (-7) | normal | Trades: 1724
+EURUSD  M1 | 8330  (-8) | normal | Trades: 1676
+EURUSD  M1 | 8330  (-9) | normal | Trades: 1802
+EURUSD  M1 | 8330  (-10) | normal | Trades: 1914
+EURUSD  M1 | 8330  (-11) | normal | Trades: 296
+-----------------------------------
+Optimization Loop ID:  "P"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 99877
+-----------------------------------
+Optimization Loop ID:  "Q"
+EURUSD  M1 | 8330  (-0) | normal | Trades: 8291
+EURUSD  M1 | 8330  (-1) | normal | Trades: 8306
+EURUSD  M1 | 8330  (-2) | normal | Trades: 8307
+EURUSD  M1 | 8330  (-3) | normal | Trades: 8307
+EURUSD  M1 | 8330  (-4) | normal | Trades: 8308
+EURUSD  M1 | 8330  (-5) | normal | Trades: 8298
+EURUSD  M1 | 8330  (-6) | normal | Trades: 8305
+EURUSD  M1 | 8330  (-7) | normal | Trades: 8308
+EURUSD  M1 | 8330  (-8) | normal | Trades: 8307
+EURUSD  M1 | 8330  (-9) | normal | Trades: 8105
+EURUSD  M1 | 8330  (-10) | normal | Trades: 7872
+EURUSD  M1 | 8330  (-11) | normal | Trades: 8306
+-----------------------------------
+
+
+
+SCORES:
+
+Optimization Loop ID:  "N"
+56.09521566710526
+-----------------------------------
+Optimization Loop ID:  "O"
+-19.041982139442386
+-45.16713492162336
+-18.0749057549825
+-28.050949816562337
+66.31152033642515
+-14.41891423220513
+-27.91829616910165
+-7.2081562018217715
+-8.694282296077887
+-39.61645029774162
+-32.84971169016712
+-36.698574675149935
+-----------------------------------
+Optimization Loop ID:  "P"
+122.78900420481662
+-----------------------------------
+Optimization Loop ID:  "Q"
+20.36134338228855
+30.837835027322264
+7.7877242669373405
+34.22019734359011
+47.269800781301186
+0.9902232354689189
+12.603969836858669
+34.24908377889084
+50.529451102219966
+21.6653914380234
+2.0517324620558357
+2.3564625845955183
+-----------------------------------
+
+
+
+RESULT_VALUES:
+
+Optimization Loop ID:  "N"
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:8|RSI_chwin:3|RSI_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+-----------------------------------
+Optimization Loop ID:  "O"
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:23|RSI_chwin:3|RSI_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:9|RSI_chwin:3|RSI_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:15|RSI_chwin:3|RSI_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:8|RSI_chwin:3|RSI_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:23|RSI_chwin:3|RSI_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:22|RSI_chwin:3|RSI_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:14|RSI_chwin:3|RSI_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:8|RSI_chwin:3|RSI_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:9|RSI_chwin:3|RSI_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:8|RSI_chwin:3|RSI_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:8|RSI_chwin:3|RSI_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:23|RSI_chwin:3|RSI_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+-----------------------------------
+Optimization Loop ID:  "P"
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:15|RSI_chwin:3|RSI_weight:1|RSI_upper_bound:59|RSI_lower_bound:80|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+-----------------------------------
+Optimization Loop ID:  "Q"
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:14|RSI_chwin:3|RSI_weight:1|RSI_upper_bound:71|RSI_lower_bound:72|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:6|RSI_chwin:3|RSI_weight:1|RSI_upper_bound:58|RSI_lower_bound:80|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:7|RSI_chwin:3|RSI_weight:1|RSI_upper_bound:55|RSI_lower_bound:73|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:6|RSI_chwin:3|RSI_weight:1|RSI_upper_bound:55|RSI_lower_bound:61|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:15|RSI_chwin:3|RSI_weight:1|RSI_upper_bound:73|RSI_lower_bound:80|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:15|RSI_chwin:3|RSI_weight:1|RSI_upper_bound:80|RSI_lower_bound:80|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:11|RSI_chwin:3|RSI_weight:1|RSI_upper_bound:55|RSI_lower_bound:77|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:14|RSI_chwin:3|RSI_weight:1|RSI_upper_bound:55|RSI_lower_bound:57|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:14|RSI_chwin:3|RSI_weight:1|RSI_upper_bound:55|RSI_lower_bound:80|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:9|RSI_chwin:3|RSI_weight:1|RSI_upper_bound:56|RSI_lower_bound:55|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:9|RSI_chwin:3|RSI_weight:1|RSI_upper_bound:71|RSI_lower_bound:67|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|RSI_win:15|RSI_chwin:3|RSI_weight:1|RSI_upper_bound:80|RSI_lower_bound:80|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|
+-----------------------------------
+

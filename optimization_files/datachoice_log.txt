@@ -1,4 +1,36 @@
 Optimization Loop ID:  "A"
-Optimization Loop ID:  "A"
-EURUSD  M1 | 99900  (-0) | normal | Trades: 3545
+EURUSD  M1 | 99900  (-0) | normal | Trades: 51130
+EURUSD  M1 | 99900  (-0) | normal | Trades: 50161
+EURUSD  M1 | 99900  (-0) | normal | Trades: 798
+EURUSD  M1 | 99900  (-0) | normal | Trades: 3
+EURUSD  M1 | 99900  (-0) | normal | Trades: 0
+EURUSD  M1 | 99900  (-0) | normal | Trades: 0
+-----------------------------------
+Optimization Loop ID:  "B"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 83317
+-----------------------------------
+Optimization Loop ID:  "C"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 68403
+-----------------------------------
+Optimization Loop ID:  "D"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 31237
+-----------------------------------
+Optimization Loop ID:  "E"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 12657
+-----------------------------------
+Optimization Loop ID:  "F"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 11817
+EURUSD  M1 | 99900  (-0) | normal | Trades: 9187
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8089
+EURUSD  M1 | 99900  (-0) | normal | Trades: 6232
+EURUSD  M1 | 99900  (-0) | normal | Trades: 3966
+EURUSD  M1 | 99900  (-0) | normal | Trades: 771
+-----------------------------------
+Optimization Loop ID:  "G"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 11817
+EURUSD  M1 | 99900  (-0) | normal | Trades: 9187
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8089
+EURUSD  M1 | 99900  (-0) | normal | Trades: 6232
+EURUSD  M1 | 99900  (-0) | normal | Trades: 3966
+EURUSD  M1 | 99900  (-0) | normal | Trades: 771
 -----------------------------------

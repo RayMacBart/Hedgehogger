@@ -3,7 +3,7 @@ def dump_results(params):
    with open('.\\optimization_files\\result_values.txt', 'a') as paramfile:
       for k, v in params.items():
          paramfile.write(f"{k}:{v}|")
-      paramfile.write('\n')
+      paramfile.write('\n\n')
 
 def dump_paramlog(loop_id, logdict, resultdict):
    with open('.\\optimization_files\\param_log.txt', 'a') as logfile:
@@ -16,6 +16,12 @@ def dump_datachoices(asset, cs, span, past, rand, nr_trades):
    nature = 'SYNTHETIC' if rand else 'normal'
    with open('.\\optimization_files\\datachoice_log.txt', 'a') as choicefile:
       choicefile.write(f"{asset}  {cs} | {span}  (-{past}) | {nature} | Trades: {nr_trades}\n")
+
+def dump_counts(counts):
+   with open('.\\optimization_files\\counts.txt', 'a') as countfile:
+      for k, v in counts:
+         countfile.write(f'{k}: {v}\n')
+      countfile.write('\n\n')
 
 def dump_score(SQN, expec, calmar, sortino, profac):
    sqn_mean = -0.3785497274953901

@@ -38,20 +38,21 @@ def CSP_calcpower(Data, bodyshrink_factor, shadow2body_factor, shadowdiff_factor
    return shift
 
 
-def MACD_calcpower(macd, histo, 
+def MACD_calcpower(macd, histo, macd_chwin, histo_chwin,
                    # signal,  #--> not used (yet?) 
                    zeroweight, histoweight, comboweight, impact_counter):
+   # note that 'combo_chwin' always has to be higher than or equal 'macd_chwin' and 'histo_chwin'!
    shift = 0
-   if rises(macd, 0):
+   if rises(macd[-macd_chwin:], 0):
       shift += zeroweight
       impact_counter['MACD-zeroX'] += 1
-   elif falls(macd, 0):
+   elif falls(macd[-macd_chwin:], 0):
       shift -= zeroweight
       impact_counter['MACD-zeroX'] += 1
-   if rises(histo, 0):
+   if rises(histo[-histo_chwin:], 0):
       shift += histoweight
       impact_counter['MACD-sigX'] += 1
-   elif falls(histo, 0):
+   elif falls(histo[-histo_chwin:], 0):
       shift -= histoweight
       impact_counter['MACD-sigX'] += 1
    if rises(macd) and rises(histo):
@@ -60,6 +61,25 @@ def MACD_calcpower(macd, histo,
    elif falls(macd) and falls(histo):
       shift -= comboweight
       impact_counter['MACD-combo'] += 1
+   # following would be a version imitating chwin == 2:
+   # if macd[-2] < 0 and macd[-1] >= 0:
+   #    shift += zeroweight
+   #    impact_counter['MACD-zeroX'] += 1
+   # elif macd[-2] >= 0 and macd[-1] < 0:
+   #    shift -= zeroweight
+   #    impact_counter['MACD-zeroX'] += 1
+   # if histo[-2] < 0 and histo[-1] >= 0:
+   #    shift += histoweight
+   #    impact_counter['MACD-sigX'] += 1
+   # elif histo[-2] >= 0 and histo[-1] < 0:
+   #    shift -= histoweight
+   #    impact_counter['MACD-sigX'] += 1
+   # if macd[-2] < macd[-1] and histo[-2] < histo[-1]:
+   #    shift += comboweight
+   #    impact_counter['MACD-combo'] += 1
+   # elif macd[-2] > macd[-1] and histo[-2] > histo[-1]:
+   #    shift -= comboweight
+   #    impact_counter['MACD-combo'] += 1
    return shift
 
 
@@ -141,19 +161,19 @@ def CAMA_calcpower(close_val, R4, R3, S3, S4, w3, w4):
 def RSI_calcpower(rsi, low_th, high_th, weight, impact_counter):  # 'th': treshold
    shift = 0
    # static absolute impacts:
-   if rsi > high_th: 
+   if rsi[-1] > high_th: 
       shift -= weight
-   elif rsi < low_th:
+   elif rsi[-1] < low_th:
       shift += weight
-   if rsi > high_th or rsi < low_th:
+   if rsi[-1] > high_th or rsi[-1] < low_th:
       impact_counter['RSI-abs'] += 1
    # dynamic movement impacts:
    if falls(rsi) and (rsi > low_th):
-   # if falls(rsi) and (rsi > (low + (50-low)/3)):
+   # if falls(rsi) and (rsi > (low_th + (50-low_th)/3)):
       shift -= weight
       impact_counter['RSI-dyn'] += 1
    elif rises(rsi) and (rsi < high_th):
-   # elif rises(rsi) and (rsi < (50 + ((high-50)/3)*2)):
+   # elif rises(rsi) and (rsi < (50 + ((high_th-50)/3)*2)):
       shift += weight
       impact_counter['RSI-dyn'] += 1
    return shift
@@ -162,11 +182,11 @@ def RSI_calcpower(rsi, low_th, high_th, weight, impact_counter):  # 'th': tresho
 def CCI_calcpower(cci, low_th, high_th, weight, impact_counter):  # 'th': treshold
    shift = 0
    # static absolute impacts:
-   if cci > high_th: 
+   if cci[-1] > high_th: 
       shift += weight
-   elif cci < low_th:
+   elif cci[-1] < low_th:
       shift -= weight
-   if cci > high_th or cci < low_th:
+   if cci[-1] > high_th or cci[-1] < low_th:
       impact_counter['CCI-abs'] += 1
    # dynamic movement impacts:
    if falls(cci) and (cci < 0):
@@ -410,53 +430,54 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
                                  # Amount of focussed on candles is 1 more than action_win because 1 'pre'-candle is needed.  
          lastpower = detect_impact(impact_counter, power, lastpower, 'CSP')
 
-         # power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['macd_chwin']-1):idx+1], 
-         #                         T['MACD']['histo'][idx-(T['MACD']['histo_chwin']-1):idx+1], 
-         #                         # T['MACD']['signal'][idx-(T['MACD']['signal_chwin']-1):idx+1], # not used (yet?)
-         #                         T['MACD']['zeroweight'], T['MACD']['histoweight'], T['MACD']['comboweight'], impact_counter)
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'MACD')
+         power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['combo_chwin']-1):idx+1], 
+                                 T['MACD']['histo'][idx-(T['MACD']['combo_chwin']-1):idx+1],
+                                 T['MACD']['macd_chwin'], T['MACD']['histo_chwin'],
+                                 # T['MACD']['signal'][idx-(T['MACD']['signal_chwin']-1):idx+1], # not used (yet?)
+                                 T['MACD']['zeroweight'], T['MACD']['histoweight'], T['MACD']['comboweight'], impact_counter)
+         lastpower = detect_impact(impact_counter, power, lastpower, 'MACD')
 
-         # power += VWAP_calcpower(Data.Close[idx-(T['VWAP']['chwin']):idx], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1],
-         #                         T['VWAP']['expfac'], T['VWAP']['weight'])  # --> vwap misuse?
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'VWAP')
+         power += VWAP_calcpower(Data.Close[idx-(T['VWAP']['chwin']):idx], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1],
+                                 T['VWAP']['expfac'], T['VWAP']['weight'])  # --> vwap misuse?
+         lastpower = detect_impact(impact_counter, power, lastpower, 'VWAP')
 
-         # # # I 'misuse' the fibonacci points in a unconventional way as breakthrough indicator.
-         # power += FIBO_calcpower(Data.Close[idx-(T['FIBO']['chwin']):idx], T['DIR']['dir'][idx], T['FIBO'][2][idx], T['FIBO'][4][idx],
-         #                              T['FIBO'][6][idx], T['FIBO'][8][idx], T['FIBO']['weight'])
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'FIBO')
+         # # I 'misuse' the fibonacci points in a unconventional way as breakthrough indicator.
+         power += FIBO_calcpower(Data.Close[idx-(T['FIBO']['chwin']):idx], T['DIR']['dir'][idx], T['FIBO'][2][idx], T['FIBO'][4][idx],
+                                      T['FIBO'][6][idx], T['FIBO'][8][idx], T['FIBO']['weight'])
+         lastpower = detect_impact(impact_counter, power, lastpower, 'FIBO')
 
          # power += CAMA_calcpower(Data.Close[idx-1], T['CAMA']['R4'][idx], T['CAMA']['R3'][idx], T['CAMA']['S3'][idx],
          #                         T['CAMA']['S4'][idx], T['CAMA']['3weight'], T['CAMA']['4weight'])
          # lastpower = detect_impact(impact_counter, power, lastpower, 'CAMA')
 
-         # power += RSI_calcpower(T['RSI']['rsi'][idx-(T['RSI']['chwin']-1):idx+1], T['RSI']['low'],
-         #                        T['RSI']['high'], T['RSI']['weight'], impact_counter)
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'RSI')
+         power += RSI_calcpower(T['RSI']['rsi'][idx-(T['RSI']['chwin']-1):idx+1], T['RSI']['low'],
+                                T['RSI']['high'], T['RSI']['weight'], impact_counter)
+         lastpower = detect_impact(impact_counter, power, lastpower, 'RSI')
 
-         # power += CCI_calcpower(T['CCI']['cci'][idx-(T['CCI']['chwin']-1):idx+1], T['CCI']['low'],
-         #                        T['CCI']['high'], T['CCI']['weight'], impact_counter)
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'CCI')
+         power += CCI_calcpower(T['CCI']['cci'][idx-(T['CCI']['chwin']-1):idx+1], T['CCI']['low'],
+                                T['CCI']['high'], T['CCI']['weight'], impact_counter)
+         lastpower = detect_impact(impact_counter, power, lastpower, 'CCI')
 
-         # power += BB_outer_touch_calcpower(T['BB']['low'][idx-(T['BB']['chwin-out']-1):idx+1], T['BB']['mid'][idx-(T['BB']['chwin-out']-1):idx+1],
-         #                        T['BB']['high'][idx-(T['BB']['chwin-out']-1):idx+1], Data.High[idx-(T['BB']['chwin-out']):idx], 
-         #                        Data.Low[idx-(T['BB']['chwin-out']):idx], T['DIR']['dir'][idx], T['BB']['weight-out'])
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'BB-out')
-         # power *= BB_trend_calcpower(power, T['BB']['mid'][idx-(T['BB']['chwin-trend']-1):idx+1], 
-         #                             T['BB']['width'][idx-(T['BB']['chwin-trend']-1):idx+1], T['BB']['expfac'], T['BB']['weight-trend'])
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'BB-trend')
+         power += BB_outer_touch_calcpower(T['BB']['low'][idx-(T['BB']['chwin-out']-1):idx+1], T['BB']['mid'][idx-(T['BB']['chwin-out']-1):idx+1],
+                                T['BB']['high'][idx-(T['BB']['chwin-out']-1):idx+1], Data.High[idx-(T['BB']['chwin-out']):idx], 
+                                Data.Low[idx-(T['BB']['chwin-out']):idx], T['DIR']['dir'][idx], T['BB']['weight-out'])
+         lastpower = detect_impact(impact_counter, power, lastpower, 'BB-out')
+         power *= BB_trend_calcpower(power, T['BB']['mid'][idx-(T['BB']['chwin-trend']-1):idx+1], 
+                                     T['BB']['width'][idx-(T['BB']['chwin-trend']-1):idx+1], T['BB']['expfac'], T['BB']['weight-trend'])
+         lastpower = detect_impact(impact_counter, power, lastpower, 'BB-trend')
 
-         # power *= VOL_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['mdfpwi'],
-         #                        T['VOL']['max_impact_zscore'], T['VOL']['weight'], timestamps[idx-1], VMMTs, clims)
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'VOL')
+         power *= VOL_calcpower(T['VOL']['volume'][idx-(T['VOL']['chwin']):idx], T['VOL']['mdfpwi'],
+                                T['VOL']['max_impact_zscore'], T['VOL']['weight'], timestamps[idx-1], VMMTs, clims)
+         lastpower = detect_impact(impact_counter, power, lastpower, 'VOL')
 
-         # power *= ADX_calcpower(power, T['ADX']['adx'][idx-(T['ADX']['chwin']-1):idx+1], T['ADX']['DM+'][idx], T['ADX']['DM-'][idx],
-         #                        T['ADX']['treshold'], T['ADX']['abs-weight'], T['ADX']['dyn-weight'], impact_counter)
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'ADX')
+         power *= ADX_calcpower(power, T['ADX']['adx'][idx-(T['ADX']['chwin']-1):idx+1], T['ADX']['DM+'][idx], T['ADX']['DM-'][idx],
+                                T['ADX']['treshold'], T['ADX']['abs-weight'], T['ADX']['dyn-weight'], impact_counter)
+         lastpower = detect_impact(impact_counter, power, lastpower, 'ADX')
 
-         # # old: (CHECK IF IT WORKS BETTER THAN CAMA VERSION ABOVE!)
-         # # power *= CAMA_calcpower(power, Data.Close[idx-1], T['CAMA']['R4'][idx], T['CAMA']['R3'][idx], T['CAMA']['S3'][idx],
-         # #                         T['CAMA']['S4'][idx], T['CAMA']['3weight'], T['CAMA']['4weight'])
-         # # lastpower = detect_impact(impact_counter, power, lastpower, 'CAMA')
+         # old: (CHECK IF IT WORKS BETTER THAN CAMA VERSION ABOVE!)
+         # power *= CAMA_calcpower(power, Data.Close[idx-1], T['CAMA']['R4'][idx], T['CAMA']['R3'][idx], T['CAMA']['S3'][idx],
+         #                         T['CAMA']['S4'][idx], T['CAMA']['3weight'], T['CAMA']['4weight'])
+         # lastpower = detect_impact(impact_counter, power, lastpower, 'CAMA')
 
          # power *= GAP_calcpower(power, T['DIR']['dir'][idx], T['GAP']['+'][idx], T['GAP']['-'][idx],
          #                         T['GAP']['accuracy'], T['GAP']['weight'], last[idx], Data.Close[idx-1] #, T['GAP']['swingdist']
@@ -469,9 +490,9 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
          # lastpower = detect_impact(impact_counter, power, lastpower, 'PEAK')
 
 
-         # power *= ATR_calcpower(T['ATR']['atr'][:idx+1], T['ATR']['mincalcwin'], T['ATR']['chwin'], T['ATR']['win'], 
-         #                        T['ATR']['abs-weight'], T['ATR']['dyn-weight'], impact_counter)
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'ATR')
+         power *= ATR_calcpower(T['ATR']['atr'][:idx+1], T['ATR']['mincalcwin'], T['ATR']['chwin'], T['ATR']['win'], 
+                                T['ATR']['abs-weight'], T['ATR']['dyn-weight'], impact_counter)
+         lastpower = detect_impact(impact_counter, power, lastpower, 'ATR')
 
          # print('_______________________________')
       # print(power)

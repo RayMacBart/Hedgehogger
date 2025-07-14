@@ -1,7 +1,7 @@
 import numpy as np
 
-def is_falling_below(S, B=None): # S=Series, B=Boundary
-   if B:
+def is_falling_below(S, B='no value'): # S=Series, B=Boundary
+   if not (B == 'no value'):
       if len(S) == 3:
          if ((S[-1]<=B and (S[-2]>B or S[-2]<=B) and S[-3]>B) and
             (B-S[-1] >= B-S[-2] >= B-S[-3])):
@@ -53,7 +53,7 @@ def is_falling_below(S, B=None): # S=Series, B=Boundary
             return True
       else:
          raise ValueError(f'ERROR: invalid Series length given to function "is_falling_below": must be between 3 and 8 (given: {len(S)})')
-   else: # if no B given
+   else: # if no B is given
       if (len(S) < 3) or (len(S) > 10):
          raise ValueError(f'ERROR: invalid Series length given to function "is_falling_below": must be between 3 and 10 (without "B" specified) (given: {len(S)})')
       testlist = []
@@ -85,8 +85,8 @@ def is_falling_below(S, B=None): # S=Series, B=Boundary
    return False
 
 
-def is_rising_above(S, B=None): # S=Series, B=Boundary
-   if B:
+def is_rising_above(S, B='no value'): # S=Series, B=Boundary
+   if not (B == 'no value'):
       if len(S) == 3:
          if ((S[-1]>=B and (S[-2]<B or S[-2]>=B) and S[-3]<B) and
             (B-S[-1] <= B-S[-2] <= B-S[-3])):
