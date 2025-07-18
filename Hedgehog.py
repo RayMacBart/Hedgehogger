@@ -35,11 +35,16 @@ class Hedgehog(Strategy):
    sizegap_win = 100
    sizepeak_win = 100
 
-   CSP_bodyshrink_factor = 6
-   CSP_shadow2body_factor = 8
-   CSP_shadowdiff_factor = 8
+   CSP_bodyshrink_factor = 5# was 6
+   CSP_shadow2body_factor = 8# was 8
+   CSP_shadowdiff_factor = 4# was 8
 
-   # 'expfac:' expansion factors that shall be reacted upon - the lower the more sensitive/reactive. use 0.1 steps
+   # 'chval_th': Change Value Treshold. Specifies how much a value must change to cause shift effect.
+   MACD_chval_th = 5  # --> Will be converted to 1/100000 automatically @ 'power'.
+   RSI_chval_th = 8
+   CCI_chval_th = 15
+
+   # 'expfac': expansion factors that shall be reacted upon - the lower the more sensitive/reactive. Will be converted to 1/10 automatically @ 'power'.
    vwap_expfac = 7  # difference between price and vwap 
    bbands_expfac = 3  # width between outer bands
 
@@ -79,7 +84,7 @@ class Hedgehog(Strategy):
    # indicator weights
 
    DIR_weight = 1
-   CSP_weight = 2
+   CSP_weight = 1 # was 2
    MACD_zeroweight = 1
    MACD_histoweight = 1
    MACD_comboweight = 1
@@ -103,6 +108,7 @@ class Hedgehog(Strategy):
    bbands_TSL_weight = 2
    ATR_TSL_weight = 3
    power_TSL_weight = 2
+   minTSLdist = 2
 
    SLdist_redufac = 8  # StopLoss distance reduction factor * 10  (to have integers for sambo optimization)
 
@@ -111,8 +117,8 @@ class Hedgehog(Strategy):
    order_closetime_dist = 5
    reenter_time_dist = 5
 
-   close_triggerpower = 2 # close_triggerpower must always be <= order_triggerpower. It also can be negative ( --> closes before power reaches 0!).
-   order_triggerpower =  28
+   close_triggerpower = 1 # was 2 # close_triggerpower must always be <= order_triggerpower. It also can be negative ( --> closes before power reaches 0!).
+   order_triggerpower =  1 # was 28
 
    size = 0.001  # of buy/sell orders
 

@@ -1,0 +1,402 @@
+Optimization Loop ID:  "E"
+DIR: 0
+CSP: 0
+MACD: 26859
+MACD-zeroX: 10342
+MACD-sigX: 18935
+MACD-combo: 20841   chwin: 6
+VWAP: 0
+FIBO: 0
+RSI: 19462
+RSI-abs: 1327
+RSI-dyn: 18141  chwin: 6
+CCI: 55755
+CCI-abs: 54308
+CCI-dyn: 7777  chwin: 6
+BB-out: 0
+BB-trend: 0
+ADX: 0
+ADX-abs: 0
+ADX-dyn: 0
+VOL: 0
+CAMA: 41612
+GAP: 0
+PEAK: 0
+ATR: 0
+ATR-abs: 0
+ATR-dyn: 0
+---------------------------------
+-----------------------------------
+Optimization Loop ID:  "F"
+DIR: 0
+CSP: 1470
+MACD: 76707
+MACD-zeroX: 10342
+MACD-sigX: 18935
+MACD-combo: 75344
+VWAP: 17946
+FIBO: 11748
+RSI: 99879
+RSI-abs: 1327
+RSI-dyn: 98745
+CCI: 75206
+CCI-abs: 54308
+CCI-dyn: 65412
+BB-out: 14686
+BB-trend: 3648
+ADX: 47761
+ADX-abs: 42878
+ADX-dyn: 26622
+VOL: 92761
+CAMA: 0
+GAP: 0
+PEAK: 0
+ATR: 86328
+ATR-abs: 22139
+ATR-dyn: 99879
+
+
+DIR: 0
+CSP: 1470
+MACD: 51777
+MACD-zeroX: 14210
+MACD-sigX: 24459
+MACD-combo: 45162
+VWAP: 18852
+FIBO: 16345
+RSI: 51406
+RSI-abs: 1327
+RSI-dyn: 50109
+CCI: 62921
+CCI-abs: 54308
+CCI-dyn: 31380
+BB-out: 17436
+BB-trend: 6303
+ADX: 45583
+ADX-abs: 41476
+ADX-dyn: 21546
+VOL: 85993
+CAMA: 0
+GAP: 0
+PEAK: 0
+ATR: 54604
+ATR-abs: 22139
+ATR-dyn: 55041
+
+
+DIR: 0
+CSP: 1470
+MACD: 49766
+MACD-zeroX: 17878
+MACD-sigX: 29471
+MACD-combo: 32981
+VWAP: 21152
+FIBO: 19684
+RSI: 32644
+RSI-abs: 1327
+RSI-dyn: 31331
+CCI: 59456
+CCI-abs: 54308
+CCI-dyn: 19687
+BB-out: 19842
+BB-trend: 8069
+ADX: 45616
+ADX-abs: 41782
+ADX-dyn: 19661
+VOL: 85077
+CAMA: 0
+GAP: 0
+PEAK: 0
+ATR: 44182
+ATR-abs: 22139
+ATR-dyn: 39040
+
+
+DIR: 0
+CSP: 1470
+MACD: 48063
+MACD-zeroX: 20247
+MACD-sigX: 31092
+MACD-combo: 20841
+VWAP: 20334
+FIBO: 21345
+RSI: 19462
+RSI-abs: 1327
+RSI-dyn: 18141
+CCI: 55755
+CCI-abs: 54308
+CCI-dyn: 7777
+BB-out: 22044
+BB-trend: 8875
+ADX: 44899
+ADX-abs: 41432
+ADX-dyn: 17243
+VOL: 83554
+CAMA: 0
+GAP: 0
+PEAK: 0
+ATR: 35371
+ATR-abs: 22139
+ATR-dyn: 26599
+
+
+DIR: 0
+CSP: 1470
+MACD: 39948
+MACD-zeroX: 19310
+MACD-sigX: 24530
+MACD-combo: 12482
+VWAP: 13257
+FIBO: 14828
+RSI: 11924
+RSI-abs: 1327
+RSI-dyn: 10598
+CCI: 54613
+CCI-abs: 54308
+CCI-dyn: 2508
+BB-out: 23977
+BB-trend: 7897
+ADX: 42001
+ADX-abs: 39071
+ADX-dyn: 14360
+VOL: 79022
+CAMA: 0
+GAP: 0
+PEAK: 0
+ATR: 28708
+ATR-abs: 22139
+ATR-dyn: 18737
+
+
+DIR: 0
+CSP: 1470
+MACD: 39938
+MACD-zeroX: 20432
+MACD-sigX: 24209
+MACD-combo: 7067
+VWAP: 12821
+FIBO: 14837
+RSI: 7451
+RSI-abs: 1327
+RSI-dyn: 6124
+CCI: 54355
+CCI-abs: 54308
+CCI-dyn: 613
+BB-out: 25766
+BB-trend: 7622
+ADX: 41562
+ADX-abs: 38973
+ADX-dyn: 12579
+VOL: 78653
+CAMA: 0
+GAP: 0
+PEAK: 0
+ATR: 25285
+ATR-abs: 22139
+ATR-dyn: 13335
+
+
+______________________________
+-----------------------------------
+Optimization Loop ID:  "G"
+DIR: 0
+CSP: 1470     good
+MACD: 76707     ---
+MACD-zeroX: 10342    3     --> even lower
+MACD-sigX: 18935     3     --> even lower
+MACD-combo: 75344    8  (7067)    --> even higher
+VWAP: 17946     3    --> even lower
+FIBO: 11748     3    --> even lower
+RSI: 99879     ---
+RSI-abs: 1327     good
+RSI-dyn: 98745     8  (6124) --> even higher
+CCI: 75206     ---
+CCI-abs: 54308     ???
+CCI-dyn: 65412     7  (2508),   8 (613)
+BB-out: 14686    3  --> even lower
+BB-trend: 3648     3   good or lower
+ADX: 47761     ---
+ADX-abs: 42878     ???
+ADX-dyn: 26622     8  (12579)  --> even higher
+VOL: 92761     8  (78653)  ??? --> even way higher?
+CAMA: 0
+GAP: 0
+PEAK: 0
+ATR: 86328
+ATR-abs: 22139     ???
+ATR-dyn: 99879     8  (13335)  --> even higher
+
+
+DIR: 0
+CSP: 1470
+MACD: 51777
+MACD-zeroX: 14210
+MACD-sigX: 24459
+MACD-combo: 45162
+VWAP: 18852
+FIBO: 16345
+RSI: 51406
+RSI-abs: 1327
+RSI-dyn: 50109
+CCI: 62921
+CCI-abs: 54308
+CCI-dyn: 31380
+BB-out: 17436
+BB-trend: 6303
+ADX: 45583
+ADX-abs: 41476
+ADX-dyn: 21546
+VOL: 85993
+CAMA: 0
+GAP: 0
+PEAK: 0
+ATR: 54604
+ATR-abs: 22139
+ATR-dyn: 55041
+
+
+DIR: 0
+CSP: 1470
+MACD: 49766
+MACD-zeroX: 17878
+MACD-sigX: 29471
+MACD-combo: 32981
+VWAP: 21152
+FIBO: 19684
+RSI: 32644
+RSI-abs: 1327
+RSI-dyn: 31331
+CCI: 59456
+CCI-abs: 54308
+CCI-dyn: 19687
+BB-out: 19842
+BB-trend: 8069
+ADX: 45616
+ADX-abs: 41782
+ADX-dyn: 19661
+VOL: 85077
+CAMA: 0
+GAP: 0
+PEAK: 0
+ATR: 44182
+ATR-abs: 22139
+ATR-dyn: 39040
+
+
+DIR: 0
+CSP: 1470
+MACD: 48063
+MACD-zeroX: 20247
+MACD-sigX: 31092
+MACD-combo: 20841
+VWAP: 20334
+FIBO: 21345
+RSI: 19462
+RSI-abs: 1327
+RSI-dyn: 18141
+CCI: 55755
+CCI-abs: 54308
+CCI-dyn: 7777
+BB-out: 22044
+BB-trend: 8875
+ADX: 44899
+ADX-abs: 41432
+ADX-dyn: 17243
+VOL: 83554
+CAMA: 0
+GAP: 0
+PEAK: 0
+ATR: 35371
+ATR-abs: 22139
+ATR-dyn: 26599
+
+
+DIR: 0
+CSP: 1470
+MACD: 39948
+MACD-zeroX: 19310
+MACD-sigX: 24530
+MACD-combo: 12482
+VWAP: 13257
+FIBO: 14828
+RSI: 11924
+RSI-abs: 1327
+RSI-dyn: 10598
+CCI: 54613
+CCI-abs: 54308
+CCI-dyn: 2508
+BB-out: 23977
+BB-trend: 7897
+ADX: 42001
+ADX-abs: 39071
+ADX-dyn: 14360
+VOL: 79022
+CAMA: 0
+GAP: 0
+PEAK: 0
+ATR: 28708
+ATR-abs: 22139
+ATR-dyn: 18737
+
+
+DIR: 0
+CSP: 1470
+MACD: 39938
+MACD-zeroX: 20432
+MACD-sigX: 24209
+MACD-combo: 7067
+VWAP: 12821
+FIBO: 14837
+RSI: 7451
+RSI-abs: 1327
+RSI-dyn: 6124
+CCI: 54355
+CCI-abs: 54308
+CCI-dyn: 613
+BB-out: 25766
+BB-trend: 7622
+ADX: 41562
+ADX-abs: 38973
+ADX-dyn: 12579
+VOL: 78653
+CAMA: 0
+GAP: 0
+PEAK: 0
+ATR: 25285
+ATR-abs: 22139
+ATR-dyn: 13335
+
+
+______________________________
+-----------------------------------
+Optimization Loop ID:  "H"
+DIR: 0
+CSP: 1931
+MACD: 0
+MACD-zeroX: 0
+MACD-sigX: 0
+MACD-combo: 0
+VWAP: 0
+FIBO: 0
+RSI: 0
+RSI-abs: 0
+RSI-dyn: 0
+CCI: 0
+CCI-abs: 0
+CCI-dyn: 0
+BB-out: 0
+BB-trend: 0
+ADX: 0
+ADX-abs: 0
+ADX-dyn: 0
+VOL: 0
+CAMA: 0
+GAP: 0
+PEAK: 0
+ATR: 0
+ATR-abs: 0
+ATR-dyn: 0
+
+
+______________________________
+-----------------------------------

@@ -18,8 +18,11 @@ from copy import deepcopy
 
 
 def do_backtest(param,
+                minTSL,
+               macd_params,
+                CHWIN
                #  triggerpower,
-                CHWIN):
+                ):
 
    # for objective result data collection:
    # randomized = random.choice([False, False, False, True])
@@ -113,55 +116,58 @@ def do_backtest(param,
 
                   candlesize = [candlesize],
                   # "fos" = future optimization suggestion, "fhwt" = frequent hence worth try, "lar" = long average result
-                  order_triggerpower = [8,13],#TRIP,       # was 18 for first trend opt
+                  order_triggerpower = 1,#TRIP,       # was 18 for first trend opt
                   close_triggerpower = 1, # was 
+                  # CHWIN = CHWIN,
+                  # CSP_bodyshrink_factor = 4,
+                  # CSP_shadow2body_factor = 3,
+                  # CSP_shadowdiff_factor = 5,
+                  # CSP_reaction_win = 6,
+                  # CSP_weight = 1,
 
-                  CHWIN = CHWIN,
-
-                  CSP_bodyshrink_factor = 8, # fhwt: 10,   fos: [8,13]
-                  CSP_shadow2body_factor = 12, # fos: [11,14]
-                  CSP_shadowdiff_factor = 7, # fhwt: 6,   fos: [4,9]
-                  CSP_reaction_win = 2,
-                  CSP_weight = 1, # was 2 (old),  bad performance --> 1 (new)
                   MACD_zeroweight = 1,# [0,2], # was 1
-                  MACD_histoweight = 1,# [1,3],   # way better results than zero & combo!   # was 2
-                  MACD_comboweight = 1,# [0,2],   # was 1
-                  MACD_chwin = CHWIN, # was 3
-                  histo_chwin = CHWIN, # was 3
-                  combo_chwin = CHWIN,
-                  MACD_longwin = 12,
-                  MACD_shortwin = 9,
-                  MACD_signalwin = 6,
-                  vwap_expfac = 1,
-                  VWAP_chwin = CHWIN, # was 3
-                  VWAP_weight = 1,   # was 1  (bad performance)
-                  fibo_chwin = CHWIN, # recently was 3, # lar: 4, modern: 6
-                  fibo_weight = 1, # recently was 2, # was 4 (old)   # bad performance --> was 1 (new)
+                  # MACD_histoweight = 1,# [1,3],   # way better results than zero & combo!   # was 2
+                  # MACD_comboweight = 1,# [0,2],   # was 1
+                  MACD_chwin = CHWIN,
+                  # histo_chwin = CHWIN, # was 3
+                  # combo_chwin = CHWIN,
+                  MACD_longwin = macd_params[0],
+                  MACD_shortwin = macd_params[1],
+                  MACD_signalwin = macd_params[2],
+                  # MACD_chval_th = [1,10],  # only relevant for combo. first idea, can be altered
+
+                  # vwap_expfac = 1,
+                  # VWAP_chwin = CHWIN, # was 3
+                  # VWAP_weight = 1,   # was 1  (bad performance)
+                  # fibo_chwin = CHWIN, # recently was 3, # lar: 4, modern: 6
+                  # fibo_weight = 1, # recently was 2, # was 4 (old)   # bad performance --> was 1 (new)
                   # cama3_weight = 1,# [0,2],  # was 1
                   # cama4_weight = 1,# [0,2],  # was 2
-                  RSI_win = 13,  # (modern static: 4)
-                  RSI_chwin = CHWIN,  # fhwt: 5     # 3-10     (recently was 3)
-                  RSI_bound_distance = 30,  # = second best. optimize it again with other indicators. "5" came actually as best result
-                  RSI_weight = 1,# [1,3], # was 2 (old)  # good performance --> 3 (new)
-                  CCI_win = 4,
-                  CCI_chwin = CHWIN,  # (dyn. fhwt: 4)    (recently was choosen as 3)
-                  CCI_treshold_distance = 80,  # fos: [40,85]
-                  CCI_weight = 1, # recently: 2  # was 3 (old), but CCI had very bad performance compared to RSI! --> middle-new was 1
+                  # RSI_win = 13,  # (modern static: 4)
+                  # RSI_chwin = 9,  # fhwt: 5     # 3-10     (recently was 3)
+                  # RSI_bound_distance = 30,  # = second best. optimize it again with other indicators. "5" came actually as best result
+                  # RSI_chval_th = [1,20],  # first idea, can be altered
+                  # RSI_weight = 1,# [1,3], # was 2 (old)  # good performance --> 3 (new)
+                  # CCI_win = 4,
+                  # CCI_chwin = CHWIN,  # (dyn. fhwt: 4)    (recently was choosen as 3)
+                  # CCI_treshold_distance = 120,  # was 80 with fos: [40,85]
+                  # CCI_chval_th = [10,50],  # first idea, can be altered
+                  # CCI_weight = 1, # recently: 2  # was 3 (old), but CCI had very bad performance compared to RSI! --> middle-new was 1
                   # ############################
-                  bbands_win = 22, # fhwt: 3 & 4    # was 20 (!!! ALSO AFFECTS SL!!!)
-                  bbands_chwin_out = CHWIN, # recently was 9,  # fhwt: 8  (if trying 'win' with 3 or 4, set chwin to 3)
-                  bbands_weight_out = 1, # recently was 3,  # was 1  (bad performance)
-                  bbands_chwin_trend = CHWIN,#[3,8], #6   # was 4
-                  bbands_expfac = 3,#[1,9],   # was 3 (only affects trend-BB, even not SL)
-                  bbands_weight_trend = 1, # was 20,
-                  vol_mdfpwi = 1,
-                  vol_max_impact_zscore = 4,
-                  vol_chwin = CHWIN, # was 3, # 2-?
-                  volume_weight = 1,
-                  ADX_win = 20,
-                  ADX_chwin = CHWIN, # was 7
-                  ADX_abs_weight = 1, # was 3
-                  ADX_dyn_weight = 1,
+                  # bbands_win = 22, # fhwt: 3 & 4    # was 20 (!!! ALSO AFFECTS SL!!!)
+                  # bbands_chwin_out = 1, # recently was 9,  # fhwt: 8  (if trying 'win' with 3 or 4, set chwin to 3)
+                  # bbands_weight_out = 1, # recently was 3,  # was 1  (bad performance)
+                  # bbands_chwin_trend = CHWIN,#[3,8], #6   # was 4
+                  # bbands_expfac = 1,#[1,9],   # was 3 (only affects trend-BB, even not SL)
+                  # bbands_weight_trend = 1, # was 20,
+                  # vol_mdfpwi = 1,
+                  # vol_max_impact_zscore = 4,
+                  # vol_chwin = 2, # was 3, # 2-?
+                  # volume_weight = 1,
+                  # ADX_win = 20,
+                  # ADX_chwin = 2, # was 7
+                  # ADX_abs_weight = 1, # was 3
+                  # ADX_dyn_weight = 1,
                   # sizegap_granularity = 12,
                   # sizepeak_granularity = 12,
                   # gap_accuracy = 5,  # area of gap value recognition in % --> the lower, the more accurate!
@@ -170,17 +176,18 @@ def do_backtest(param,
                   # sizepeak_win = 100,
                   # gap_weight = 1,
                   # peak_weight = 3,
-                  ATR_win = 14,
-                  ATR_chwin = CHWIN, # was 3
-                  ATR_mincalcwin = 100,
-                  ATR_abs_weight = 1, # was 2
-                  ATR_dyn_weight = 1, # was 2
+                  # ATR_win = 14,
+                  # ATR_chwin = CHWIN, # was 3
+                  # ATR_mincalcwin = 100,
+                  # ATR_abs_weight = 1, # was 2
+                  # ATR_dyn_weight = 1, # was 2
                   SLdist_redufac = 9,
                   bbands_TSL_chwin = 7,
                   PSAR_weight = 1,
                   bbands_TSL_weight = 1,
                   ATR_TSL_weight = 2,
                   power_TSL_weight = 3,
+                  minTSLdist = minTSL,
 
                   maximize = lambda stats: (
                      ((stats["SQN"]-sqn_mean)/sqn_std)*38 +
@@ -202,25 +209,30 @@ def do_backtest(param,
                   # constraint=lambda p: p.MACD_shortwin < p.MACD_longwin
                )
    param_opt_log_dict = {
-                  'order_triggerpower': [8,13],
+                  'order_triggerpower': 1,
                   'close_triggerpower': 1, # was 2
-                  'CHWIN': CHWIN,
+                  'MACD_chwin': CHWIN,
+                  'MACD_longwin': macd_params[0],
+                  'MACD_shortwin': macd_params[1],
+                  'MACD_signalwin': macd_params[2],
+                  'minTSLdist': minTSL,
                   'SLdist_redufac': 9,
                   'bbands_TSL_chwin': 7,
                   'PSAR_weight': 1,
                   'bbands_TSL_weight': 1,
                   'ATR_TSL_weight': 2,
-                  'power_TSL_weight': 3,
+                  'power_TSL_weight': 3
    }
    
                   
                   
 
 
-   # time.sleep(200)
+   time.sleep(20)
    # print(f'{param} done.')
    # print(f'TRIP {TRIP} done.')
-   print(f'CHWIN {CHWIN} done.')
+   # print(f'CHWIN {CHWIN} done.')
+   print(f'macd_chwin={CHWIN}, minTSL={minTSL} & macd_params={macd_params} done.')
 
    # print(stats)
 
@@ -266,7 +278,8 @@ def do_backtest(param,
 #    5. COMBINE THE RESULTS OF 1-4 EQUALLY.
 
 
-paramlist = [0,0,0,0,0,0,
+paramlist = [0,0,0,0,0,0,0,0,
+            #  0,0,0,0,0,
             #  1,2,3,4,5,6,7,
             #  8,9,
             #  10,11,
@@ -275,7 +288,14 @@ paramlist = [0,0,0,0,0,0,
 
 # triggerpowers = [4,4,4,4,4,4,]  # was 6
 
-chwins = [3,4,5,6,7,8,]
+chwins = [2,2,2,2,3,3,3,3,]
+
+minTSLs = [1,2,3,4,1,2,3,4,]
+
+macd_params = [[12,9,6], [12,9,6], [12,9,6], [12,9,6],
+               [12,9,6], [12,9,6], [12,9,6], [12,9,6],
+              ]
+
 
 
 if __name__ == '__main__':
@@ -287,9 +307,13 @@ if __name__ == '__main__':
       # with Pool() as p:                            # This only makes sense with huge datasets used with 'run()'
       #    results = p.map(do_backtest, paramlist)   # since 'optimize()' automatically comes with multiprocessing by default
 
-      results = list(map(do_backtest, paramlist, 
+      results = list(map(do_backtest,
+                         paramlist,
+                         minTSLs,
+                         macd_params,
+                         chwins
                         #  triggerpowers, 
-                         chwins))
+                         ))
 
       time_taken = time.time() - start_time
 

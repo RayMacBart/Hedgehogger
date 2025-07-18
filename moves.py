@@ -2,7 +2,10 @@ import numpy as np
 
 def is_falling_below(S, B='no value'): # S=Series, B=Boundary
    if not (B == 'no value'):
-      if len(S) == 3:
+      if len(S) == 2:
+         if (S[-1]<=B and S[-2]>B):
+            return True
+      elif len(S) == 3:
          if ((S[-1]<=B and (S[-2]>B or S[-2]<=B) and S[-3]>B) and
             (B-S[-1] >= B-S[-2] >= B-S[-3])):
             return True
@@ -52,10 +55,13 @@ def is_falling_below(S, B='no value'): # S=Series, B=Boundary
                (B-S[-1] >= np.mean([B-S[-2], B-S[-3]]) >= np.mean([B-S[-4], B-S[-5]]) >= np.mean([B-S[-6], B-S[-7], B-S[-8]]))):
             return True
       else:
-         raise ValueError(f'ERROR: invalid Series length given to function "is_falling_below": must be between 3 and 8 (given: {len(S)})')
+         raise ValueError(f'ERROR: invalid Series length given to function "is_falling_below": must be between 2 and 8 (given: {len(S)})')
    else: # if no B is given
-      if (len(S) < 3) or (len(S) > 10):
-         raise ValueError(f'ERROR: invalid Series length given to function "is_falling_below": must be between 3 and 10 (without "B" specified) (given: {len(S)})')
+      if (len(S) < 2) or (len(S) > 10):
+         raise ValueError(f'ERROR: invalid Series length given to function "is_falling_below": must be between 2 and 10 (without "B" specified) (given: {len(S)})')
+      if (len(S) == 2):
+         if S[0] > S[1]:
+            return True
       testlist = []
       for s in S:
          if not testlist:
@@ -87,6 +93,9 @@ def is_falling_below(S, B='no value'): # S=Series, B=Boundary
 
 def is_rising_above(S, B='no value'): # S=Series, B=Boundary
    if not (B == 'no value'):
+      if len(S) == 2:
+         if (S[-1]>=B and S[-2]<B):
+            return True
       if len(S) == 3:
          if ((S[-1]>=B and (S[-2]<B or S[-2]>=B) and S[-3]<B) and
             (B-S[-1] <= B-S[-2] <= B-S[-3])):
@@ -137,11 +146,13 @@ def is_rising_above(S, B='no value'): # S=Series, B=Boundary
                (B-S[-1] <= np.mean([B-S[-2], B-S[-3]]) <= np.mean([B-S[-4], B-S[-5]]) <= np.mean([B-S[-6], B-S[-7], B-S[-8]]))):
             return True
       else:
-         raise ValueError(f'ERROR: invalid Series length given to function "is_rising_above": must be between 3 and 8 (given: {len(S)})')
+         raise ValueError(f'ERROR: invalid Series length given to function "is_rising_above": must be between 2 and 8 (given: {len(S)})')
    else: # if no B given
-      if (len(S) < 3) or (len(S) > 10):
-         raise ValueError(f'ERROR: invalid Series length given to function "is_rising_above": must be between 3 and 10 (without "B" specified) (given: {len(S)})')
-      testlist = []
+      if (len(S) < 2) or (len(S) > 10):
+         raise ValueError(f'ERROR: invalid Series length given to function "is_rising_above": must be between 2 and 10 (without "B" specified) (given: {len(S)})')
+      if (len(S) == 2):
+         if S[0] < S[1]:
+            return True
       testlist = []
       for s in S:
          if not testlist:

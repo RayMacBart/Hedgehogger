@@ -1,0 +1,32 @@
+Optimization Loop ID:  "G"
+
+GOAL:  About 10.000 triggers
+
+Default chwin (here) = 3
+
+DIR: 0
+CSP: 1470     too few
+MACD: 76707     ---
+MACD-zeroX: 10342   perfect
+MACD-sigX: 18935     --> even lower, try chwin=2
+MACD-combo: 75344    IMPLEMENT MINIMUM CHANGE FAC BOTH HAVE TO REACH!       chwin-8 (7067) is too slow
+VWAP: 17946     --> even lower!  try chwin=2!
+FIBO: 11748     good, but try chwin=2!
+RSI: 99879     ---
+RSI-abs: 1327     too few
+RSI-dyn: 98745     IMPLEMENT MINIMUM CHANGE FACTOR!!!    chwin-8  (6124) is too slow! 
+CCI: 75206     ---
+CCI-abs: 54308     ???  --> raise CCI_th_dist from 80 to 120
+CCI-dyn: 65412    IMPLEMENT MINIMUM CHANGE FACTOR!!!    too slow chwins: 6 (7777),  7  (2508),   8 (613)
+BB-out: 14686    --> even lower   --> try chwin=2 or - here possibe - even 1 for extreme fastness
+BB-trend: 3648     too few triggers (especially for Floating Impact): keep chwin=3 or try even 2 for fastness and lower expfac to 1
+ADX: 47761     ---
+ADX-abs: 42878    --> Maybe ok (Floating impact)
+ADX-dyn: 26622     has Floating Impact --> so take even 2 because it's faster!   too slow chwin-8 (12579)
+VOL: 92761     Maybe ok (Floating impact)   --> maybe try 2 (faster)    too slow chwin=8  (78653)
+CAMA: 0
+GAP: 0
+PEAK: 0
+ATR: 86328
+ATR-abs: 22139     good (Floating impact)
+ATR-dyn: 99879     Floating Impact     too slow: chwin=8  (13335)
