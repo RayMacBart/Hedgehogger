@@ -47,19 +47,19 @@ def MACD_calcpower(macd, histo, macd_chwin, histo_chwin, chval_treshold,
    elif falls(macd[-macd_chwin:], 0):
       shift -= zeroweight
       impact_counter['MACD-zeroX'] += 1
-   # if rises(histo[-histo_chwin:], 0):
-   #    shift += histoweight
-   #    impact_counter['MACD-sigX'] += 1
-   # elif falls(histo[-histo_chwin:], 0):
-   #    shift -= histoweight
-   #    impact_counter['MACD-sigX'] += 1
-   # if (abs(macd[-1] - macd[0]) >= real_chval_th) and (abs(histo[-1] - histo[0]) >= real_chval_th):
-   #    if rises(macd) and rises(histo):
-   #       shift += comboweight
-   #       impact_counter['MACD-combo'] += 1
-   #    elif falls(macd) and falls(histo):
-   #       shift -= comboweight
-   #       impact_counter['MACD-combo'] += 1
+   if rises(histo[-histo_chwin:], 0):
+      shift += histoweight
+      impact_counter['MACD-sigX'] += 1
+   elif falls(histo[-histo_chwin:], 0):
+      shift -= histoweight
+      impact_counter['MACD-sigX'] += 1
+   if (abs(macd[-1] - macd[0]) >= real_chval_th) and (abs(histo[-1] - histo[0]) >= real_chval_th):
+      if rises(macd) and rises(histo):
+         shift += comboweight
+         impact_counter['MACD-combo'] += 1
+      elif falls(macd) and falls(histo):
+         shift -= comboweight
+         impact_counter['MACD-combo'] += 1
    # following would be a version imitating chwin == 2:
    # if macd[-2] < 0 and macd[-1] >= 0:
    #    shift += zeroweight
@@ -431,16 +431,16 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
          #                         # Amount of focussed on candles is 1 more than action_win because 1 'pre'-candle is needed.  
          # lastpower = detect_impact(impact_counter, power, lastpower, 'CSP')
 
-         power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['combo_chwin']-1):idx+1], 
-                                 T['MACD']['histo'][idx-(T['MACD']['combo_chwin']-1):idx+1],
-                                 T['MACD']['macd_chwin'], T['MACD']['histo_chwin'], T['MACD']['chval_treshold'],
-                                 # T['MACD']['signal'][idx-(T['MACD']['signal_chwin']-1):idx+1], # not used (yet?)
-                                 T['MACD']['zeroweight'], T['MACD']['histoweight'], T['MACD']['comboweight'], impact_counter)
-         lastpower = detect_impact(impact_counter, power, lastpower, 'MACD')
+         # power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['combo_chwin']-1):idx+1], 
+         #                         T['MACD']['histo'][idx-(T['MACD']['combo_chwin']-1):idx+1],
+         #                         T['MACD']['macd_chwin'], T['MACD']['histo_chwin'], T['MACD']['chval_treshold'],
+         #                         # T['MACD']['signal'][idx-(T['MACD']['signal_chwin']-1):idx+1], # not used (yet?)
+         #                         T['MACD']['zeroweight'], T['MACD']['histoweight'], T['MACD']['comboweight'], impact_counter)
+         # lastpower = detect_impact(impact_counter, power, lastpower, 'MACD')
 
-         # power += VWAP_calcpower(Data.Close[idx-(T['VWAP']['chwin']):idx], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1],
-         #                         T['VWAP']['expfac'], T['VWAP']['weight'])  # --> vwap misuse?
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'VWAP')
+         power += VWAP_calcpower(Data.Close[idx-(T['VWAP']['chwin']):idx], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1],
+                                 T['VWAP']['expfac'], T['VWAP']['weight'])  # --> vwap misuse?
+         lastpower = detect_impact(impact_counter, power, lastpower, 'VWAP')
 
          # # # I 'misuse' the fibonacci points in a unconventional way as breakthrough indicator.
          # power += FIBO_calcpower(Data.Close[idx-(T['FIBO']['chwin']):idx], T['DIR']['dir'][idx], T['FIBO'][2][idx], T['FIBO'][4][idx],

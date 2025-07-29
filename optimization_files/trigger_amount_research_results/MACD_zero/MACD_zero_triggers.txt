@@ -1,0 +1,55 @@
+Optimization Loop ID:  "A"
+macd_chwin: 2
+EURUSD  M1 | 99900  (-0) | normal | Trades: 6186     minTSL: 1
+EURUSD  M1 | 99900  (-0) | normal | Trades: 6186     minTSL: 2
+EURUSD  M1 | 99900  (-0) | normal | Trades: 6186     minTSL: 3
+EURUSD  M1 | 99900  (-0) | normal | Trades: 6186     minTSL: 4
+
+macd_chwin: 3
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10340     minTSL: 1
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10340     minTSL: 2
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10340     minTSL: 3
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10340     minTSL: 4
+-----------------------------------
+Optimization Loop ID:  "B"
+macd_chwin: 3
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10342     minTSL: 5
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10342     minTSL: 6
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10342     minTSL: 7
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10342     minTSL: 8
+
+macd_chwin: 4
+EURUSD  M1 | 99900  (-0) | normal | Trades: 14207     minTSL: 1
+EURUSD  M1 | 99900  (-0) | normal | Trades: 14207     minTSL: 2
+EURUSD  M1 | 99900  (-0) | normal | Trades: 14207     minTSL: 3
+EURUSD  M1 | 99900  (-0) | normal | Trades: 14207     minTSL: 4
+EURUSD  M1 | 99900  (-0) | normal | Trades: 14210     minTSL: 5
+EURUSD  M1 | 99900  (-0) | normal | Trades: 14210     minTSL: 6
+EURUSD  M1 | 99900  (-0) | normal | Trades: 14210     minTSL: 7
+EURUSD  M1 | 99900  (-0) | normal | Trades: 14210     minTSL: 8
+
+macd_chwin: 5
+EURUSD  M1 | 99900  (-0) | normal | Trades: 17874     minTSL: 1
+EURUSD  M1 | 99900  (-0) | normal | Trades: 17874     minTSL: 2
+EURUSD  M1 | 99900  (-0) | normal | Trades: 17874     minTSL: 3
+EURUSD  M1 | 99900  (-0) | normal | Trades: 17874     minTSL: 4
+EURUSD  M1 | 99900  (-0) | normal | Trades: 17877     minTSL: 5
+EURUSD  M1 | 99900  (-0) | normal | Trades: 17877     minTSL: 6
+EURUSD  M1 | 99900  (-0) | normal | Trades: 17877     minTSL: 7
+EURUSD  M1 | 99900  (-0) | normal | Trades: 17878     minTSL: 8
+
+macd_chwin: 6
+EURUSD  M1 | 99900  (-0) | normal | Trades: 20247     minTSL: 1
+EURUSD  M1 | 99900  (-0) | normal | Trades: 20247     minTSL: 2
+EURUSD  M1 | 99900  (-0) | normal | Trades: 20247     minTSL: 3
+EURUSD  M1 | 99900  (-0) | normal | Trades: 20247     minTSL: 4
+EURUSD  M1 | 99900  (-0) | normal | Trades: 20247     minTSL: 5
+EURUSD  M1 | 99900  (-0) | normal | Trades: 20247     minTSL: 6
+EURUSD  M1 | 99900  (-0) | normal | Trades: 20245     minTSL: 7
+EURUSD  M1 | 99900  (-0) | normal | Trades: 20247     minTSL: 8
+-----------------------------------
+Optimization Loop ID:  "C"
+macd_chwin: 4
+macd_chwin: 5
+macd_chwin: 6
+-----------------------------------

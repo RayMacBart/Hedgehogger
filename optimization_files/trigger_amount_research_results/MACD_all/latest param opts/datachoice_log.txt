@@ -1,0 +1,29 @@
+Optimization Loop ID:  "A"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 34344
+EURUSD  M1 | 99900  (-0) | SYNTHETIC | Trades: 31523
+EURUSD  M1 | 99900  (-0) | normal | Trades: 42893
+EURUSD  M1 | 99900  (-0) | SYNTHETIC | Trades: 30139
+EURUSD  M1 | 99900  (-0) | normal | Trades: 11435
+EURUSD  M1 | 99900  (-0) | SYNTHETIC | Trades: 7248
+EURUSD  M1 | 99900  (-0) | normal | Trades: 4897
+EURUSD  M1 | 99900  (-0) | SYNTHETIC | Trades: 1602
+EURUSD  M1 | 99900  (-0) | normal | Trades: 11467
+EURUSD  M1 | 99900  (-0) | SYNTHETIC | Trades: 11235
+-----------------------------------
+Optimization Loop ID:  "B"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 3702
+EURUSD  M1 | 99900  (-0) | SYNTHETIC | Trades: 3003
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13046
+EURUSD  M1 | 99900  (-0) | SYNTHETIC | Trades: 10228
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10729
+EURUSD  M1 | 99900  (-0) | SYNTHETIC | Trades: 8637
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10593
+EURUSD  M1 | 99900  (-0) | SYNTHETIC | Trades: 7625
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8873
+EURUSD  M1 | 99900  (-0) | SYNTHETIC | Trades: 6311
+EURUSD  M1 | 99900  (-0) | normal | Trades: 4389
+EURUSD  M1 | 99900  (-0) | SYNTHETIC | Trades: 2540
+-----------------------------------
+Optimization Loop ID:  "C"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 5799
+-----------------------------------

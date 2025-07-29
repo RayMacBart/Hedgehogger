@@ -1,0 +1,81 @@
+macd_combo - chval_th Test:  (dataspan 99900, macd_params [9,7,7])
+TRIGGERS:
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13207
+EURUSD  M1 | 99900  (-0) | normal | Trades: 3022
+EURUSD  M1 | 99900  (-0) | normal | Trades: 942
+EURUSD  M1 | 99900  (-0) | normal | Trades: 406
+EURUSD  M1 | 99900  (-0) | normal | Trades: 196
+EURUSD  M1 | 99900  (-0) | normal | Trades: 114
+EURUSD  M1 | 99900  (-0) | normal | Trades: 69
+EURUSD  M1 | 99900  (-0) | normal | Trades: 45
+EURUSD  M1 | 99900  (-0) | normal | Trades: 30
+EURUSD  M1 | 99900  (-0) | normal | Trades: 25
+EURUSD  M1 | 99900  (-0) | normal | Trades: 20
+EURUSD  M1 | 99900  (-0) | normal | Trades: 19
+EURUSD  M1 | 99900  (-0) | normal | Trades: 15
+EURUSD  M1 | 99900  (-0) | normal | Trades: 11
+EURUSD  M1 | 99900  (-0) | normal | Trades: 9
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8
+EURUSD  M1 | 99900  (-0) | normal | Trades: 6
+EURUSD  M1 | 99900  (-0) | normal | Trades: 4
+EURUSD  M1 | 99900  (-0) | normal | Trades: 4
+EURUSD  M1 | 99900  (-0) | normal | Trades: 2
+EURUSD  M1 | 99900  (-0) | normal | Trades: 2
+EURUSD  M1 | 99900  (-0) | normal | Trades: 2
+EURUSD  M1 | 99900  (-0) | normal | Trades: 2
+EURUSD  M1 | 99900  (-0) | normal | Trades: 2
+EURUSD  M1 | 99900  (-0) | normal | Trades: 2
+EURUSD  M1 | 99900  (-0) | normal | Trades: 2
+EURUSD  M1 | 99900  (-0) | normal | Trades: 1
+EURUSD  M1 | 99900  (-0) | normal | Trades: 1
+EURUSD  M1 | 99900  (-0) | normal | Trades: 1
+EURUSD  M1 | 99900  (-0) | normal | Trades: 1
+-----------------------------------
+SCORES:
+-12.40893481153346
+-32.03621980357779
+-29.209287311472124
+-41.39657523065499
+-56.905460194168924
+-97.94668386558287
+-82.64521423401695
+-63.572700437832594
+-39.71553046025334
+-77.64940039349432
+-62.02393505779041
+-91.4460548644903
+-105.85410164049786
+-134.78967835060857
+-190.31211737749996
+-228.81020358371734
+-158.2176540612198
+-127.21243586756319
+-127.21243586756319
+-536.1675067615558
+-536.1675067615558
+-536.1675067615558
+-536.1675067615558
+-536.1675067615558
+-536.1675067615558
+-536.1675067615558
+nan
+nan
+nan
+nan
+-----------------------------------
+param log:
+order_triggerpower: range=1, results=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+close_triggerpower: range=1, results=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+minTSLdist: range=12, results=[12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12]
+combo_chwin: range=2, results=[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+MACD_longwin: range=9, results=[9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
+MACD_shortwin: range=7, results=[7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]
+MACD_signalwin: range=7, results=[7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]
+MACD_chval_th: range=1, results=[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]
+SLdist_redufac: range=9, results=[9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
+bbands_TSL_chwin: range=7, results=[7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]
+PSAR_weight: range=1, results=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+bbands_TSL_weight: range=1, results=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+ATR_TSL_weight: range=2, results=[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+power_TSL_weight: range=3, results=[3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+

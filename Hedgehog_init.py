@@ -28,11 +28,11 @@ def __init__(self):
 #    self.CCI = self.I(ta.cci, self.data.High.s, self.data.Low.s, self.data.Close.s, self.CCI_win)
 #    self.CCI_upper_treshold = self.CCI_treshold_distance
 #    self.CCI_lower_treshold = self.CCI_treshold_distance*(-1)
-#    self.MACD_df = ta.macd(self.data.Close.s, self.MACD_shortwin, self.MACD_longwin, self.MACD_signalwin)
-#    self.MACD_macd = self.I(lambda: self.MACD_df[f'MACD_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='MACD')
-#    self.MACD_histogram = self.I(lambda: self.MACD_df[f'MACDh_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Histogram')
+   # self.MACD_df = ta.macd(self.data.Close.s, self.MACD_shortwin, self.MACD_longwin, self.MACD_signalwin)
+   # self.MACD_macd = self.I(lambda: self.MACD_df[f'MACD_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='MACD')
+   # self.MACD_histogram = self.I(lambda: self.MACD_df[f'MACDh_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Histogram')
    ## self.MACD_signalline = self.I(lambda: self.MACD_df[f'MACDs_{self.MACD_shortwin}_{self.MACD_longwin}_{self.MACD_signalwin}'], name='Signalline')
-#    self.VWAP = self.I(ta.vwap, self.data.High.s, self.data.Low.s, self.data.Close.s, self.data.Volume.s, name='VWAP')
+   self.VWAP = self.I(ta.vwap, self.data.High.s, self.data.Low.s, self.data.Close.s, self.data.Volume.s, name='VWAP')
    self.bbands_df = ta.bbands(self.data.Close.s, self.bbands_win)
    self.lowerband = self.I(indicator_setups.lowerband, self.bbands_df[f'BBL_{self.bbands_win}_2.0'], name='lower bband')
    self.upperband = self.I(indicator_setups.upperband, self.bbands_df[f'BBU_{self.bbands_win}_2.0'], name='upper bband')
@@ -70,8 +70,8 @@ def __init__(self):
                       'DIR': {'dir' :self.dirs, 'weight': self.DIR_weight},
                 #       'VOL': {'volume': self.data.Volume, 'chwin': self.vol_chwin, 'mdfpwi': self.vol_mdfpwi,
                 #               'max_impact_zscore': self.vol_max_impact_zscore, 'weight': self.volume_weight},
-                #       'VWAP': {'vwap': self.VWAP, 'chwin': self.VWAP_chwin, 'weight': self.VWAP_weight,
-                #                'expfac': self.vwap_expfac}, # difference expansion factor
+                      'VWAP': {'vwap': self.VWAP, 'chwin': self.VWAP_chwin, 'weight': self.VWAP_weight,
+                               'expfac': self.vwap_expfac}, # difference expansion factor
                       'ATR': {'atr': self.ATR,  'chwin': self.ATR_chwin, 'mincalcwin': self.ATR_mincalcwin, 'win': self.ATR_win,
                               'abs-weight': self.ATR_abs_weight, 'dyn-weight': self.ATR_dyn_weight, 'TSL-weight': self.ATR_TSL_weight},
                 #       'ADX': {'adx': self.ADX_adx, 'DM+': self.ADX_DM_pos, 'DM-': self.ADX_DM_neg, 'chwin': self.ADX_chwin,
@@ -80,14 +80,14 @@ def __init__(self):
                 #               'chwin': self.RSI_chwin, 'chval_treshold': self.RSI_chval_th, 'weight': self.RSI_weight},
                 #       'CCI': {'cci': self.CCI, 'low': self.CCI_lower_treshold, 'high': self.CCI_upper_treshold,
                 #               'chwin': self.CCI_chwin, 'chval_treshold': self.CCI_chval_th, 'weight': self.CCI_weight},
-                      'CSP': {'reaction_win': self.CSP_reaction_win, 'bodyshrink_factor': self.CSP_bodyshrink_factor,
-                              'shadow2body_factor': self.CSP_shadow2body_factor, 'shadowdiff_factor': self.CSP_shadowdiff_factor,
-                              'weight': self.CSP_weight}, # 'CSP': Candle Stick Pattern
-                #       'MACD': {'macd': self.MACD_macd, 'histo': self.MACD_histogram,
-                #                #'signal': self.MACD_signalline, # not used (yet?)
-                #                'macd_chwin': self.MACD_chwin, 'histo_chwin': self.histo_chwin, 'combo_chwin': self.combo_chwin,
-                #                'chval_treshold': self.MACD_chval_th, 'zeroweight': self.MACD_zeroweight,
-                #                'histoweight': self.MACD_histoweight, 'comboweight': self.MACD_comboweight},
+                     #  'CSP': {'reaction_win': self.CSP_reaction_win, 'bodyshrink_factor': self.CSP_bodyshrink_factor,
+                     #          'shadow2body_factor': self.CSP_shadow2body_factor, 'shadowdiff_factor': self.CSP_shadowdiff_factor,
+                     #          'weight': self.CSP_weight}, # 'CSP': Candle Stick Pattern
+                     #  'MACD': {'macd': self.MACD_macd, 'histo': self.MACD_histogram,
+                     #           #'signal': self.MACD_signalline, # not used (yet?)
+                     #           'macd_chwin': self.MACD_chwin, 'histo_chwin': self.histo_chwin, 'combo_chwin': self.combo_chwin,
+                     #           'chval_treshold': self.MACD_chval_th, 'zeroweight': self.MACD_zeroweight,
+                     #           'histoweight': self.MACD_histoweight, 'comboweight': self.MACD_comboweight},
                       'BB': {'low': self.lowerband, 'high': self.upperband,'mid': self.middleband,
                              'width': self.bandwidth, 'chwin-out': self.bbands_chwin_out, 'chwin-trend': self.bbands_chwin_trend,
                              'weight-out': self.bbands_weight_out, 'weight-trend': self.bbands_weight_trend, 'TSL-weight': self.bbands_TSL_weight,

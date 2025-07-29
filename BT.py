@@ -17,11 +17,12 @@ from copy import deepcopy
 # since 'optimize()' automatically comes with multiprocessing by default
 
 
-def do_backtest(param,
+def do_backtest(
+               #  param,
                 minTSL,
-               macd_params,
                 CHWIN
-               #  triggerpower,
+               #  TRIP,
+               #  randomized
                 ):
 
    # for objective result data collection:
@@ -37,13 +38,14 @@ def do_backtest(param,
    # candlesize = random.choice(['M1', 'M5', 'M15', 'M30', 'H1'])
 
 
-   pastshift = param  # the only automatically iterated value
+   # pastshift = param  # the only automatically iterated value
 
-   # TRIP = triggerpower
 
    asset, candlesize = get_vars()
-
-   dataspan = 99900
+   
+   dataspan = 30000
+   pastshift = 0
+   # dataspan = 99900
    # dataspan = 8330
    randomized = False
 
@@ -97,7 +99,7 @@ def do_backtest(param,
    # stats = bt.run()
 
 
-   max_tries = 80 # was 73
+   max_tries = 40
 
    # MAKE PARAMETER RANGES RESULTING IN ABOUT >1000 POSSIBLE COMBINATIONS.
    # WAYS TO DO THIS:   4 x 4 x 4 x 4 x 4 = 1024   |   4 x 6 x 6 x 7 = 1008   |   5 x 6 x 6 x 6 = 1080   |   5 x 5 x 6 x 7 = 1050   
@@ -116,29 +118,29 @@ def do_backtest(param,
 
                   candlesize = [candlesize],
                   # "fos" = future optimization suggestion, "fhwt" = frequent hence worth try, "lar" = long average result
-                  order_triggerpower = 1,#TRIP,       # was 18 for first trend opt
+                  order_triggerpower = 1,       # was 18 for first trend opt
                   close_triggerpower = 1, # was 
                   # CHWIN = CHWIN,
                   # CSP_bodyshrink_factor = 4,
                   # CSP_shadow2body_factor = 3,
                   # CSP_shadowdiff_factor = 5,
-                  # CSP_reaction_win = 6,
+                  # CSP_reaction_win = 6,   # maybe consider less for fastness
                   # CSP_weight = 1,
 
-                  MACD_zeroweight = 1,# [0,2], # was 1
-                  # MACD_histoweight = 1,# [1,3],   # way better results than zero & combo!   # was 2
-                  # MACD_comboweight = 1,# [0,2],   # was 1
-                  MACD_chwin = CHWIN,
-                  # histo_chwin = CHWIN, # was 3
-                  # combo_chwin = CHWIN,
-                  MACD_longwin = macd_params[0],
-                  MACD_shortwin = macd_params[1],
-                  MACD_signalwin = macd_params[2],
-                  # MACD_chval_th = [1,10],  # only relevant for combo. first idea, can be altered
+                  # MACD_zeroweight = 1, #[0,2], # was 1
+                  # MACD_histoweight = 1, #[1,3],   # way better results than zero & combo!   # was 2
+                  # MACD_comboweight = 2, #[0,2],   # was 1
+                  # MACD_longwin = 5, #[4,10], #7
+                  # MACD_shortwin = 3, #[3,8], #6
+                  # MACD_signalwin = 3, #[2,7], #6
+                  # MACD_chwin = 2,
+                  # histo_chwin = 2,
+                  # combo_chwin = 2,
+                  # MACD_chval_th = 1,  # only relevant for combo.
 
-                  # vwap_expfac = 1,
-                  # VWAP_chwin = CHWIN, # was 3
-                  # VWAP_weight = 1,   # was 1  (bad performance)
+                  vwap_expfac = [1,2,3,4,5,6,7,8,9,10],
+                  VWAP_chwin = CHWIN, # was 3
+                  VWAP_weight = 1,   # was 1  (bad performance)
                   # fibo_chwin = CHWIN, # recently was 3, # lar: 4, modern: 6
                   # fibo_weight = 1, # recently was 2, # was 4 (old)   # bad performance --> was 1 (new)
                   # cama3_weight = 1,# [0,2],  # was 1
@@ -187,7 +189,7 @@ def do_backtest(param,
                   bbands_TSL_weight = 1,
                   ATR_TSL_weight = 2,
                   power_TSL_weight = 3,
-                  minTSLdist = minTSL,
+                  minTSLdist = minTSL, # minTSL   # best so far: (csp & macd_zero): 12 (or 8)
 
                   maximize = lambda stats: (
                      ((stats["SQN"]-sqn_mean)/sqn_std)*38 +
@@ -205,17 +207,16 @@ def do_backtest(param,
 
                   # method='sambo',
                   # max_tries=max_tries,
-                  constraint=lambda p: p.MACD_signalwin <= p.MACD_shortwin < p.MACD_longwin
+                  # constraint=lambda p: p.MACD_signalwin <= p.MACD_shortwin < p.MACD_longwin
                   # constraint=lambda p: p.MACD_shortwin < p.MACD_longwin
                )
    param_opt_log_dict = {
                   'order_triggerpower': 1,
                   'close_triggerpower': 1, # was 2
-                  'MACD_chwin': CHWIN,
-                  'MACD_longwin': macd_params[0],
-                  'MACD_shortwin': macd_params[1],
-                  'MACD_signalwin': macd_params[2],
-                  'minTSLdist': minTSL,
+                  'minTSLdist': minTSL,  # minTSL   # best so far for both csp & macd_zero is 12 though
+                  'VWAP_chwin': CHWIN, # was 3
+                  'vwap_expfac': [1,2,3,4,5,6,7,8,9,10],
+                  'VWAP_weight': 1,   # was 1  (bad performance)
                   'SLdist_redufac': 9,
                   'bbands_TSL_chwin': 7,
                   'PSAR_weight': 1,
@@ -225,14 +226,10 @@ def do_backtest(param,
    }
    
                   
-                  
-
 
    time.sleep(20)
-   # print(f'{param} done.')
-   # print(f'TRIP {TRIP} done.')
-   # print(f'CHWIN {CHWIN} done.')
-   print(f'macd_chwin={CHWIN}, minTSL={minTSL} & macd_params={macd_params} done.')
+
+   print(f'CHWIN={CHWIN},  minTSL={minTSL}  done.')
 
    # print(stats)
 
@@ -246,55 +243,36 @@ def do_backtest(param,
 
 
 
-# USE 25 AS DIFFERENT AS POSSIBLE STRATEGY CONFIGURATIONS, AND FOR EACH ONE, LOOP THROUGH ALL 10 PASTSHIFTS (dataspan=10.000 each),
-# WITH DIFFERENT OBJECTIVES OPTIMIZED FOR EACH PASTSHIFT. WHEN CHANGING THE STRATEGY CONFIGURATIONS, ALSO CHANGE THE ORDER OF THE USED
-# OBJECTIVES OVER THE PASTSHIFTS. THE DIFFERENT STRATEGY CONFIGURATIONS SHALL SAMBO OPTIMIZE 1.000 POSSIBLE COMBINATIONS WITH MAX_TRIES
-# SET TO 200 (=20%) EACH. FOR EVERY SINGLE OPTIMIZATION, COLLECT RESULT DATA FROM ALL OBJECTIVES FOR LATER Z-SCORE USE.
-
-
-# WHEN IT COMES TO THE REAL OPTIMIZATION, USE A ZSCORE NORMALIZED COMBINATION OF OBJECTIVES WITH 5 OBJECTIVES MELTED TOGETHER IN WEIGHTED WAY:
-# SQN: 38%,   EXPECTANCY: 22%,   CALMAR RATIO: 16%,   SORTINO RATIO: 13%,   PROFIT FACTOR: 11%
-
-# OPTIMIZE EACH SINGLE INDICATOR BY LETTING IT RUN THROUGH THE WHOLE 100.000 DATAPOINTS.
-# 
-# SINGLE INDICATOR OPTIMIZATION (PREP 4 OVERALL OPTIMIZATION):
-#    1. LET IT RUN THROUGH THE WHOLE 100.000 DATAPOINTS
-#    2. LET IT RUN THROUGH 12 x 8333 PASTSHIFTED OPTIMIZATIONS AND COMBINE THE PARAMETER RESULTS TO ONE RESULT, 
-#                                     BUT WEIGHTED IN A CHRONOLOGICAL WAY: LET THE MOST RECENT DATA BE 12 TIMES WORTH THE OLDEST DATA.
-#                                     FOR THIS, USE A LINEAR WEIGHT DECREASE (LOSING THE SAME ABSOLUTE WEIGHT EACH STEP ON THE WAY TO 1/12).
-#                                     DECREMENT THE NUMERATOR OF 12/12 BY ONE EACH STEP!
-#
-# WHEN IT COMES TO THE OVERALL OPTIMIZATION:
-#    1. LET IT RUN THROUGH THE WHOLE 100.000 DATAPOINTS
-#    3. LET IT RUN THROUGH 8 x 12.500 PASTSHIFTED OPTIMIZATIONS AND COMBINE THE PARAMETER RESULTS TO ONE RESULT, 
-#                                     BUT WEIGHTED IN A CHRONOLOGICAL WAY: LET THE MOST RECENT DATA BE 8 TIMES WORTH THE OLDEST DATA.
-#                                     FOR THIS, USE A LINEAR WEIGHT DECREASE (LOSING THE SAME ABSOLUTE WEIGHT EACH STEP ON THE WAY TO 1/8).
-#                                     DECREMENT THE NUMERATOR OF 8/8 BY ONE EACH STEP!
-#    2. LET IT RUN THROUGH 20 x 5000 PASTSHIFTED OPTIMIZATIONS AND COMBINE THE PARAMETER RESULTS TO ONE RESULT, 
-#                                     BUT WEIGHTED IN A CHRONOLOGICAL WAY: LET THE MOST RECENT DATA BE 20 TIMES WORTH THE OLDEST DATA.
-#                                     FOR THIS, USE A RECIPROCAL, HYPERBOLIC WEIGHT DECREASE (STARTING FAST, ENDING SLOW).
-#                                     INCREMENT THE DENOMINATOR THE ORIGINAL, FIRST VALUE SHALL BE DIVIDED WITH BY ONE EACH STEP!
-#    4. LET IT RUN THROUGH 10 x 10.000 RANDOMIZED DATA AND COMBINE THE RESULTS
-#    5. COMBINE THE RESULTS OF 1-4 EQUALLY.
-
-
-paramlist = [0,0,0,0,0,0,0,0,
+# paramlist = [0,0,0,0,0,0,0,0,0,0,
+#              0,0,0,0,0,0,0,0,0,0,
+#              0,0,0,0,0,0,0,0,0,0,
+#              0,0,0,0,0,0,0,0,0,0,
+#              0,0,0,0,0,0,0,0,0,0,
+#              0,0,0,0,0,0,0,0,0,0,
+#              0,0,0,0,0,0,0,0,0,0,
+#              0,0,0,0,0,0,0,0,0,0,
+#              0,0,0,0,0,0,0,0,0,0,
+#              0,0,0,0,0,0,0,0,
             #  0,0,0,0,0,
             #  1,2,3,4,5,6,7,
             #  8,9,
             #  10,11,
             # 12,13,14,15,16,17,18,19
-             ]
+            #  ]
 
-# triggerpowers = [4,4,4,4,4,4,]  # was 6
+# synths = [False,False]
 
-chwins = [2,2,2,2,3,3,3,3,]
+# triggerpowers = [2,2]
 
-minTSLs = [1,2,3,4,1,2,3,4,]
 
-macd_params = [[12,9,6], [12,9,6], [12,9,6], [12,9,6],
-               [12,9,6], [12,9,6], [12,9,6], [12,9,6],
-              ]
+chwins = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+          3,3,3,3,3,3,3,3,3,3,3,3,3,3,
+          4,4,4,4,4,4,4,4,4,4,4,4,4,4,]
+
+minTSLs = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,
+           1,2,3,4,5,6,7,8,9,10,11,12,13,14,
+           1,2,3,4,5,6,7,8,9,10,11,12,13,14,]
+
 
 
 
@@ -308,11 +286,13 @@ if __name__ == '__main__':
       #    results = p.map(do_backtest, paramlist)   # since 'optimize()' automatically comes with multiprocessing by default
 
       results = list(map(do_backtest,
-                         paramlist,
+                        #  paramlist,
+                        #  macd_params,
+                        #  chval_ths,
                          minTSLs,
-                         macd_params,
                          chwins
-                        #  triggerpowers, 
+                        #  triggerpowers,
+                        #  synths
                          ))
 
       time_taken = time.time() - start_time

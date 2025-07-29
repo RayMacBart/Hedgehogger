@@ -96,7 +96,7 @@ def is_rising_above(S, B='no value'): # S=Series, B=Boundary
       if len(S) == 2:
          if (S[-1]>=B and S[-2]<B):
             return True
-      if len(S) == 3:
+      elif len(S) == 3:
          if ((S[-1]>=B and (S[-2]<B or S[-2]>=B) and S[-3]<B) and
             (B-S[-1] <= B-S[-2] <= B-S[-3])):
             return True

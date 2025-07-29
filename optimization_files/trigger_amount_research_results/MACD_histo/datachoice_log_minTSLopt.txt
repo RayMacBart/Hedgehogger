@@ -1,0 +1,18 @@
+minTSL 1-16 macd_histo [9,7,7], histo_chwin: 2 results
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13936
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13936
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13936
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13936
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13937
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13937
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13937
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13937
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13937
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13937
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13937
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13937
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13937
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13937
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13937
+EURUSD  M1 | 100000  (-0) | normal | Trades: 13937
+-----------------------------------

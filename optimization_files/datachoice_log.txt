@@ -1,0 +1,46 @@
+Optimization Loop ID:  "A"
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7184
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7184
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7184
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7184
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7184
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7184
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7184
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7184
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7184
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7184
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7184
+EURUSD  M1 | 30000  (-0) | normal | Trades: 2024
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7184
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7184
+
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5535
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5535
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5535
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5535
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5535
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5535
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5535
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5535
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5535
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5535
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5535
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5535
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5535
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5535
+
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5740
+EURUSD  M1 | 30000  (-0) | normal | Trades: 2258
+EURUSD  M1 | 30000  (-0) | normal | Trades: 2258
+EURUSD  M1 | 30000  (-0) | normal | Trades: 2258
+EURUSD  M1 | 30000  (-0) | normal | Trades: 2258
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5740
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5740
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5740
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5740
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5740
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5740
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5740
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5740
+EURUSD  M1 | 30000  (-0) | normal | Trades: 5740
+-----------------------------------
