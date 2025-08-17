@@ -1,0 +1,7 @@
+old idea of handling the data_parameters @ Hedgehog.py:
+asset = sys.argv[1] if len(sys.argv) > 1 else "EURUSD"
+adjufac = 100 if asset == "USDJPY" else 1  # adjustment factor for the USD/JPY pair which has a 100x higher pip-size!
+candlesize = ("M"+str(sys.argv[2]) if int(sys.argv[2]) != 60 else "H1") if len(sys.argv) > 2 else "M5"
+dataspan = int(sys.argv[3]) if len(sys.argv) > 3 else 10000
+... --> ! 3rd arg 'dataspan' must be min. 2580 with M1, min. 520 with M5,  min. 180 with M15...
+pastshift = int(sys.argv[4]) if len(sys.argv) > 4 else 0

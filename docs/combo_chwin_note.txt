@@ -1,0 +1,1 @@
+Be aware that 'combo_chwin' always has to be higher than or equal 'macd_chwin' and 'histo_chwin'!

@@ -1,0 +1,6 @@
+pre-guessing version could work like:
+   if rises(Closes) and (Closes[-1] >= high[-1]) and pow < trend_treshold:  (would need "pow" and "trend_treshold" args)
+   implement price reversal guessings not only upon pow verification, but also only upon outer band touches if 
+   reversal direction is confirmed by mid band rise/fall!
+   observe wether this guessing or the confirming strategy works better and change other indicator to better strategy
+   (and compare effectiveness with old version)

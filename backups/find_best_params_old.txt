@@ -1,0 +1,68 @@
+   resultdict = {}
+   rescountdict = {}
+   for parname in pardict:
+      max_amount_count = 0
+      max_amount_value = None
+      for num in set(pardict[parname]):
+         if pardict[parname].count(num) >= max_amount_count:
+            max_amount_value = (max_amount_value, num) if (pardict[parname].count(num) == max_amount_count and 
+                                                           max_amount_value) else num
+            max_amount_count = pardict[parname].count(num)
+      resultdict[parname] = max_amount_value
+      rescountdict[parname] = max_amount_count
+   
+   dict_2nds = {}
+   count2nds_dict = {}
+   for parname in pardict:
+      secmax_amount_count = 0
+      secmax_amount_value = None
+      for num in set(pardict[parname]):
+         if num != resultdict[parname]:
+            if pardict[parname].count(num) >= secmax_amount_count:
+               secmax_amount_value = (secmax_amount_value, num) if (pardict[parname].count(num) == secmax_amount_count and 
+                                                            secmax_amount_value) else num
+               secmax_amount_count = pardict[parname].count(num)
+      dict_2nds[parname] = secmax_amount_value
+      count2nds_dict[parname] = secmax_amount_count
+   
+   dict_3rds = {}
+   count3rds_dict = {}
+   for parname in pardict:
+      thimax_amount_count = 0
+      thimax_amount_value = None
+      for num in set(pardict[parname]):
+         if num not in [resultdict[parname], dict_2nds[parname]]:
+            if pardict[parname].count(num) >= thimax_amount_count:
+               thimax_amount_value = (thimax_amount_value, num) if (pardict[parname].count(num) == thimax_amount_count and 
+                                                            thimax_amount_value) else num
+               thimax_amount_count = pardict[parname].count(num)
+      dict_3rds[parname] = thimax_amount_value
+      count3rds_dict[parname] = thimax_amount_count
+
+   dict_4ths = {}
+   count4ths_dict = {}
+   for parname in pardict:
+      foumax_amount_count = 0
+      foumax_amount_value = None
+      for num in set(pardict[parname]):
+         if num not in [resultdict[parname], dict_2nds[parname], dict_3rds[parname]]:
+            if pardict[parname].count(num) >= foumax_amount_count:
+               foumax_amount_value = (foumax_amount_value, num) if (pardict[parname].count(num) == foumax_amount_count and 
+                                                            foumax_amount_value) else num
+               foumax_amount_count = pardict[parname].count(num)
+      dict_4ths[parname] = foumax_amount_value
+      count4ths_dict[parname] = foumax_amount_count
+
+   dict_5ths = {}
+   count5ths_dict = {}
+   for parname in pardict:
+      fifmax_amount_count = 0
+      fifmax_amount_value = None
+      for num in set(pardict[parname]):
+         if num not in [resultdict[parname], dict_2nds[parname], dict_3rds[parname], dict_4ths[parname]]:
+            if pardict[parname].count(num) >= fifmax_amount_count:
+               fifmax_amount_value = (fifmax_amount_value, num) if (pardict[parname].count(num) == fifmax_amount_count and 
+                                                            fifmax_amount_value) else num
+               fifmax_amount_count = pardict[parname].count(num)
+      dict_5ths[parname] = fifmax_amount_value
+      count5ths_dict[parname] = fifmax_amount_count

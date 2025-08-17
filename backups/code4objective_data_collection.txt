@@ -1,0 +1,11 @@
+   for objective result data collection:
+   randomized = random.choice([False, False, False, True])
+   objective = random.choice(['SQN', 'SQN', 'Expectancy [%]', 'Expectancy [%]',
+                              'Profit Factor', 'Profit Factor', 'Avg. Trade [%]',
+                              'Calmar Ratio', 'Calmar Ratio', 'Sortino Ratio', 'Sortino Ratio', 'Sharpe Ratio', 'Sharpe Ratio',
+                              'Return [%]', 'Equity Final [$]', 'Equity Peak [$]', 'Win Rate [%]'
+                              ])
+   dataspan = random.randrange(2000, 15000)
+   pastshift = random.randrange(0, 100000//dataspan)
+   asset = random.choice(['EURUSD', 'AUDUSD', 'USDJPY'])
+   candlesize = random.choice(['M1', 'M5', 'M15', 'M30', 'H1'])

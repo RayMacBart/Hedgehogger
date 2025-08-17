@@ -1,0 +1,1 @@
+'expfac': expansion factors that shall be reacted upon - the lower the more sensitive/reactive. Will be converted to 1/10 automatically @ 'power'.

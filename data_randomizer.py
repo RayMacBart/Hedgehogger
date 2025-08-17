@@ -229,42 +229,9 @@ def get_randomized_df(df, asset, candlesize, startpos):
    print('shadow_interception_count:', shadow_interception_count)
    return rdf
 
-      
 
 
 
-   # old way of doing candlesize to volume impact calc:
-      # if sizeclass_index in range(10):
-      #    cs2vol_impact = 0.35+0.07*sizeclass_index
-      # elif sizeclass_index in range(10, 16):
-      #    cs2vol_impact = 1.05+0.09*(sizeclass_index-10)
-      # elif sizeclass_index in range(16, 19):
-      #    cs2vol_impact = 1.6+0.125*(sizeclass_index-16)
-      # elif sizeclass_index == 19:
-      #    cs2vol_impact = 2
-      # else:
-      #    raise Exception('CANDLESIZE CLASS NOT IN VALID RANGE OF 0-19!')
+#(old way of doing candlesize to volume impact calc)[backups/candlesize_vol_impact_idea.py]
 
-
-#old way for distributing shadows over candlesize classes (needed sidiras in function!):
-   # shacos = [0 for i in range(SCG)] # shadow counts
-   # for row in sorted_copieddf.itertuples():
-   #    rowidx += 1
-   #    bullish = True if row.Close - row.Open >= 0 else False  # candlesizes of 0 ("Dojis") will be in bullish records
-   #    for idx in range(SCG):
-   #       # if (int(abs(row.Close - row.Open)*100000) in range(int(sidiras[idx][0]*100000), int(sidiras[idx][1]*100000)) or
-   #       #     (int(sidiras[idx][0]*100000) == int(sidiras[idx][1]*100000) == int(abs(row.Close - row.Open)*100000))):
-   #       if shacos[idx] < datasize // SCG:
-   #          print(f'row {rowidx},  sizeclass {idx}:')
-   #          print(f'shacos[{idx}]={shacos[idx]}  <  datasize={datasize} // SCG={SCG}  (--> = {datasize // SCG})')
-   #          if bullish:
-   #             bullup_shadows[idx].append(row.High - row.Close)
-   #             bulldown_shadows[idx].append(row.Open - row.Low)
-   #          else:
-   #             bearup_shadows[idx].append(row.High - row.Open)
-   #             beardown_shadows[idx].append(row.Close - row.Low)
-   #          shacos[idx] += 1
-   #          break
-   #       else:
-   #          print(f'shacos[{idx}] = {shacos[idx]} (is full)')
-   #          continue
+#(old: distributing shadows over candlesize classes)[backups/shadow_dist_over_candlesize_classes.py]

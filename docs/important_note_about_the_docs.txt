@@ -1,0 +1,8 @@
+
+How this documentation works:
+
+Links, which lead to the documentation files in this folder ('docs'), are used in the code files.
+The super simple, minimalistic but effective VSC extension 'Comment Links' makes the links work.
+They look like this: (?)[important_note_about_the_docs.txt], and can be followed via CTRL+click.
+Each link leads to the proper documentation, which is related to the code beside the link.
+Advantage: super fast access to the currently needed docs without having the code cluttered with long comments.

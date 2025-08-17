@@ -1,0 +1,2 @@
+--> why returning absolute distances and not the "ready" stoploss values (Close[idx-1] + reldist)?
+...because it is safer and hence better to determine the stoploss direction upon actual, active trades (dedected in next())!

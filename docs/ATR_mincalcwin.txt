@@ -1,0 +1,3 @@
+ATR_mincalcwin:
+
+minimum of used data for zscore calculation for absolute valued indications

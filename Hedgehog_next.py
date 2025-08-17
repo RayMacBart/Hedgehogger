@@ -16,9 +16,8 @@ def next(self):
          elif self.data.Close[-1] - self.abs_SL_dists[-1] > trade.sl:
             trade.sl = self.data.Close[-1] - self.abs_SL_dists[-1] if self.data.Close[-1] - self.abs_SL_dists[-1] >= 0 else \
                self.data.Close[-1] - 0.0005*self.adjufac
-         # elif self.data.Close[-1] - self.abs_SL_dists[-1] > self.current_sl:
-         #    self.current_sl = self.data.Close[-1] - self.abs_SL_dists[-1]
-         #    trade.sl = self.current_sl
+         #(code)[backups/code_at_nextfunc_using_currentSL.txt]
+
    if shorts:
       for trade in shorts:
          if order_closetime:
@@ -26,9 +25,7 @@ def next(self):
             # valdump.tradelog('Short', 'closed', self.data.Close[-1])
          elif self.data.Close[-1] + self.abs_SL_dists[-1] < trade.sl:
             trade.sl = self.data.Close[-1] + self.abs_SL_dists[-1]
-         # elif self.data.Close[-1] + self.abs_SL_dists[-1] < self.current_sl:
-         #    self.current_sl = self.data.Close[-1] + self.abs_SL_dists[-1]
-         #    trade.sl = self.current_sl
+         #(code)[backups/code_at_nextfunc_using_currentSL.txt]
          
    if self.powers[-1] <= -self.close_triggerpower:
       if longs:

@@ -1,0 +1,1 @@
+--> This value will be converted to 1/100000 automatically @ 'power'!

@@ -1,0 +1,12 @@
+
+# @ if longs:
+
+         elif self.data.Close[-1] - self.abs_SL_dists[-1] > self.current_sl:
+            self.current_sl = self.data.Close[-1] - self.abs_SL_dists[-1]
+            trade.sl = self.current_sl
+
+# @ if shorts:
+
+         elif self.data.Close[-1] + self.abs_SL_dists[-1] < self.current_sl:
+            self.current_sl = self.data.Close[-1] + self.abs_SL_dists[-1]
+            trade.sl = self.current_sl

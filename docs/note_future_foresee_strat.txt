@@ -1,0 +1,4 @@
+FUTURE TEST FOR EFFECTIVENESS: NOT RELY ON ACTUAL DEDECTED MOVEMENTS (VIA DIR), BUT ACTUALLY GUESS/FORESEE REVERSALS
+FUTURE TEST FOR EFFECTIVENESS: define range-bound phases: they occur if "power" is near 0 or
+if a variable that measures the 'power' of trend indicators only is near 0.
+in such a range-bound phase, e.g. touching cama-points, fibo-points or outer BBs could be a reversal signal.

@@ -1,0 +1,256 @@
+CCI-treshold-distances per block:
+40,50,59,67,74,80,85,90,94,97,100,103,106,110,115,120,126,133,141,150,160,175,190 
+
+CCI-win: 4
+EURUSD  M1 | 60000  (-0) | normal | Trades: 49866
+EURUSD  M1 | 60000  (-0) | normal | Trades: 46410
+EURUSD  M1 | 60000  (-0) | normal | Trades: 42893
+EURUSD  M1 | 60000  (-0) | normal | Trades: 39061
+EURUSD  M1 | 60000  (-0) | normal | Trades: 35791
+EURUSD  M1 | 60000  (-0) | normal | Trades: 32538
+EURUSD  M1 | 60000  (-0) | normal | Trades: 29713
+EURUSD  M1 | 60000  (-0) | normal | Trades: 26786
+EURUSD  M1 | 60000  (-0) | normal | Trades: 24416
+EURUSD  M1 | 60000  (-0) | normal | Trades: 22683
+EURUSD  M1 | 60000  (-0) | normal | Trades: 20968
+EURUSD  M1 | 60000  (-0) | normal | Trades: 19408
+EURUSD  M1 | 60000  (-0) | normal | Trades: 17875
+EURUSD  M1 | 60000  (-0) | normal | Trades: 15987
+EURUSD  M1 | 60000  (-0) | normal | Trades: 13816
+EURUSD  M1 | 60000  (-0) | normal | Trades: 11812
+EURUSD  M1 | 60000  (-0) | normal | Trades: 9719
+EURUSD  M1 | 60000  (-0) | normal | Trades: 7657
+EURUSD  M1 | 60000  (-0) | normal | Trades: 0
+EURUSD  M1 | 60000  (-0) | normal | Trades: 0
+EURUSD  M1 | 60000  (-0) | normal | Trades: 0
+EURUSD  M1 | 60000  (-0) | normal | Trades: 0
+EURUSD  M1 | 60000  (-0) | normal | Trades: 0
+
+CCI-win: 5
+EURUSD  M1 | 60000  (-0) | normal | Trades: 49157
+EURUSD  M1 | 60000  (-0) | normal | Trades: 45774
+EURUSD  M1 | 60000  (-0) | normal | Trades: 42311
+EURUSD  M1 | 60000  (-0) | normal | Trades: 38905
+EURUSD  M1 | 60000  (-0) | normal | Trades: 35814
+EURUSD  M1 | 60000  (-0) | normal | Trades: 32962
+EURUSD  M1 | 60000  (-0) | normal | Trades: 30506
+EURUSD  M1 | 60000  (-0) | normal | Trades: 27928
+EURUSD  M1 | 60000  (-0) | normal | Trades: 25858
+EURUSD  M1 | 60000  (-0) | normal | Trades: 24318
+EURUSD  M1 | 60000  (-0) | normal | Trades: 22755
+EURUSD  M1 | 60000  (-0) | normal | Trades: 21177
+EURUSD  M1 | 60000  (-0) | normal | Trades: 19620
+EURUSD  M1 | 60000  (-0) | normal | Trades: 17577
+EURUSD  M1 | 60000  (-0) | normal | Trades: 15245
+EURUSD  M1 | 60000  (-0) | normal | Trades: 13168
+EURUSD  M1 | 60000  (-0) | normal | Trades: 10856
+EURUSD  M1 | 60000  (-0) | normal | Trades: 8548
+EURUSD  M1 | 60000  (-0) | normal | Trades: 6421
+EURUSD  M1 | 60000  (-0) | normal | Trades: 4521
+EURUSD  M1 | 60000  (-0) | normal | Trades: 2932
+EURUSD  M1 | 60000  (-0) | normal | Trades: 0
+EURUSD  M1 | 60000  (-0) | normal | Trades: 0
+
+CCI-win: 6
+EURUSD  M1 | 60000  (-0) | normal | Trades: 48729
+EURUSD  M1 | 60000  (-0) | normal | Trades: 45425
+EURUSD  M1 | 60000  (-0) | normal | Trades: 42104
+EURUSD  M1 | 60000  (-0) | normal | Trades: 38756
+EURUSD  M1 | 60000  (-0) | normal | Trades: 35754
+EURUSD  M1 | 60000  (-0) | normal | Trades: 33122
+EURUSD  M1 | 60000  (-0) | normal | Trades: 30734
+EURUSD  M1 | 60000  (-0) | normal | Trades: 28423
+EURUSD  M1 | 60000  (-0) | normal | Trades: 26558
+EURUSD  M1 | 60000  (-0) | normal | Trades: 25131
+EURUSD  M1 | 60000  (-0) | normal | Trades: 23743
+EURUSD  M1 | 60000  (-0) | normal | Trades: 22373
+EURUSD  M1 | 60000  (-0) | normal | Trades: 20982
+EURUSD  M1 | 60000  (-0) | normal | Trades: 19196
+EURUSD  M1 | 60000  (-0) | normal | Trades: 17049
+EURUSD  M1 | 60000  (-0) | normal | Trades: 14951
+EURUSD  M1 | 60000  (-0) | normal | Trades: 12545
+EURUSD  M1 | 60000  (-0) | normal | Trades: 10115
+EURUSD  M1 | 60000  (-0) | normal | Trades: 7741
+EURUSD  M1 | 60000  (-0) | normal | Trades: 5641
+EURUSD  M1 | 60000  (-0) | normal | Trades: 3886
+EURUSD  M1 | 60000  (-0) | normal | Trades: 2143
+EURUSD  M1 | 60000  (-0) | normal | Trades: 1094
+
+CCI-win: 7
+EURUSD  M1 | 60000  (-0) | normal | Trades: 48626
+EURUSD  M1 | 60000  (-0) | normal | Trades: 45210
+EURUSD  M1 | 60000  (-0) | normal | Trades: 41863
+EURUSD  M1 | 60000  (-0) | normal | Trades: 38735
+EURUSD  M1 | 60000  (-0) | normal | Trades: 35795
+EURUSD  M1 | 60000  (-0) | normal | Trades: 33187
+EURUSD  M1 | 60000  (-0) | normal | Trades: 30963
+EURUSD  M1 | 60000  (-0) | normal | Trades: 28671
+EURUSD  M1 | 60000  (-0) | normal | Trades: 26804
+EURUSD  M1 | 60000  (-0) | normal | Trades: 25469
+EURUSD  M1 | 60000  (-0) | normal | Trades: 24065
+EURUSD  M1 | 60000  (-0) | normal | Trades: 22736
+EURUSD  M1 | 60000  (-0) | normal | Trades: 21461
+EURUSD  M1 | 60000  (-0) | normal | Trades: 19819
+EURUSD  M1 | 60000  (-0) | normal | Trades: 17779
+EURUSD  M1 | 60000  (-0) | normal | Trades: 15827
+EURUSD  M1 | 60000  (-0) | normal | Trades: 13647
+EURUSD  M1 | 60000  (-0) | normal | Trades: 11385
+EURUSD  M1 | 60000  (-0) | normal | Trades: 9024
+EURUSD  M1 | 60000  (-0) | normal | Trades: 6805
+EURUSD  M1 | 60000  (-0) | normal | Trades: 4800
+EURUSD  M1 | 60000  (-0) | normal | Trades: 2812
+EURUSD  M1 | 60000  (-0) | normal | Trades: 1577
+
+CCI-win: 8
+EURUSD  M1 | 60000  (-0) | normal | Trades: 48568
+EURUSD  M1 | 60000  (-0) | normal | Trades: 45099
+EURUSD  M1 | 60000  (-0) | normal | Trades: 41739
+EURUSD  M1 | 60000  (-0) | normal | Trades: 38567
+EURUSD  M1 | 60000  (-0) | normal | Trades: 35723
+EURUSD  M1 | 60000  (-0) | normal | Trades: 33178
+EURUSD  M1 | 60000  (-0) | normal | Trades: 30915
+EURUSD  M1 | 60000  (-0) | normal | Trades: 28709
+EURUSD  M1 | 60000  (-0) | normal | Trades: 26953
+EURUSD  M1 | 60000  (-0) | normal | Trades: 25610
+EURUSD  M1 | 60000  (-0) | normal | Trades: 24354
+EURUSD  M1 | 60000  (-0) | normal | Trades: 23045
+EURUSD  M1 | 60000  (-0) | normal | Trades: 21814
+EURUSD  M1 | 60000  (-0) | normal | Trades: 20168
+EURUSD  M1 | 60000  (-0) | normal | Trades: 18283
+EURUSD  M1 | 60000  (-0) | normal | Trades: 16392
+EURUSD  M1 | 60000  (-0) | normal | Trades: 14234
+EURUSD  M1 | 60000  (-0) | normal | Trades: 11983
+EURUSD  M1 | 60000  (-0) | normal | Trades: 9755
+EURUSD  M1 | 60000  (-0) | normal | Trades: 7658
+EURUSD  M1 | 60000  (-0) | normal | Trades: 5662
+EURUSD  M1 | 60000  (-0) | normal | Trades: 3439
+EURUSD  M1 | 60000  (-0) | normal | Trades: 1998
+
+CCI-win: 9
+EURUSD  M1 | 60000  (-0) | normal | Trades: 48421
+EURUSD  M1 | 60000  (-0) | normal | Trades: 44995
+EURUSD  M1 | 60000  (-0) | normal | Trades: 41611
+EURUSD  M1 | 60000  (-0) | normal | Trades: 38439
+EURUSD  M1 | 60000  (-0) | normal | Trades: 35571
+EURUSD  M1 | 60000  (-0) | normal | Trades: 33112
+EURUSD  M1 | 60000  (-0) | normal | Trades: 30983
+EURUSD  M1 | 60000  (-0) | normal | Trades: 28865
+EURUSD  M1 | 60000  (-0) | normal | Trades: 27167
+EURUSD  M1 | 60000  (-0) | normal | Trades: 25881
+EURUSD  M1 | 60000  (-0) | normal | Trades: 24596
+EURUSD  M1 | 60000  (-0) | normal | Trades: 23335
+EURUSD  M1 | 60000  (-0) | normal | Trades: 22141
+EURUSD  M1 | 60000  (-0) | normal | Trades: 20533
+EURUSD  M1 | 60000  (-0) | normal | Trades: 18591
+EURUSD  M1 | 60000  (-0) | normal | Trades: 16763
+EURUSD  M1 | 60000  (-0) | normal | Trades: 14670
+EURUSD  M1 | 60000  (-0) | normal | Trades: 12504
+EURUSD  M1 | 60000  (-0) | normal | Trades: 10242
+EURUSD  M1 | 60000  (-0) | normal | Trades: 8102
+EURUSD  M1 | 60000  (-0) | normal | Trades: 6182
+EURUSD  M1 | 60000  (-0) | normal | Trades: 3925
+EURUSD  M1 | 60000  (-0) | normal | Trades: 2417
+
+CCI-win: 10
+EURUSD  M1 | 60000  (-0) | normal | Trades: 48234
+EURUSD  M1 | 60000  (-0) | normal | Trades: 44863
+EURUSD  M1 | 60000  (-0) | normal | Trades: 41660
+EURUSD  M1 | 60000  (-0) | normal | Trades: 38451
+EURUSD  M1 | 60000  (-0) | normal | Trades: 35568
+EURUSD  M1 | 60000  (-0) | normal | Trades: 33098
+EURUSD  M1 | 60000  (-0) | normal | Trades: 31082
+EURUSD  M1 | 60000  (-0) | normal | Trades: 28932
+EURUSD  M1 | 60000  (-0) | normal | Trades: 27277
+EURUSD  M1 | 60000  (-0) | normal | Trades: 26043
+EURUSD  M1 | 60000  (-0) | normal | Trades: 24898
+EURUSD  M1 | 60000  (-0) | normal | Trades: 23624
+EURUSD  M1 | 60000  (-0) | normal | Trades: 22381
+EURUSD  M1 | 60000  (-0) | normal | Trades: 20769
+EURUSD  M1 | 60000  (-0) | normal | Trades: 18877
+EURUSD  M1 | 60000  (-0) | normal | Trades: 17083
+EURUSD  M1 | 60000  (-0) | normal | Trades: 15076
+EURUSD  M1 | 60000  (-0) | normal | Trades: 12832
+EURUSD  M1 | 60000  (-0) | normal | Trades: 10643
+EURUSD  M1 | 60000  (-0) | normal | Trades: 8502
+EURUSD  M1 | 60000  (-0) | normal | Trades: 6562
+EURUSD  M1 | 60000  (-0) | normal | Trades: 4278
+EURUSD  M1 | 60000  (-0) | normal | Trades: 2730
+
+CCI-win: 11
+EURUSD  M1 | 60000  (-0) | normal | Trades: 48174
+EURUSD  M1 | 60000  (-0) | normal | Trades: 44875
+EURUSD  M1 | 60000  (-0) | normal | Trades: 41608
+EURUSD  M1 | 60000  (-0) | normal | Trades: 38477
+EURUSD  M1 | 60000  (-0) | normal | Trades: 35639
+EURUSD  M1 | 60000  (-0) | normal | Trades: 33169
+EURUSD  M1 | 60000  (-0) | normal | Trades: 31101
+EURUSD  M1 | 60000  (-0) | normal | Trades: 29052
+EURUSD  M1 | 60000  (-0) | normal | Trades: 27415
+EURUSD  M1 | 60000  (-0) | normal | Trades: 26200
+EURUSD  M1 | 60000  (-0) | normal | Trades: 24983
+EURUSD  M1 | 60000  (-0) | normal | Trades: 23774
+EURUSD  M1 | 60000  (-0) | normal | Trades: 22566
+EURUSD  M1 | 60000  (-0) | normal | Trades: 20976
+EURUSD  M1 | 60000  (-0) | normal | Trades: 19058
+EURUSD  M1 | 60000  (-0) | normal | Trades: 17336
+EURUSD  M1 | 60000  (-0) | normal | Trades: 15259
+EURUSD  M1 | 60000  (-0) | normal | Trades: 13131
+EURUSD  M1 | 60000  (-0) | normal | Trades: 10940
+EURUSD  M1 | 60000  (-0) | normal | Trades: 8776
+EURUSD  M1 | 60000  (-0) | normal | Trades: 6835
+EURUSD  M1 | 60000  (-0) | normal | Trades: 4575
+EURUSD  M1 | 60000  (-0) | normal | Trades: 2985
+
+CCI-win: 12
+EURUSD  M1 | 60000  (-0) | normal | Trades: 48134
+EURUSD  M1 | 60000  (-0) | normal | Trades: 44792
+EURUSD  M1 | 60000  (-0) | normal | Trades: 41549
+EURUSD  M1 | 60000  (-0) | normal | Trades: 38479
+EURUSD  M1 | 60000  (-0) | normal | Trades: 35614
+EURUSD  M1 | 60000  (-0) | normal | Trades: 33197
+EURUSD  M1 | 60000  (-0) | normal | Trades: 31146
+EURUSD  M1 | 60000  (-0) | normal | Trades: 29038
+EURUSD  M1 | 60000  (-0) | normal | Trades: 27411
+EURUSD  M1 | 60000  (-0) | normal | Trades: 26212
+EURUSD  M1 | 60000  (-0) | normal | Trades: 25042
+EURUSD  M1 | 60000  (-0) | normal | Trades: 23872
+EURUSD  M1 | 60000  (-0) | normal | Trades: 22688
+EURUSD  M1 | 60000  (-0) | normal | Trades: 21126
+EURUSD  M1 | 60000  (-0) | normal | Trades: 19232
+EURUSD  M1 | 60000  (-0) | normal | Trades: 17435
+EURUSD  M1 | 60000  (-0) | normal | Trades: 15497
+EURUSD  M1 | 60000  (-0) | normal | Trades: 13313
+EURUSD  M1 | 60000  (-0) | normal | Trades: 11145
+EURUSD  M1 | 60000  (-0) | normal | Trades: 9070
+EURUSD  M1 | 60000  (-0) | normal | Trades: 7098
+EURUSD  M1 | 60000  (-0) | normal | Trades: 4810
+EURUSD  M1 | 60000  (-0) | normal | Trades: 3182
+
+CCI-win: 13
+EURUSD  M1 | 60000  (-0) | normal | Trades: 48061
+EURUSD  M1 | 60000  (-0) | normal | Trades: 44713
+EURUSD  M1 | 60000  (-0) | normal | Trades: 41448
+EURUSD  M1 | 60000  (-0) | normal | Trades: 38378
+EURUSD  M1 | 60000  (-0) | normal | Trades: 35594
+EURUSD  M1 | 60000  (-0) | normal | Trades: 33141
+EURUSD  M1 | 60000  (-0) | normal | Trades: 31109
+EURUSD  M1 | 60000  (-0) | normal | Trades: 29071
+EURUSD  M1 | 60000  (-0) | normal | Trades: 27458
+EURUSD  M1 | 60000  (-0) | normal | Trades: 26242
+EURUSD  M1 | 60000  (-0) | normal | Trades: 25071
+EURUSD  M1 | 60000  (-0) | normal | Trades: 23883
+EURUSD  M1 | 60000  (-0) | normal | Trades: 22748
+EURUSD  M1 | 60000  (-0) | normal | Trades: 21268
+EURUSD  M1 | 60000  (-0) | normal | Trades: 19391
+EURUSD  M1 | 60000  (-0) | normal | Trades: 17604
+EURUSD  M1 | 60000  (-0) | normal | Trades: 15601
+EURUSD  M1 | 60000  (-0) | normal | Trades: 13532
+EURUSD  M1 | 60000  (-0) | normal | Trades: 11381
+EURUSD  M1 | 60000  (-0) | normal | Trades: 9237
+EURUSD  M1 | 60000  (-0) | normal | Trades: 7260
+EURUSD  M1 | 60000  (-0) | normal | Trades: 5004
+EURUSD  M1 | 60000  (-0) | normal | Trades: 3329
+-----------------------------------
+________________________________________________________________________
+-----------------------------------
+

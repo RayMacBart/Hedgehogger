@@ -12,45 +12,31 @@ import sambo
 from data_randomizer import get_randomized_df
 from messager import send_msg
 from copy import deepcopy
-# from multiprocessing import Pool  
-# multiprocessing.Pool only makes sense with huge datasets used with 'run()'
-# since 'optimize()' automatically comes with multiprocessing by default
+
+# (note about multiprocessing)[backups/note_about_multprocessing.txt]
+
 
 
 def do_backtest(
+                MACD_chval_th
                #  param,
-                minTSL,
-                CHWIN
+               #  minTSL,
+               #  CHWIN,
                #  TRIP,
                #  randomized
                 ):
 
-   # for objective result data collection:
-   # randomized = random.choice([False, False, False, True])
-   # objective = random.choice(['SQN', 'SQN', 'Expectancy [%]', 'Expectancy [%]',
-   #                            'Profit Factor', 'Profit Factor', 'Avg. Trade [%]',
-   #                            'Calmar Ratio', 'Calmar Ratio', 'Sortino Ratio', 'Sortino Ratio', 'Sharpe Ratio', 'Sharpe Ratio',
-   #                            'Return [%]', 'Equity Final [$]', 'Equity Peak [$]', 'Win Rate [%]'
-   #                            ])
-   # dataspan = random.randrange(2000, 15000)
-   # pastshift = random.randrange(0, 100000//dataspan)
-   # asset = random.choice(['EURUSD', 'AUDUSD', 'USDJPY'])
-   # candlesize = random.choice(['M1', 'M5', 'M15', 'M30', 'H1'])
-
-
-   # pastshift = param  # the only automatically iterated value
+   # (code for objective result data collection)[backups/code4objective_data_collection.txt]
 
 
    asset, candlesize = get_vars()
    
-   dataspan = 30000
+   dataspan = 99900
    pastshift = 0
-   # dataspan = 99900
-   # dataspan = 8330
    randomized = False
 
 
-   adjufac = 100 if asset == "USDJPY" else 1  # adjustment factor for the USD/JPY pair which has a 100x higher pip-size!
+   adjufac = 100 if asset == "USDJPY" else 1  #(?)[docs/adjufac.txt]
    
    if dataspan*(pastshift+1) > 100000:
       raise helpers.insufficientDataError("Can't handle given dataspan and pastshift due to insufficient amount of data.")
@@ -101,14 +87,8 @@ def do_backtest(
 
    max_tries = 40
 
-   # MAKE PARAMETER RANGES RESULTING IN ABOUT >1000 POSSIBLE COMBINATIONS.
-   # WAYS TO DO THIS:   4 x 4 x 4 x 4 x 4 = 1024   |   4 x 6 x 6 x 7 = 1008   |   5 x 6 x 6 x 6 = 1080   |   5 x 5 x 6 x 7 = 1050   
-   #                    3 x 3 x 4 x 5 x 6 = 1080   |   3 x 6 x 7 x 8 = 1008   |   3 x 7 x 7 x 7 = 1029   |   10 x 10 x 10 = 1000
-   #                2 x 3 x 3 x 3 x 4 x 5 = 1080   |   4 x 4 x 8 x 8 = 1024   |   4 x 5 x 6 x 9 = 1080   |   3 x 3 x 3 x 5 x 8 = 1080
-   #            2 x 2 x 2 x 3 x 3 x 3 x 5 = 1080   |   2 x 2 x 2 x 3 x 3 x 4 x 4 = 1152 (!)              |   4 x 4 x 6 x 11 = 1056
-   #                           9 x 9 x 13 = 1053   |   2 ^ 10 = 1024                                     |   6 x 6 x 30 = 1080
-   #                          7 x 12 x 12 = 1008   |   3 x 13 x 26 = 1014
-   
+   # (1000 possible combinations cookbook)[docs/1000_combis_cookbook.txt]
+
 
    # WARNING: I HAVE SET 'SIZE' @ HEDGEHOG.PY TO 0.001 (INSTEAD OF 0.1) AND CASH @ BACKTEST() ABOVE TO 100.000 (INSTEAD OF 1.000)!!!
    stats = bt.optimize(
@@ -120,45 +100,42 @@ def do_backtest(
                   # "fos" = future optimization suggestion, "fhwt" = frequent hence worth try, "lar" = long average result
                   order_triggerpower = 1,       # was 18 for first trend opt
                   close_triggerpower = 1, # was 
-                  # CHWIN = CHWIN,
                   # CSP_bodyshrink_factor = 4,
                   # CSP_shadow2body_factor = 3,
                   # CSP_shadowdiff_factor = 5,
                   # CSP_reaction_win = 6,   # maybe consider less for fastness
                   # CSP_weight = 1,
-
                   # MACD_zeroweight = 1, #[0,2], # was 1
-                  # MACD_histoweight = 1, #[1,3],   # way better results than zero & combo!   # was 2
-                  # MACD_comboweight = 2, #[0,2],   # was 1
-                  # MACD_longwin = 5, #[4,10], #7
-                  # MACD_shortwin = 3, #[3,8], #6
-                  # MACD_signalwin = 3, #[2,7], #6
+                  MACD_histoweight = 1, #[1,3],   # way better results than zero & combo!   # was 2
+                  # MACD_comboweight = 1, #[0,2],   # was 2!
+                  MACD_longwin = 5, #[4,10], #7
+                  MACD_shortwin = 3, #[3,8], #6
+                  MACD_signalwin = 3, #[2,7], #6
                   # MACD_chwin = 2,
-                  # histo_chwin = 2,
+                  histo_chwin = 2,
                   # combo_chwin = 2,
-                  # MACD_chval_th = 1,  # only relevant for combo.
-
-                  vwap_expfac = [1,2,3,4,5,6,7,8,9,10],
-                  VWAP_chwin = CHWIN, # was 3
-                  VWAP_weight = 1,   # was 1  (bad performance)
-                  # fibo_chwin = CHWIN, # recently was 3, # lar: 4, modern: 6
-                  # fibo_weight = 1, # recently was 2, # was 4 (old)   # bad performance --> was 1 (new)
+                  MACD_chval_th = MACD_chval_th,  # was 1! # only relevant for combo.
+                  # vwap_expfac = 1,
+                  # VWAP_chwin = 2,
+                  # VWAP_weight = 1,
+                  # fibo_chwin = 2,
+                  # fibo_weight = 1,
                   # cama3_weight = 1,# [0,2],  # was 1
                   # cama4_weight = 1,# [0,2],  # was 2
-                  # RSI_win = 13,  # (modern static: 4)
-                  # RSI_chwin = 9,  # fhwt: 5     # 3-10     (recently was 3)
-                  # RSI_bound_distance = 30,  # = second best. optimize it again with other indicators. "5" came actually as best result
-                  # RSI_chval_th = [1,20],  # first idea, can be altered
-                  # RSI_weight = 1,# [1,3], # was 2 (old)  # good performance --> 3 (new)
-                  # CCI_win = 4,
-                  # CCI_chwin = CHWIN,  # (dyn. fhwt: 4)    (recently was choosen as 3)
-                  # CCI_treshold_distance = 120,  # was 80 with fos: [40,85]
-                  # CCI_chval_th = [10,50],  # first idea, can be altered
-                  # CCI_weight = 1, # recently: 2  # was 3 (old), but CCI had very bad performance compared to RSI! --> middle-new was 1
-                  # ############################
-                  # bbands_win = 22, # fhwt: 3 & 4    # was 20 (!!! ALSO AFFECTS SL!!!)
+                  # RSI_win = 14,  # 14 = result for static. also try 6 (faster variant with bounddist=28),  # (modern static: 4)
+                  # RSI_chwin = 2,  # was 9,   fhwt: 5     # 3-10    # chwin only affects dynamic RSI !!
+                  # RSI_bound_distance = 18,  # 18 = result for static. also try 28 (faster variant with RSI-win=6)
+                  # RSI_chval_th = 7,   # only affects dynamic RSI
+                  # RSI_weight = 1,   # CHECK IF OMITTING DYN. RSI WORKS BETTER (STATIC HAS BETTER SCORES)
+                  # CCI_win = 10,
+                  # CCI_chwin = 2,  # only affects dynamic CCI    (dyn. fhwt: 4)
+                  # CCI_treshold_distance = 159,
+                  # CCI_chval_th = 100,  # only affects dynamic CCI
+                  # CCI_weight = 1,
+                  # bbands_win = 116, #  score: 45.3, trades: 7766  ||  shorter alternatives: 12 (score: 6.65, trades: 6060)  and  26 (score: 14.94, trades: 6257)
                   # bbands_chwin_out = 1, # recently was 9,  # fhwt: 8  (if trying 'win' with 3 or 4, set chwin to 3)
                   # bbands_weight_out = 1, # recently was 3,  # was 1  (bad performance)
+                  ######################################
                   # bbands_chwin_trend = CHWIN,#[3,8], #6   # was 4
                   # bbands_expfac = 1,#[1,9],   # was 3 (only affects trend-BB, even not SL)
                   # bbands_weight_trend = 1, # was 20,
@@ -189,7 +166,7 @@ def do_backtest(
                   bbands_TSL_weight = 1,
                   ATR_TSL_weight = 2,
                   power_TSL_weight = 3,
-                  minTSLdist = minTSL, # minTSL   # best so far: (csp & macd_zero): 12 (or 8)
+                  minTSLdist = 12, # minTSL   # best so far: (csp & macd_zero): 12 (or 8)
 
                   maximize = lambda stats: (
                      ((stats["SQN"]-sqn_mean)/sqn_std)*38 +
@@ -211,12 +188,15 @@ def do_backtest(
                   # constraint=lambda p: p.MACD_shortwin < p.MACD_longwin
                )
    param_opt_log_dict = {
+                  'MACD_histoweight': 1, #[0,2],   # was 2!
+                  'MACD_longwin': 5, #[4,10], #7
+                  'MACD_shortwin': 3, #[3,8], #6
+                  'MACD_signalwin': 3, #[2,7], #6
+                  'histo_chwin': 2,
+                  'MACD_chval_th': MACD_chval_th,
                   'order_triggerpower': 1,
                   'close_triggerpower': 1, # was 2
-                  'minTSLdist': minTSL,  # minTSL   # best so far for both csp & macd_zero is 12 though
-                  'VWAP_chwin': CHWIN, # was 3
-                  'vwap_expfac': [1,2,3,4,5,6,7,8,9,10],
-                  'VWAP_weight': 1,   # was 1  (bad performance)
+                  'minTSLdist': 12,  # minTSL   # best so far for both csp & macd_zero is 12 though
                   'SLdist_redufac': 9,
                   'bbands_TSL_chwin': 7,
                   'PSAR_weight': 1,
@@ -227,9 +207,9 @@ def do_backtest(
    
                   
 
-   time.sleep(20)
+   time.sleep(3)
 
-   print(f'CHWIN={CHWIN},  minTSL={minTSL}  done.')
+   print(f'MACD_chval_th: {MACD_chval_th}  done.')
 
    # print(stats)
 
@@ -243,36 +223,10 @@ def do_backtest(
 
 
 
-# paramlist = [0,0,0,0,0,0,0,0,0,0,
-#              0,0,0,0,0,0,0,0,0,0,
-#              0,0,0,0,0,0,0,0,0,0,
-#              0,0,0,0,0,0,0,0,0,0,
-#              0,0,0,0,0,0,0,0,0,0,
-#              0,0,0,0,0,0,0,0,0,0,
-#              0,0,0,0,0,0,0,0,0,0,
-#              0,0,0,0,0,0,0,0,0,0,
-#              0,0,0,0,0,0,0,0,0,0,
-#              0,0,0,0,0,0,0,0,
-            #  0,0,0,0,0,
-            #  1,2,3,4,5,6,7,
-            #  8,9,
-            #  10,11,
-            # 12,13,14,15,16,17,18,19
-            #  ]
-
-# synths = [False,False]
-
-# triggerpowers = [2,2]
+# (unused parameter lists)[backups/unused_paramlists.txt]
 
 
-chwins = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-          3,3,3,3,3,3,3,3,3,3,3,3,3,3,
-          4,4,4,4,4,4,4,4,4,4,4,4,4,4,]
-
-minTSLs = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,
-           1,2,3,4,5,6,7,8,9,10,11,12,13,14,
-           1,2,3,4,5,6,7,8,9,10,11,12,13,14,]
-
+MACD_chval_ths = [1,2,3,4,]
 
 
 
@@ -282,15 +236,16 @@ if __name__ == '__main__':
    start_time = time.time()
    try:
 
-      # with Pool() as p:                            # This only makes sense with huge datasets used with 'run()'
-      #    results = p.map(do_backtest, paramlist)   # since 'optimize()' automatically comes with multiprocessing by default
+
 
       results = list(map(do_backtest,
+                         MACD_chval_ths
+                        #  chwins,
                         #  paramlist,
                         #  macd_params,
                         #  chval_ths,
-                         minTSLs,
-                         chwins
+                        #  minTSLs,
+                        
                         #  triggerpowers,
                         #  synths
                          ))
@@ -312,17 +267,4 @@ if __name__ == '__main__':
 
 
 
-
-
-###### old idea but has complications so far:  #####
-### code for automatic iteration through all variables: ###
-# paramlist = []
-# for asset in ['EURUSD', 'AUDUSD', 'USDJPY']:
-#    for candlesize in ['M1', 'M5', 'M15']:
-#       for pastshift in [0,1,2]:
-#          paramlist.append({'asset': asset, 'candlesize': candlesize, 'pastshift': pastshift})
-#############################################
-
-### code for iteration through pastshift values only ###
-# paramlist = [0,1,2,3,4]
-#############################################
+# (old, complicated parameter loop idea)[backups/old_paramloop_idea.txt]

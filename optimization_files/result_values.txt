@@ -1,86 +1,36 @@
 Optimization Loop ID:  "A"
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:2|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:1|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|MACD_comboweight:1|MACD_longwin:5|MACD_shortwin:3|MACD_signalwin:3|combo_chwin:2|MACD_chval_th:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
 
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:2|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:2|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|MACD_comboweight:1|MACD_longwin:5|MACD_shortwin:3|MACD_signalwin:3|combo_chwin:2|MACD_chval_th:2|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
 
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:2|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:3|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|MACD_comboweight:1|MACD_longwin:5|MACD_shortwin:3|MACD_signalwin:3|combo_chwin:2|MACD_chval_th:3|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
 
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:2|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:4|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|MACD_comboweight:1|MACD_longwin:5|MACD_shortwin:3|MACD_signalwin:3|combo_chwin:2|MACD_chval_th:4|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
 
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:2|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:5|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|MACD_comboweight:1|MACD_longwin:5|MACD_shortwin:3|MACD_signalwin:3|combo_chwin:2|MACD_chval_th:5|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
 
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:2|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:6|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|MACD_comboweight:1|MACD_longwin:5|MACD_shortwin:3|MACD_signalwin:3|combo_chwin:2|MACD_chval_th:6|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
 
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:2|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:7|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|MACD_comboweight:1|MACD_longwin:5|MACD_shortwin:3|MACD_signalwin:3|combo_chwin:2|MACD_chval_th:7|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
 
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:2|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:8|
+-----------------------------------
+Optimization Loop ID:  "B"
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|MACD_zeroweight:1|MACD_longwin:5|MACD_shortwin:3|MACD_signalwin:3|MACD_chwin:2|MACD_chval_th:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
 
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:2|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:9|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|MACD_zeroweight:1|MACD_longwin:5|MACD_shortwin:3|MACD_signalwin:3|MACD_chwin:2|MACD_chval_th:2|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
 
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:2|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:10|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|MACD_zeroweight:1|MACD_longwin:5|MACD_shortwin:3|MACD_signalwin:3|MACD_chwin:2|MACD_chval_th:3|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
 
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:2|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:11|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|MACD_zeroweight:1|MACD_longwin:5|MACD_shortwin:3|MACD_signalwin:3|MACD_chwin:2|MACD_chval_th:4|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
 
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:9|VWAP_chwin:2|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
+-----------------------------------
+Optimization Loop ID:  "C"
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|MACD_histoweight:1|MACD_longwin:5|MACD_shortwin:3|MACD_signalwin:3|histo_chwin:2|MACD_chval_th:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
 
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:2|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:13|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|MACD_histoweight:1|MACD_longwin:5|MACD_shortwin:3|MACD_signalwin:3|histo_chwin:2|MACD_chval_th:2|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
 
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:2|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:14|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|MACD_histoweight:1|MACD_longwin:5|MACD_shortwin:3|MACD_signalwin:3|histo_chwin:2|MACD_chval_th:3|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
 
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:3|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:1|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:3|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:2|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:3|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:3|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:3|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:4|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:3|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:5|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:3|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:6|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:3|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:7|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:3|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:8|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:3|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:9|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:3|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:10|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:3|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:11|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:3|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:3|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:13|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:3|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:14|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:4|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:1|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:9|VWAP_chwin:4|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:2|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:9|VWAP_chwin:4|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:3|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:9|VWAP_chwin:4|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:4|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:9|VWAP_chwin:4|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:5|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:4|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:6|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:4|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:7|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:4|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:8|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:4|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:9|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:4|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:10|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:4|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:11|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:4|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:4|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:13|
-
-candlesize:M1|order_triggerpower:1|close_triggerpower:1|vwap_expfac:1|VWAP_chwin:4|VWAP_weight:1|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:14|
+candlesize:M1|order_triggerpower:1|close_triggerpower:1|MACD_histoweight:1|MACD_longwin:5|MACD_shortwin:3|MACD_signalwin:3|histo_chwin:2|MACD_chval_th:4|SLdist_redufac:9|bbands_TSL_chwin:7|PSAR_weight:1|bbands_TSL_weight:1|ATR_TSL_weight:2|power_TSL_weight:3|minTSLdist:12|
 
 -----------------------------------

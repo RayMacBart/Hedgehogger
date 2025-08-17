@@ -35,50 +35,35 @@ def CSP_calcpower(Data, bodyshrink_factor, shadow2body_factor, shadowdiff_factor
    return shift
 
 
-def MACD_calcpower(macd, histo, macd_chwin, histo_chwin, chval_treshold,
+def MACD_calcpower(macd, histo, macd_chwin, histo_chwin, chval_treshold, histo_chval_th,
                    # signal,  #--> not used (yet?) 
-                   zeroweight, histoweight, comboweight, impact_counter):
-   # note that 'combo_chwin' always has to be higher than or equal 'macd_chwin' and 'histo_chwin'!
+                   zeroweight, histoweight, comboweight, impact_counter):  #(!)[docs/combo_chwin_note.txt]
    real_chval_th = chval_treshold/100000
+   real_histo_chval_th = histo_chval_th/100000
    shift = 0
-   if rises(macd[-macd_chwin:], 0):
-      shift += zeroweight
-      impact_counter['MACD-zeroX'] += 1
-   elif falls(macd[-macd_chwin:], 0):
-      shift -= zeroweight
-      impact_counter['MACD-zeroX'] += 1
-   if rises(histo[-histo_chwin:], 0):
-      shift += histoweight
-      impact_counter['MACD-sigX'] += 1
-   elif falls(histo[-histo_chwin:], 0):
-      shift -= histoweight
-      impact_counter['MACD-sigX'] += 1
-   if (abs(macd[-1] - macd[0]) >= real_chval_th) and (abs(histo[-1] - histo[0]) >= real_chval_th):
-      if rises(macd) and rises(histo):
-         shift += comboweight
-         impact_counter['MACD-combo'] += 1
-      elif falls(macd) and falls(histo):
-         shift -= comboweight
-         impact_counter['MACD-combo'] += 1
-   # following would be a version imitating chwin == 2:
-   # if macd[-2] < 0 and macd[-1] >= 0:
-   #    shift += zeroweight
-   #    impact_counter['MACD-zeroX'] += 1
-   # elif macd[-2] >= 0 and macd[-1] < 0:
-   #    shift -= zeroweight
-   #    impact_counter['MACD-zeroX'] += 1
-   # if histo[-2] < 0 and histo[-1] >= 0:
-   #    shift += histoweight
-   #    impact_counter['MACD-sigX'] += 1
-   # elif histo[-2] >= 0 and histo[-1] < 0:
-   #    shift -= histoweight
-   #    impact_counter['MACD-sigX'] += 1
-   # if macd[-2] < macd[-1] and histo[-2] < histo[-1]:
-   #    shift += comboweight
-   #    impact_counter['MACD-combo'] += 1
-   # elif macd[-2] > macd[-1] and histo[-2] > histo[-1]:
-   #    shift -= comboweight
-   #    impact_counter['MACD-combo'] += 1
+   # if (abs(macd[-1] - macd[0]) >= real_chval_th):
+   #    if rises(macd[-macd_chwin:], 0):
+   #       shift += zeroweight
+   #       impact_counter['MACD-zeroX'] += 1
+   #    elif falls(macd[-macd_chwin:], 0):
+   #       shift -= zeroweight
+   #       impact_counter['MACD-zeroX'] += 1
+   if abs(histo[-1] - histo[0]) >= real_histo_chval_th:
+      if rises(histo[-histo_chwin:], 0):
+         shift += histoweight
+         impact_counter['MACD-sigX'] += 1
+      elif falls(histo[-histo_chwin:], 0):
+         shift -= histoweight
+         impact_counter['MACD-sigX'] += 1
+   # if (abs(macd[-1] - macd[0]) >= real_chval_th) and (abs(histo[-1] - histo[0]) >= real_chval_th):
+   #    if rises(macd) and rises(histo):
+   #       shift += comboweight
+   #       impact_counter['MACD-combo'] += 1
+   #    elif falls(macd) and falls(histo):
+   #       shift -= comboweight
+   #       impact_counter['MACD-combo'] += 1
+
+   #(old)[backups/old_MACD_calcpower_code.py]
    return shift
 
 
@@ -141,20 +126,8 @@ def CAMA_calcpower(close_val, R4, R3, S3, S4, w3, w4):
       shift += w4
    return shift
 
-# old, but more sophisticated CONFIRMING (with factor!) version - CHECK WHICH VERSION WORKS BETTER!!
-# def CAMA_calcpower(pow, close_val, R4, R3, S3, S4, w3, w4):  
-#    factor = 1
-#    if (pow < 0 and close_val > R4) or (pow > 0 and close_val < S4):
-#       factor += w4/4
-#    elif (pow < 0 and close_val > R3) or (pow > 0 and close_val < S3):
-#       factor += w3/4
-#    elif (pow < 0 and close_val < S4) or (pow > 0 and close_val > R4):
-#       factor -= w4/6
-#    elif (pow < 0 and close_val < S3) or (pow > 0 and close_val > R3):
-#       factor -= w3/6
-#    if factor < 0.5:  # NEW (+clear): 1 indicator can't decrease power more than make it half
-#       factor = 0.5
-#    return factor
+#(good alternative)[backups/confirming_CAMA_calcpower.py]
+
 
 
 def RSI_calcpower(rsi, low_th, high_th, chval_treshold, weight, impact_counter):  # 'th': treshold
@@ -223,12 +196,8 @@ def BB_outer_touch_calcpower(low, mid, high, Highs, Lows, dir, weight):
          shift -= weight
    return shift
 
-# pre-guessing version could work like:
-   # if rises(Closes) and (Closes[-1] >= high[-1]) and pow < trend_treshold:  (would need "pow" and "trend_treshold" args)
-   # implement price reversal guessings not only upon pow verification, but also only upon outer band touches if 
-   # reversal direction is confirmed by mid band rise/fall!
-   # observe wether this guessing or the confirming strategy works better and change other indicator to better strategy
-   # (and compare effectiveness with old version)
+#(pre-guessing version idea)[docs/BB-preguessing.txt]
+
 
 def BB_trend_calcpower(pow, mids, widths, expfac, weight):  # expfac: width expansion factor
    real_expfac = (expfac/10)+1  # only 'expfac' is adjusted version to be integers usable with sambo opt.
@@ -270,22 +239,8 @@ def VOL_calcpower(vols, mdfpwi, max_impact_zscore, weight, TS, VMMTs, clims):
       factor = 0.75
    return factor
    
+   #(old)[backups/old_VOL_calcpower.py]
 
-   # with the new z score normalized version, the below defusing/adjusting isn't necessary anymore
-   # dePDFM = helpers.defuse(abs(PDFM), defuse_lvl)
-   # maxval = helpers.defuse(1000, defuse_lvl)
-   # if ZSDFM > 0:
-   #    factor += 0.2*(deZSDFM/maxval)*weight
-   # elif ZSDFM < 0:
-   #    factor -= 0.16666*(deZSDFM/maxval)*weight
-
-   #  normdev = (PDFM - VMMTs['mean']) / VMMTs['std'] # z score normalization --> nice, but not really helping here
-   # old idea with surpass treshold:
-   # vpdf = get_volume_peak_defusing_factor(TS)
-   # if rises(vols, vols[0]+(vols[0]*(mtcp/100))):
-   #    grown_to_percentage = vols[-1]/(vols[0]/100)
-   #    factor *= ((grown_to_percentage/100)/5)*weight*vpdf
-   # return factor
 
 
 def ADX_calcpower(pow, adx, dmp, dmn, treshold, abs_weight, dyn_weight, impact_counter):
@@ -329,12 +284,7 @@ def GAP_calcpower(pow, dir_val, upgap_val, downgap_val, acc, weight, last_swing_
    factor = 1
    if (((pow < 0 and dir_val < 0 and close_val < last_swing_val) and 
         (last_swing_val - downgap_val <= close_val <= last_swing_val - downgap_val + close_val*(acc/100))) or # from acc % above to gap (down movement!)
-      # --> WHY NOT:
-      # "(last_swing_val - downgap_val - close_val*(acc/200) <= close_val <= last_swing_val - downgap_val + close_val*(acc/200)))" ?
-      # Explanation:
-      # Due to the delayed reaction of the indicator (which is orientated to the last Close value), if the price is in a downwards movement, coming
-      # from above, it's more likely to be already lower in the actual moment than indicated - so it has been adjusted to compensate this
-      # by being triggered earlier (above the downgap value only). This principle is also applied below (also in the PEAK_calcpower function!)
+        #(!)[docs/why_not_other_check_at_GAP_calcpower.txt]
         ((pow > 0 and dir_val > 0 and close_val > last_swing_val) and 
          (last_swing_val + upgap_val - close_val*(acc/100) <= last_swing_val <= last_swing_val + upgap_val))):
       factor += weight/5
@@ -349,6 +299,8 @@ def PEAK_calcpower(pow, dir_val, uppeak_val, downpeak_val, acc, weight, last_swi
          (last_swing_val + uppeak_val - close_val*(acc/200) <= last_swing_val <= last_swing_val + uppeak_val + close_val*(acc/200)))):
       factor -= weight/6 if weight/6 < 0.25 else 0.25
    return factor
+
+#(old)[backups/PEAK_calcpower_old.py]
 
 
 def ATR_calcpower(atr, mincalcwin, chwin, win, abs_weight, dyn_weight, impact_counter):
@@ -378,23 +330,6 @@ def ATR_calcpower(atr, mincalcwin, chwin, win, abs_weight, dyn_weight, impact_co
    return factor
 
 
-# OLD VERSION (WITH A DIFFERENTIATION FROM REVERSAL CONFIRMATION BY CANDLE AMOUNT SINCE LAST SWING... NOT CONVINCING):
-# def PEAK_calcpower(pow, dir, uppeak, downpeak, acc, weight, last, close_val, swingdist):
-#    factor = 1
-#    if ((pow < 0 and dir[-1] < 0 and dir[-swingdist] > 0 and  # "dir[-swingdist]" implements distance of last swing
-#         # BELOW YOU MUST ADD THE PEAK VAL TO THE LAST SWINGS VAL!!!!
-#         (last - (downpeak - downpeak*(acc/200)) <= close_val <= (last - (downpeak + downpeak*(acc/200))))) or
-
-#         (pow > 0 and dir[-1] > 0 and dir[-swingdist] < 0 and 
-#          (last + (uppeak - uppeak*(acc/200)) <= last <= (last + (uppeak + uppeak*(acc/200)))))):
-#       factor += weight/5
-#    elif ((pow < 0 and all(d < 0 for d in dir[-swingdist:]) and # "after more than 'swingdist' candles into same dir"
-#           # BELOW YOU MUST SUBTRACT THE PEAK VAL TO THE LAST SWINGS VAL!!!!
-#          (downpeak - downpeak*(0.25/acc) <= (last - close_val) <= downpeak + downpeak*(0.25/acc))) or
-#          (pow > 0 and all(d > 0 for d in dir[-swingdist:]) and 
-#           (uppeak - uppeak*(0.25/acc) <= (close_val - last) <= uppeak + uppeak*(0.25/acc)))):
-#       factor -= weight/5
-#    return factor
 
 
 def detect_impact(impact_counter, power, lastpower, tech_ind):
@@ -407,10 +342,9 @@ def detect_impact(impact_counter, power, lastpower, tech_ind):
    return power
 
 
-# FUTURE TEST FOR EFFECTIVENESS: NOT RELY ON ACTUAL DEDECTED MOVEMENTS (VIA DIR), BUT ACTUALLY GUESS/FORESEE REVERSALS
-# FUTURE TEST FOR EFFECTIVENESS: define range-bound phases: they occur if "power" is near 0 or
-# if a variable that measures the 'power' of trend indicators only is near 0.
-# in such a range-bound phase, e.g. touching cama-points, fibo-points or outer BBs could be a reversal signal.
+
+#(!)[docs/note_future_foresee_strat.txt]
+
 
 
 def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
@@ -431,16 +365,17 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
          #                         # Amount of focussed on candles is 1 more than action_win because 1 'pre'-candle is needed.  
          # lastpower = detect_impact(impact_counter, power, lastpower, 'CSP')
 
-         # power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['combo_chwin']-1):idx+1], 
-         #                         T['MACD']['histo'][idx-(T['MACD']['combo_chwin']-1):idx+1],
-         #                         T['MACD']['macd_chwin'], T['MACD']['histo_chwin'], T['MACD']['chval_treshold'],
-         #                         # T['MACD']['signal'][idx-(T['MACD']['signal_chwin']-1):idx+1], # not used (yet?)
-         #                         T['MACD']['zeroweight'], T['MACD']['histoweight'], T['MACD']['comboweight'], impact_counter)
-         # lastpower = detect_impact(impact_counter, power, lastpower, 'MACD')
+         power += MACD_calcpower(T['MACD']['macd'][idx-(T['MACD']['combo_chwin']-1):idx+1], 
+                                 T['MACD']['histo'][idx-(T['MACD']['combo_chwin']-1):idx+1],
+                                 T['MACD']['macd_chwin'], T['MACD']['histo_chwin'],
+                                 T['MACD']['chval_treshold'], T['MACD']['histo_chval_th'],
+                                 # T['MACD']['signal'][idx-(T['MACD']['signal_chwin']-1):idx+1], # not used (yet?)
+                                 T['MACD']['zeroweight'], T['MACD']['histoweight'], T['MACD']['comboweight'], impact_counter)
+         lastpower = detect_impact(impact_counter, power, lastpower, 'MACD')
 
-         power += VWAP_calcpower(Data.Close[idx-(T['VWAP']['chwin']):idx], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1],
-                                 T['VWAP']['expfac'], T['VWAP']['weight'])  # --> vwap misuse?
-         lastpower = detect_impact(impact_counter, power, lastpower, 'VWAP')
+         # power += VWAP_calcpower(Data.Close[idx-(T['VWAP']['chwin']):idx], T['VWAP']['vwap'][idx-(T['VWAP']['chwin']-1):idx+1],
+         #                         T['VWAP']['expfac'], T['VWAP']['weight'])  # --> vwap misuse?
+         # lastpower = detect_impact(impact_counter, power, lastpower, 'VWAP')
 
          # # # I 'misuse' the fibonacci points in a unconventional way as breakthrough indicator.
          # power += FIBO_calcpower(Data.Close[idx-(T['FIBO']['chwin']):idx], T['DIR']['dir'][idx], T['FIBO'][2][idx], T['FIBO'][4][idx],
@@ -499,23 +434,9 @@ def powers(Data, T, last, timestamps, VMMTs, clims, impact_counter):
       # print(power)
       powers.append(power)
    
-   # floats = 0
-   # ints = 0
-   # elses = 0
 
-   # for p in powers:
-   #    print(p)
-   #    if type(p) == float:
-   #       floats += 1
-   #    elif type(p) == int:
-   #       ints += 1
-   #    else:
-   #       elses += 1
-         # if isinstance(p, _Indicator):
-         #    print('Indicator type found:', type(p), '  value:', p)
-   # print('--------------\ntypes found:')
-   # print('floats:', floats, '  ints:', ints, '  elses:', elses)
-   # print('--------------')
+   #(code: powers batchwork)[backups/powers_batchwork.py]
+
 
    powers = helpers.trans_list_to_BT_array(powers, 'powers')
    return powers

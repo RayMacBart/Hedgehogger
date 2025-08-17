@@ -1,0 +1,1 @@
+'chval_th': Change Value Treshold. Specifies how much a value must change to cause shift effect.

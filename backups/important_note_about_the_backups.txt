@@ -1,0 +1,8 @@
+
+How this backup folder works:
+
+Links, which lead to the backup files in this folder ('backups'), are used in the code files.
+The super simple, minimalistic but effective VSC extension 'Comment Links' makes the links work.
+They look like this: (backupnote)[important_note_about_the_backups.txt], and can be followed via CTRL+click.
+Each link leads to the proper backup, which belongs to the place in the code where the link resides.
+Advantage: super fast access to the currently needed backups without having the code cluttered with backups as comments.

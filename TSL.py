@@ -41,16 +41,8 @@ def add_power_impact(reldist, powers, minTSLdist, TSLweight):
       shift -= (abs_power*(reldist/30))*TSLweight
    return shift
 
-# old idea: dynamic power impact --> but absolute impact (see above) may be clearer and more concise
-# def add_power_impact(reldist, powers, minTSLdist, TSLweight):
-   # here it should be intended that the higher the power difference is to stronger power (+ or - !), the closer the distance should get ( --> subtraction),
-   # and the higher the power difference is to weaker power (+ or - !), the closer the distance should get ( --> subtraction).
-   # shift = 0
-   # abs_powdiff = abs(powers[-1] - powers[0])
-   # shift -= (reldist/10)*abs_powdiff*TSLweight  # this means (per weight): if power difference is 10, shift would be as big as reldist
-   # if reldist + shift < minTSLdist:  # note that shift is negative and hence this works like a substraction
-   #    shift = (reldist-minTSLdist)*(-1)
-   # return shift
+
+ # (dynamic power impact)[backups/dyn_power_impact.txt]
 
 
 def former_spans_impact(Highs, Lows):
@@ -84,8 +76,9 @@ def stoplosses(Close, High, Low, T, spanswin, SLdist_redufac, powers, power_TSL_
       abs_SL_dists.append(abs(reldist)/(SLdist_redufac/10))
    abs_SL_dists = helpers.trans_list_to_BT_array(abs_SL_dists, 'stop loss values')
    return abs_SL_dists
-   # --> why returning absolute distances and not the "ready" stoploss values (Close[idx-1] + reldist)?
-   # ...because it is safer and hence better to determine the stoploss direction upon actual, active trades (dedected in next())!
+
+   #(?)[docs/why_abs_dists_returned.txt]
+
 
 
 

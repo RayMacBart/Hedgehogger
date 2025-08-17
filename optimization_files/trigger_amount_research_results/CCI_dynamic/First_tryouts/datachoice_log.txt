@@ -1,0 +1,366 @@
+dataspan = 30.000 (!)
+
+___   CCI-chwin: 2   ___
+
+chval-th: 5
+EURUSD  M1 | 30000  (-0) | normal | Trades: 28074
+EURUSD  M1 | 30000  (-0) | normal | Trades: 27952
+EURUSD  M1 | 30000  (-0) | normal | Trades: 27952
+EURUSD  M1 | 30000  (-0) | normal | Trades: 27952
+EURUSD  M1 | 30000  (-0) | normal | Trades: 27856
+EURUSD  M1 | 30000  (-0) | normal | Trades: 27856
+EURUSD  M1 | 30000  (-0) | normal | Trades: 27856
+EURUSD  M1 | 30000  (-0) | normal | Trades: 27686
+EURUSD  M1 | 30000  (-0) | normal | Trades: 27586
+EURUSD  M1 | 30000  (-0) | normal | Trades: 27391
+chval-th: 10
+EURUSD  M1 | 30000  (-0) | normal | Trades: 26234
+EURUSD  M1 | 30000  (-0) | normal | Trades: 25975
+EURUSD  M1 | 30000  (-0) | normal | Trades: 25975
+EURUSD  M1 | 30000  (-0) | normal | Trades: 25975
+EURUSD  M1 | 30000  (-0) | normal | Trades: 25725
+EURUSD  M1 | 30000  (-0) | normal | Trades: 25725
+EURUSD  M1 | 30000  (-0) | normal | Trades: 25725
+EURUSD  M1 | 30000  (-0) | normal | Trades: 25412
+EURUSD  M1 | 30000  (-0) | normal | Trades: 25247
+EURUSD  M1 | 30000  (-0) | normal | Trades: 24978
+chval-th: 17
+EURUSD  M1 | 30000  (-0) | normal | Trades: 23680
+EURUSD  M1 | 30000  (-0) | normal | Trades: 23257
+EURUSD  M1 | 30000  (-0) | normal | Trades: 23257
+EURUSD  M1 | 30000  (-0) | normal | Trades: 23257
+EURUSD  M1 | 30000  (-0) | normal | Trades: 22824
+EURUSD  M1 | 30000  (-0) | normal | Trades: 22824
+EURUSD  M1 | 30000  (-0) | normal | Trades: 22824
+EURUSD  M1 | 30000  (-0) | normal | Trades: 22438
+EURUSD  M1 | 30000  (-0) | normal | Trades: 22031
+EURUSD  M1 | 30000  (-0) | normal | Trades: 21601
+chval-th: 25
+EURUSD  M1 | 30000  (-0) | normal | Trades: 20719
+EURUSD  M1 | 30000  (-0) | normal | Trades: 20274
+EURUSD  M1 | 30000  (-0) | normal | Trades: 20274
+EURUSD  M1 | 30000  (-0) | normal | Trades: 20274
+EURUSD  M1 | 30000  (-0) | normal | Trades: 19672
+EURUSD  M1 | 30000  (-0) | normal | Trades: 19672
+EURUSD  M1 | 30000  (-0) | normal | Trades: 19672
+EURUSD  M1 | 30000  (-0) | normal | Trades: 19056
+EURUSD  M1 | 30000  (-0) | normal | Trades: 18614
+EURUSD  M1 | 30000  (-0) | normal | Trades: 18063
+chval-th: 33
+EURUSD  M1 | 30000  (-0) | normal | Trades: 18040
+EURUSD  M1 | 30000  (-0) | normal | Trades: 17430
+EURUSD  M1 | 30000  (-0) | normal | Trades: 17430
+EURUSD  M1 | 30000  (-0) | normal | Trades: 17430
+EURUSD  M1 | 30000  (-0) | normal | Trades: 16715
+EURUSD  M1 | 30000  (-0) | normal | Trades: 16715
+EURUSD  M1 | 30000  (-0) | normal | Trades: 16715
+EURUSD  M1 | 30000  (-0) | normal | Trades: 16139
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15551
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15053
+chval-th: 40
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15826
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15110
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15110
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15110
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14447
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14447
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14447
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13830
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13318
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12747
+chval-th: 45
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14415
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13609
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13609
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13609
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13004
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13004
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13004
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12336
+EURUSD  M1 | 30000  (-0) | normal | Trades: 11820
+EURUSD  M1 | 30000  (-0) | normal | Trades: 11214
+chval-th: 50
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13075
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12247
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12247
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12247
+EURUSD  M1 | 30000  (-0) | normal | Trades: 11596
+EURUSD  M1 | 30000  (-0) | normal | Trades: 11596
+EURUSD  M1 | 30000  (-0) | normal | Trades: 11596
+EURUSD  M1 | 30000  (-0) | normal | Trades: 10944
+EURUSD  M1 | 30000  (-0) | normal | Trades: 10479
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9861
+
+___   CCI-chwin: 3   ___
+
+chval-th: 5
+EURUSD  M1 | 30000  (-0) | normal | Trades: 16685
+EURUSD  M1 | 30000  (-0) | normal | Trades: 16295
+EURUSD  M1 | 30000  (-0) | normal | Trades: 16295
+EURUSD  M1 | 30000  (-0) | normal | Trades: 16295
+EURUSD  M1 | 30000  (-0) | normal | Trades: 16043
+EURUSD  M1 | 30000  (-0) | normal | Trades: 16043
+EURUSD  M1 | 30000  (-0) | normal | Trades: 16043
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15837
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15619
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15497
+chval-th: 10
+EURUSD  M1 | 30000  (-0) | normal | Trades: 16184
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15777
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15777
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15777
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15449
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15449
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15449
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15247
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14999
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14846
+chval-th: 17
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15488
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15050
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15050
+EURUSD  M1 | 30000  (-0) | normal | Trades: 15050
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14720
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14720
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14720
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14417
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14149
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13916
+chval-th: 25
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14734
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14312
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14312
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14312
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13957
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13957
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13957
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13599
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13241
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12962
+chval-th: 33
+EURUSD  M1 | 30000  (-0) | normal | Trades: 14090
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13595
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13595
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13595
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13158
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13158
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13158
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12778
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12389
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12055
+chval-th: 40
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13556
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12954
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12954
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12954
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12506
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12506
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12506
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12083
+EURUSD  M1 | 30000  (-0) | normal | Trades: 11626
+EURUSD  M1 | 30000  (-0) | normal | Trades: 11311
+chval-th: 45
+EURUSD  M1 | 30000  (-0) | normal | Trades: 13156
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12539
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12539
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12539
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12017
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12017
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12017
+EURUSD  M1 | 30000  (-0) | normal | Trades: 11555
+EURUSD  M1 | 30000  (-0) | normal | Trades: 11114
+EURUSD  M1 | 30000  (-0) | normal | Trades: 10787
+chval-th: 50
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12763
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12062
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12062
+EURUSD  M1 | 30000  (-0) | normal | Trades: 12062
+EURUSD  M1 | 30000  (-0) | normal | Trades: 11587
+EURUSD  M1 | 30000  (-0) | normal | Trades: 11587
+EURUSD  M1 | 30000  (-0) | normal | Trades: 11587
+EURUSD  M1 | 30000  (-0) | normal | Trades: 11072
+EURUSD  M1 | 30000  (-0) | normal | Trades: 10637
+EURUSD  M1 | 30000  (-0) | normal | Trades: 10270
+
+___   CCI-chwin: 4   ___
+
+chval-th: 5
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9603
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9598
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9598
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9598
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9658
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9658
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9658
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9631
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9603
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9588
+chval-th: 10
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9531
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9536
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9536
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9536
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9573
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9573
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9573
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9543
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9495
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9502
+chval-th: 17
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9429
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9426
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9426
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9426
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9441
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9441
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9441
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9415
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9359
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9355
+chval-th: 25
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9305
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9267
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9267
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9267
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9280
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9280
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9280
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9257
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9178
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9145
+chval-th: 33
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9142
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9111
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9111
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9111
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9108
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9108
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9108
+EURUSD  M1 | 30000  (-0) | normal | Trades: 9065
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8974
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8925
+chval-th: 40
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8992
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8960
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8960
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8960
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8958
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8958
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8958
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8857
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8779
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8693
+chval-th: 45
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8894
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8840
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8840
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8840
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8841
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8841
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8841
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8715
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8613
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8525
+chval-th: 50
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8769
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8719
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8719
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8719
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8701
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8701
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8701
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8574
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8455
+EURUSD  M1 | 30000  (-0) | normal | Trades: 8312
+
+___   CCI-chwin: 5   ___
+
+chval-th: 5
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6966
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7063
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7063
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7063
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7191
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7191
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7191
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7268
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7218
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7273
+chval-th: 10
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6948
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7048
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7048
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7048
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7177
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7177
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7177
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7257
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7211
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7257
+chval-th: 17
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6928
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7030
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7030
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7030
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7149
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7149
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7149
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7230
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7185
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7235
+chval-th: 25
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6899
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7002
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7002
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7002
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7112
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7112
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7112
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7189
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7138
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7197
+chval-th: 33
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6865
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6960
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6960
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6960
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7060
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7060
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7060
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7137
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7074
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7119
+chval-th: 40
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6829
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6917
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6917
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6917
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7017
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7017
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7017
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7071
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7000
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7045
+chval-th: 45
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6791
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6877
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6877
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6877
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6973
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6973
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6973
+EURUSD  M1 | 30000  (-0) | normal | Trades: 7019
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6949
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6974
+chval-th: 50
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6757
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6830
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6830
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6830
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6918
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6918
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6918
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6958
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6879
+EURUSD  M1 | 30000  (-0) | normal | Trades: 6897
+-----------------------------------

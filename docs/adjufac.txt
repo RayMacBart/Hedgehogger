@@ -1,0 +1,1 @@
+adjustment factor for the USD/JPY pair which has a 100x higher pip-size!

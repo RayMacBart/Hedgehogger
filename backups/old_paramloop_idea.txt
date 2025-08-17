@@ -1,0 +1,12 @@
+##### old idea but has complications so far:  #####
+## code for automatic iteration through all variables: ###
+paramlist = []
+for asset in ['EURUSD', 'AUDUSD', 'USDJPY']:
+   for candlesize in ['M1', 'M5', 'M15']:
+      for pastshift in [0,1,2]:
+         paramlist.append({'asset': asset, 'candlesize': candlesize, 'pastshift': pastshift})
+############################################
+
+## code for iteration through pastshift values only ###
+paramlist = [0,1,2,3,4]
+############################################

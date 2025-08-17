@@ -54,14 +54,11 @@ def convert_daymeans2zscore_lists(winter, trans, summer, mean_all, std_all):
 def change_to_diffs2prior(zdms):
    return [ zdms[i] - (zdms[i-1] if i > 0 else 0) for i in range(len(zdms)) ]
 
+#(procentual old way)[backups/change_to_diffs2prior_old_procentual.py]
+
 
 # def convert_infos_to_lists(length, mean_all, std_all):                         # not necessary
 #    return [mean_all for i in range(length)], [std_all for i in range(length)]
-
-# procentual old way:
-# def change_to_diffs2prior(vmmts):
-#    return [ (lambda prior, current: (current/(prior/100)-100) if not (np.isnan(current) or np.isnan(prior)) else 0)\
-#            (vmmts[(m-1) if (m > 0) else len(vmmts)-1], vmmts[m]) for m in range(len(vmmts)) ]
 
 
 def get_volmean_movetimes(asset, clims): # clims = candle length in minutes
@@ -102,32 +99,6 @@ if __name__ == '__main__':
    volmean_df.to_csv(f'.\\volmean_data\\volmean_{asset}_{candle}.csv', sep='\t')
 
 
+#(old)[backups/get_volmean_movetimes_old_code.py]
 
-# hourly_list = {}
-# hourly_averages = {}
-# hourly_maxs = {}
-# hourly_mins = {}
-# for h in range(24):
-#    hourly_list[h] = []
-
-# for h in range(24):
-#    for m in range(0,60,5):
-#       hourly_list[h].append(time_mean_dict[h][m])
-# for h in hourly_list:
-#    hourly_averages[h] = np.mean(hourly_list[h])
-   # hourly_maxs[h] = max(hourly_list[h])
-   # hourly_mins[h] = min(hourly_list[h])
-
-# for h in range(24):
-#    print('_____________________')
-#    print('')
-#    print('HOUR:', h)
-   # for m in range(0,60,5):
-   #    print(f'   min {m}:', time_mean_dict[h][m])
-   # print('AV:', hourly_averages[h])
-   # print('MAX:', hourly_maxs[h])
-   # print('MIN:', hourly_mins[h])
-
-# overall_av = np.mean(list(hourly_averages.values()))
-# print('overall average:', overall_av)
    

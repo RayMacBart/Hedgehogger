@@ -28,7 +28,7 @@ EURUSD  M1 | 70000  (-0) | normal | Trades: 16007
 EURUSD  M1 | 70000  (-0) | normal | Trades: 15541
 EURUSD  M1 | 70000  (-0) | normal | Trades: 14999
 EURUSD  M1 | 70000  (-0) | normal | Trades: 20955
-EURUSD  M1 | 70000  (-0) | normal | Trades: 19789
+EURUSD  M1 | 70000  (-0) | normal | Trades: 19789      [5,3,3]
 EURUSD  M1 | 70000  (-0) | normal | Trades: 18951
 EURUSD  M1 | 70000  (-0) | normal | Trades: 18331
 EURUSD  M1 | 70000  (-0) | normal | Trades: 17855

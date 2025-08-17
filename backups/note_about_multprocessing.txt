@@ -1,0 +1,9 @@
+# multiprocessing.Pool only makes sense with huge datasets used with 'run()'
+# since 'optimize()' automatically comes with multiprocessing by default
+
+# it would be used like this:
+
+from multiprocessing import Pool
+
+with Pool() as p:
+   results = p.map(do_backtest, paramlist)

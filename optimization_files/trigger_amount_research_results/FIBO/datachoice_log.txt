@@ -1,0 +1,48 @@
+fibo_chwin: 2
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10138
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10138
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10138
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10138
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10138
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10138
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10138
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10138
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10138
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10138
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10138
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10137
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10137
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10137
+
+fibo_chwin: 3
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8927
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8927
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8927
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8927
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8927
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8927
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8927
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8927
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8927
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8927
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8927
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8927
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8927
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8927
+
+fibo_chwin: 4
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13387
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13387
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13387
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13387
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13388
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13388
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13388
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13388
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13388
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13388
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13388
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13388
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13388
+EURUSD  M1 | 99900  (-0) | normal | Trades: 13389
+-----------------------------------

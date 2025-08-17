@@ -1,0 +1,6 @@
+--> WHY NOT:
+"(last_swing_val - downgap_val - close_val*(acc/200) <= close_val <= last_swing_val - downgap_val + close_val*(acc/200)))" ?
+Explanation:
+Due to the delayed reaction of the indicator (which is orientated to the last Close value), if the price is in a downwards movement, coming
+from above, it's more likely to be already lower in the actual moment than indicated - so it has been adjusted to compensate this
+by being triggered earlier (above the downgap value only). This principle is also applied below (also in the PEAK_calcpower function!)
