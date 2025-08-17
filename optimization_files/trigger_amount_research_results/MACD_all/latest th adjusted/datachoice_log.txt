@@ -1,0 +1,23 @@
+MACD-params: [5,3,3]
+
+Combo: chval_th 1-7.
+EURUSD  M1 | 99900  (-0) | normal | Trades: 36921
+EURUSD  M1 | 99900  (-0) | normal | Trades: 16102
+EURUSD  M1 | 99900  (-0) | normal | Trades: 7655    chval_th: 3
+EURUSD  M1 | 99900  (-0) | normal | Trades: 3976
+EURUSD  M1 | 99900  (-0) | normal | Trades: 2299
+EURUSD  M1 | 99900  (-0) | normal | Trades: 1364
+EURUSD  M1 | 99900  (-0) | normal | Trades: 853
+-----------------------------------
+Zero: chval_th 1-4.
+EURUSD  M1 | 99900  (-0) | normal | Trades: 12975
+EURUSD  M1 | 99900  (-0) | normal | Trades: 10690
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8780    chval_th: 3
+EURUSD  M1 | 99900  (-0) | normal | Trades: 7186
+-----------------------------------
+Histo: histo_chval_th 1-4.
+EURUSD  M1 | 99900  (-0) | normal | Trades: 15801
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8632    histo_chval_th: 2   (BEST CHOOSEN)
+EURUSD  M1 | 99900  (-0) | normal | Trades: 4788
+EURUSD  M1 | 99900  (-0) | normal | Trades: 2817
+-----------------------------------

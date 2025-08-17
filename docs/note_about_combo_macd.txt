@@ -1,0 +1,2 @@
+Try out if it's better to don't use combo-macd at all!
+It had bad scores for same trade amounts compared to zero and histo!

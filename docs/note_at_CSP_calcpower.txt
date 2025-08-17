@@ -1,0 +1,2 @@
+Note the direct impact upon every matching row (No general 'shifting' variable)
+- but this is good: multiple occurences should count more.

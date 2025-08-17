@@ -12,13 +12,24 @@ import sambo
 from data_randomizer import get_randomized_df
 from messager import send_msg
 from copy import deepcopy
-
 # (note about multiprocessing)[backups/note_about_multprocessing.txt]
 
 
 
 def do_backtest(
-                MACD_chval_th
+                triggerpower,
+                CSP_weight,
+                MACD_zeroweight,
+                MACD_histoweight,
+                MACD_comboweight,
+                VWAP_weight,
+                fibo_weight,
+                cama3_weight,
+                cama4_weight,
+                RSI_weight,
+                CCI_weight,
+                bbands_weight_out,
+                logger
                #  param,
                #  minTSL,
                #  CHWIN,
@@ -28,20 +39,17 @@ def do_backtest(
 
    # (code for objective result data collection)[backups/code4objective_data_collection.txt]
 
-
    asset, candlesize = get_vars()
    
-   dataspan = 99900
+   dataspan = 40000
    pastshift = 0
    randomized = False
-
 
    adjufac = 100 if asset == "USDJPY" else 1  #(?)[docs/adjufac.txt]
    
    if dataspan*(pastshift+1) > 100000:
       raise helpers.insufficientDataError("Can't handle given dataspan and pastshift due to insufficient amount of data.")
 
-   
    try:
       file_path = os.path.join("data", f"{asset}_{candlesize}.csv")
       if not os.path.exists(file_path):
@@ -85,7 +93,7 @@ def do_backtest(
    # stats = bt.run()
 
 
-   max_tries = 40
+   max_tries = 66
 
    # (1000 possible combinations cookbook)[docs/1000_combis_cookbook.txt]
 
@@ -98,43 +106,44 @@ def do_backtest(
 
                   candlesize = [candlesize],
                   # "fos" = future optimization suggestion, "fhwt" = frequent hence worth try, "lar" = long average result
-                  order_triggerpower = 1,       # was 18 for first trend opt
+                  order_triggerpower = triggerpower,       # was 18 for first trend opt
                   close_triggerpower = 1, # was 
-                  # CSP_bodyshrink_factor = 4,
-                  # CSP_shadow2body_factor = 3,
-                  # CSP_shadowdiff_factor = 5,
-                  # CSP_reaction_win = 6,   # maybe consider less for fastness
-                  # CSP_weight = 1,
-                  # MACD_zeroweight = 1, #[0,2], # was 1
-                  MACD_histoweight = 1, #[1,3],   # way better results than zero & combo!   # was 2
-                  # MACD_comboweight = 1, #[0,2],   # was 2!
+                  CSP_bodyshrink_factor = 4,
+                  CSP_shadow2body_factor = 3,
+                  CSP_shadowdiff_factor = 5,
+                  CSP_reaction_win = 6,   # maybe consider less for fastness
+                  CSP_weight = CSP_weight,
+                  MACD_zeroweight = MACD_zeroweight, #[0,2], # was 1
+                  MACD_histoweight = MACD_histoweight, #[1,3],   # way better results than zero & combo!   # was 2
+                  MACD_comboweight = MACD_comboweight, #[0,2],   # was 2!   #(!)[docs/note_about_combo_macd.txt]
                   MACD_longwin = 5, #[4,10], #7
                   MACD_shortwin = 3, #[3,8], #6
                   MACD_signalwin = 3, #[2,7], #6
-                  # MACD_chwin = 2,
+                  MACD_chwin = 2,
                   histo_chwin = 2,
-                  # combo_chwin = 2,
-                  MACD_chval_th = MACD_chval_th,  # was 1! # only relevant for combo.
-                  # vwap_expfac = 1,
-                  # VWAP_chwin = 2,
-                  # VWAP_weight = 1,
-                  # fibo_chwin = 2,
-                  # fibo_weight = 1,
-                  # cama3_weight = 1,# [0,2],  # was 1
-                  # cama4_weight = 1,# [0,2],  # was 2
-                  # RSI_win = 14,  # 14 = result for static. also try 6 (faster variant with bounddist=28),  # (modern static: 4)
-                  # RSI_chwin = 2,  # was 9,   fhwt: 5     # 3-10    # chwin only affects dynamic RSI !!
-                  # RSI_bound_distance = 18,  # 18 = result for static. also try 28 (faster variant with RSI-win=6)
-                  # RSI_chval_th = 7,   # only affects dynamic RSI
-                  # RSI_weight = 1,   # CHECK IF OMITTING DYN. RSI WORKS BETTER (STATIC HAS BETTER SCORES)
-                  # CCI_win = 10,
-                  # CCI_chwin = 2,  # only affects dynamic CCI    (dyn. fhwt: 4)
-                  # CCI_treshold_distance = 159,
-                  # CCI_chval_th = 100,  # only affects dynamic CCI
-                  # CCI_weight = 1,
-                  # bbands_win = 116, #  score: 45.3, trades: 7766  ||  shorter alternatives: 12 (score: 6.65, trades: 6060)  and  26 (score: 14.94, trades: 6257)
-                  # bbands_chwin_out = 1, # recently was 9,  # fhwt: 8  (if trying 'win' with 3 or 4, set chwin to 3)
-                  # bbands_weight_out = 1, # recently was 3,  # was 1  (bad performance)
+                  combo_chwin = 2,
+                  MACD_chval_th = 3,  # was 1! # only relevant for combo and zero
+                  histo_chval_th = 2,  # only relevant for histo
+                  vwap_expfac = 1,
+                  VWAP_chwin = 2,
+                  VWAP_weight = VWAP_weight,
+                  fibo_chwin = 2,
+                  fibo_weight = fibo_weight,
+                  cama3_weight = cama3_weight,# [0,2],  # was 1
+                  cama4_weight = cama4_weight,# [0,2],  # was 2
+                  RSI_win = 14,  # 14 = result for static. also try 6 (faster variant with bounddist=28),  # (modern static: 4)
+                  RSI_chwin = 2,  # was 9,   fhwt: 5     # 3-10    # chwin only affects dynamic RSI !!
+                  RSI_bound_distance = 18,  # 18 = result for static. also try 28 (faster variant with RSI-win=6)
+                  RSI_chval_th = 7,   # only affects dynamic RSI
+                  RSI_weight = RSI_weight,   # CHECK IF OMITTING DYN. RSI WORKS BETTER (STATIC HAS BETTER SCORES)
+                  CCI_win = 10,
+                  CCI_chwin = 2,  # only affects dynamic CCI    (dyn. fhwt: 4)
+                  CCI_treshold_distance = 159,
+                  CCI_chval_th = 100,  # only affects dynamic CCI
+                  CCI_weight = CCI_weight,
+                  bbands_win = 116, #  score: 45.3, trades: 7766  ||  shorter alternatives: 12 (score: 6.65, trades: 6060)  and  26 (score: 14.94, trades: 6257)
+                  bbands_chwin_out = 1, # recently was 9,  # fhwt: 8  (if trying 'win' with 3 or 4, set chwin to 3)
+                  bbands_weight_out = bbands_weight_out, # recently was 3,  # was 1  (bad performance)
                   ######################################
                   # bbands_chwin_trend = CHWIN,#[3,8], #6   # was 4
                   # bbands_expfac = 1,#[1,9],   # was 3 (only affects trend-BB, even not SL)
@@ -175,27 +184,53 @@ def do_backtest(
                      ((stats["Sortino Ratio"]-sortino_mean)/sortino_std)*13 +
                      ((stats["Profit Factor"]-profac_mean)/profac_std)*11
                   ),
-
-                  # maximize = objective,
-                  # maximize = lambda stats: (stats["Expectancy [%]"]-exp_mean)/exp_std + \
-                  #                          (stats["Profit Factor"]-profac_mean)/profac_std + \
-                  #                          (stats["SQN"]-SQN_mean)/SQN_std,
-               #    if stats['# Trades'] >= 100 else -np.inf,
-
+                  #(old)[backups/old_optim_params.py]
                   # method='sambo',
                   # max_tries=max_tries,
                   # constraint=lambda p: p.MACD_signalwin <= p.MACD_shortwin < p.MACD_longwin
                   # constraint=lambda p: p.MACD_shortwin < p.MACD_longwin
                )
+   
+
    param_opt_log_dict = {
-                  'MACD_histoweight': 1, #[0,2],   # was 2!
+                  'order_triggerpower': triggerpower,       # was 18 for first trend opt
+                  'close_triggerpower': 1, # was 
+                  'CSP_bodyshrink_factor': 4,
+                  'CSP_shadow2body_factor': 3,
+                  'CSP_shadowdiff_factor': 5,
+                  'CSP_reaction_win': 6,   # maybe consider less for fastness
+                  'CSP_weight': CSP_weight,
+                  'MACD_zeroweight': MACD_zeroweight, #[0,2], # was 1
+                  'MACD_histoweight': MACD_histoweight, #[1,3],   # way better results than zero & combo!   # was 2
+                  'MACD_comboweight': MACD_comboweight, #[0,2],   # was 2!   #(!)[docs/note_about_combo_macd.txt]
                   'MACD_longwin': 5, #[4,10], #7
                   'MACD_shortwin': 3, #[3,8], #6
                   'MACD_signalwin': 3, #[2,7], #6
+                  'MACD_chwin': 2,
                   'histo_chwin': 2,
-                  'MACD_chval_th': MACD_chval_th,
-                  'order_triggerpower': 1,
-                  'close_triggerpower': 1, # was 2
+                  'combo_chwin': 2,
+                  'MACD_chval_th': 3,  # was 1! # only relevant for combo and zero
+                  'histo_chval_th': 2,  # only relevant for histo
+                  'vwap_expfac': 1,
+                  'VWAP_chwin': 2,
+                  'VWAP_weight': VWAP_weight,
+                  'fibo_chwin': 2,
+                  'fibo_weight': fibo_weight,
+                  'cama3_weight': cama3_weight,# [0,2],  # was 1
+                  'cama4_weight': cama4_weight,# [0,2],  # was 2
+                  'RSI_win': 14,  # 14 = result for static. also try 6 (faster variant with bounddist=28),  # (modern static: 4)
+                  'RSI_chwin': 2,  # was 9,   fhwt: 5     # 3-10    # chwin only affects dynamic RSI !!
+                  'RSI_bound_distance': 18,  # 18 = result for static. also try 28 (faster variant with RSI-win=6)
+                  'RSI_chval_th': 7,   # only affects dynamic RSI
+                  'RSI_weight': RSI_weight,   # CHECK IF OMITTING DYN. RSI WORKS BETTER (STATIC HAS BETTER SCORES)
+                  'CCI_win': 10,
+                  'CCI_chwin': 2,  # only affects dynamic CCI    (dyn. fhwt: 4)
+                  'CCI_treshold_distance': 159,
+                  'CCI_chval_th': 100,  # only affects dynamic CCI
+                  'CCI_weight': CCI_weight,
+                  'bbands_win': 116, #  score: 45.3, trades: 7766  ||  shorter alternatives: 12 (score: 6.65, trades: 6060)  and  26 (score: 14.94, trades: 6257)
+                  'bbands_chwin_out': 1, # recently was 9,  # fhwt: 8  (if trying 'win' with 3 or 4, set chwin to 3)
+                  'bbands_weight_out': bbands_weight_out, # recently was 3,  # was 1  (bad performance)
                   'minTSLdist': 12,  # minTSL   # best so far for both csp & macd_zero is 12 though
                   'SLdist_redufac': 9,
                   'bbands_TSL_chwin': 7,
@@ -207,9 +242,9 @@ def do_backtest(
    
                   
 
-   time.sleep(3)
+   time.sleep(20)
 
-   print(f'MACD_chval_th: {MACD_chval_th}  done.')
+   print(f'Tested Indicator: {logger},   Triggerpower: {triggerpower}  done.')
 
    # print(stats)
 
@@ -219,14 +254,191 @@ def do_backtest(
            'randomized': randomized,
          #   'objective': objective,
            'param_opt_log_dict': param_opt_log_dict}
-   
 
+
+triggerpowers = [16,18,20,22,24,26,28,30,
+                 16,18,20,22,24,26,28,30,
+                 16,18,20,22,24,26,28,30,
+                 16,18,20,22,24,26,28,30,
+                 16,18,20,22,24,26,28,30,
+                 16,18,20,22,24,26,28,30,
+                 16,18,20,22,24,26,28,30,
+                 16,18,20,22,24,26,28,30,
+                 16,18,20,22,24,26,28,30,
+                 16,18,20,22,24,26,28,30,
+                 16,18,20,22,24,26,28,30,]
+CSP_weights = [
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               ]
+MACD_zeroweights = [
+               5,5,5,5,5,5,5,5,
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               ]
+MACD_histoweights = [
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               ]
+MACD_comboweights = [
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               ]
+VWAP_weights = [
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               ]
+fibo_weights = [
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               ]
+cama3_weights = [
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               ]
+cama4_weights = [
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               ]
+RSI_weights = [
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               ]
+CCI_weights = [
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               5,5,5,5,5,5,5,5,
+               ]
+bbands_weights_out = [
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               5,5,5,5,5,5,5,5,
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               [0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],[0,1,2,3,4,5,6,7,8,9,10],
+               ]
+loggers = ['CSP_weight', 'CSP_weight', 'CSP_weight', 'CSP_weight', 'CSP_weight', 'CSP_weight', 'CSP_weight', 'CSP_weight',
+          'MACD_zeroweight', 'MACD_zeroweight', 'MACD_zeroweight', 'MACD_zeroweight', 'MACD_zeroweight', 'MACD_zeroweight', 'MACD_zeroweight', 'MACD_zeroweight',
+          'MACD_histoweight', 'MACD_histoweight', 'MACD_histoweight', 'MACD_histoweight', 'MACD_histoweight', 'MACD_histoweight', 'MACD_histoweight', 'MACD_histoweight',
+          'MACD_comboweight', 'MACD_comboweight', 'MACD_comboweight', 'MACD_comboweight', 'MACD_comboweight', 'MACD_comboweight', 'MACD_comboweight', 'MACD_comboweight',
+          'VWAP_weight', 'VWAP_weight', 'VWAP_weight', 'VWAP_weight', 'VWAP_weight', 'VWAP_weight', 'VWAP_weight', 'VWAP_weight',
+          'fibo_weight', 'fibo_weight', 'fibo_weight', 'fibo_weight', 'fibo_weight', 'fibo_weight', 'fibo_weight', 'fibo_weight',
+          'cama3_weight', 'cama3_weight', 'cama3_weight', 'cama3_weight', 'cama3_weight', 'cama3_weight', 'cama3_weight', 'cama3_weight',
+          'cama4_weight', 'cama4_weight', 'cama4_weight', 'cama4_weight', 'cama4_weight', 'cama4_weight', 'cama4_weight', 'cama4_weight',
+          'RSI_weight', 'RSI_weight', 'RSI_weight', 'RSI_weight', 'RSI_weight', 'RSI_weight', 'RSI_weight', 'RSI_weight',
+          'CCI_weight', 'CCI_weight', 'CCI_weight', 'CCI_weight', 'CCI_weight', 'CCI_weight', 'CCI_weight', 'CCI_weight',
+          'bbands_weight_out', 'bbands_weight_out', 'bbands_weight_out', 'bbands_weight_out', 'bbands_weight_out', 'bbands_weight_out', 'bbands_weight_out', 'bbands_weight_out',]
 
 
 # (unused parameter lists)[backups/unused_paramlists.txt]
 
 
-MACD_chval_ths = [1,2,3,4,]
+
+
 
 
 
@@ -239,7 +451,19 @@ if __name__ == '__main__':
 
 
       results = list(map(do_backtest,
-                         MACD_chval_ths
+                         triggerpowers,
+                         CSP_weights,
+                         MACD_zeroweights,
+                         MACD_histoweights,
+                         MACD_comboweights,
+                         VWAP_weights,
+                         fibo_weights,
+                         cama3_weights,
+                         cama4_weights,
+                         RSI_weights,
+                         CCI_weights,
+                         bbands_weights_out,
+                         loggers
                         #  chwins,
                         #  paramlist,
                         #  macd_params,
