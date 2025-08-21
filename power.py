@@ -90,23 +90,29 @@ def VWAP_calcpower(Closes, vwap, expfac, weight):
 def FIBO_calcpower(Close, dir, f2, f4, f6, f8, weight):   # is this unconventional use of fibonacci even good? (test it)
    shift = 0
    if dir < 0:
-      if falls(Close, f8):
-         shift -= weight*1.3
-      elif falls(Close, f6):
-         shift -= weight*1.1
-      elif falls(Close, f4):
-         shift -= weight*0.9
-      elif falls(Close, f2):
-         shift -= weight*0.7
+      if falls(Close, f6):
+         shift -= weight
    elif dir > 0:
-      if rises(Close, f8):
-         shift += weight*1.3
-      elif rises(Close, f6):
-         shift += weight*1.1
-      elif rises(Close, f4):
-         shift += weight*0.9
-      elif rises(Close, f2):
-         shift += weight*0.7
+      if rises(Close, f6):
+         shift += weight
+   # if dir < 0:
+   #    if falls(Close, f8):
+   #       shift -= weight*1.3
+   #    elif falls(Close, f6):
+   #       shift -= weight*1.1
+   #    elif falls(Close, f4):
+   #       shift -= weight*0.9
+   #    elif falls(Close, f2):
+   #       shift -= weight*0.7
+   # elif dir > 0:
+   #    if rises(Close, f8):
+   #       shift += weight*1.3
+   #    elif rises(Close, f6):
+   #       shift += weight*1.1
+   #    elif rises(Close, f4):
+   #       shift += weight*0.9
+   #    elif rises(Close, f2):
+   #       shift += weight*0.7
    return shift
 
 
@@ -115,10 +121,10 @@ def CAMA_calcpower(close_val, R4, R3, S3, S4, w3, w4):
    shift = 0
    if (close_val > R4):
       shift -= w4
-   elif (close_val > R3):
-      shift -= w3
-   elif (close_val < S3):
-      shift += w3
+   # elif (close_val > R3):
+   #    shift -= w3
+   # elif (close_val < S3):
+   #    shift += w3
    elif (close_val < S4):
       shift += w4
    return shift

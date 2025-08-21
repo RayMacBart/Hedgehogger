@@ -1,0 +1,13 @@
+Optimization Loop ID:  "A"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 9466
+EURUSD  M1 | 99900  (-0) | normal | Trades: 7050
+EURUSD  M1 | 99900  (-0) | normal | Trades: 7544
+EURUSD  M1 | 99900  (-0) | normal | Trades: 7565
+EURUSD  M1 | 99900  (-0) | normal | Trades: 18440
+EURUSD  M1 | 99900  (-0) | normal | Trades: 9334
+EURUSD  M1 | 99900  (-0) | normal | Trades: 1466
+EURUSD  M1 | 99900  (-0) | normal | Trades: 14637
+EURUSD  M1 | 99900  (-0) | normal | Trades: 14584
+EURUSD  M1 | 99900  (-0) | normal | Trades: 16213
+EURUSD  M1 | 99900  (-0) | normal | Trades: 8241
+-----------------------------------

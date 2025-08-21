@@ -1,0 +1,70 @@
+Dataspan: 25.000
+Triggerpower each 5:  16,20,24,27,30
+
+EURUSD  M1 | 25000  (-0) | normal | Trades: 67
+EURUSD  M1 | 25000  (-0) | normal | Trades: 14
+EURUSD  M1 | 25000  (-0) | normal | Trades: 13
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 8
+EURUSD  M1 | 25000  (-0) | normal | Trades: 7
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 14
+EURUSD  M1 | 25000  (-0) | normal | Trades: 3
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 18
+EURUSD  M1 | 25000  (-0) | normal | Trades: 8
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 10
+EURUSD  M1 | 25000  (-0) | normal | Trades: 6
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 38
+EURUSD  M1 | 25000  (-0) | normal | Trades: 3
+EURUSD  M1 | 25000  (-0) | normal | Trades: 3
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 14
+EURUSD  M1 | 25000  (-0) | normal | Trades: 11
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 19
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 62
+EURUSD  M1 | 25000  (-0) | normal | Trades: 2
+EURUSD  M1 | 25000  (-0) | normal | Trades: 2
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 16
+EURUSD  M1 | 25000  (-0) | normal | Trades: 5
+EURUSD  M1 | 25000  (-0) | normal | Trades: 5
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 147
+EURUSD  M1 | 25000  (-0) | normal | Trades: 12
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+EURUSD  M1 | 25000  (-0) | normal | Trades: 0
+-----------------------------------
+
+Dataspan: 99900, all 11 weights set to 3, Triggerpowers 9-15
+Optimization Loop ID:  "B"
+EURUSD  M1 | 99900  (-0) | normal | Trades: 6675
+EURUSD  M1 | 99900  (-0) | normal | Trades: 1641
+EURUSD  M1 | 99900  (-0) | normal | Trades: 1641
+EURUSD  M1 | 99900  (-0) | normal | Trades: 1460
+EURUSD  M1 | 99900  (-0) | normal | Trades: 286
+EURUSD  M1 | 99900  (-0) | normal | Trades: 286
+EURUSD  M1 | 99900  (-0) | normal | Trades: 237
+-----------------------------------

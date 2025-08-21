@@ -1,0 +1,244 @@
+10 Shift Indicators (without Cama3)
+Dataspan 40.000
+single indicator weight impact analysis
+
+
+
+All equal weighted (1) // triggerpower 3-6
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2587
+EURUSD  M1 | 40000  (-0) | normal | Trades: 571
+EURUSD  M1 | 40000  (-0) | normal | Trades: 90
+EURUSD  M1 | 40000  (-0) | normal | Trades: 7
+
+
+
+CSP
+weight: 0 // triggerpower: 3-6
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2306
+EURUSD  M1 | 40000  (-0) | normal | Trades: 485
+EURUSD  M1 | 40000  (-0) | normal | Trades: 57
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2
+weight: 2 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 991
+EURUSD  M1 | 40000  (-0) | normal | Trades: 255
+EURUSD  M1 | 40000  (-0) | normal | Trades: 73
+EURUSD  M1 | 40000  (-0) | normal | Trades: 28
+weight: 3 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1849
+EURUSD  M1 | 40000  (-0) | normal | Trades: 655
+EURUSD  M1 | 40000  (-0) | normal | Trades: 289
+EURUSD  M1 | 40000  (-0) | normal | Trades: 133
+weight: 4 // triggerpower: 5-9
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1468
+EURUSD  M1 | 40000  (-0) | normal | Trades: 615
+EURUSD  M1 | 40000  (-0) | normal | Trades: 334
+EURUSD  M1 | 40000  (-0) | normal | Trades: 215
+EURUSD  M1 | 40000  (-0) | normal | Trades: 111
+
+MACD_zero
+weight: 0 // triggerpower: 3-6
+EURUSD  M1 | 40000  (-0) | normal | Trades: 6140
+EURUSD  M1 | 40000  (-0) | normal | Trades: 299
+EURUSD  M1 | 40000  (-0) | normal | Trades: 36
+EURUSD  M1 | 40000  (-0) | normal | Trades: 3
+weight: 2 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 299
+EURUSD  M1 | 40000  (-0) | normal | Trades: 362
+EURUSD  M1 | 40000  (-0) | normal | Trades: 61
+EURUSD  M1 | 40000  (-0) | normal | Trades: 6
+weight: 3 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1385
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1176
+EURUSD  M1 | 40000  (-0) | normal | Trades: 333
+EURUSD  M1 | 40000  (-0) | normal | Trades: 60
+weight: 4 // triggerpower: 5-9
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1176
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1147
+EURUSD  M1 | 40000  (-0) | normal | Trades: 332
+EURUSD  M1 | 40000  (-0) | normal | Trades: 60
+EURUSD  M1 | 40000  (-0) | normal | Trades: 6
+
+MACD_histo
+weight: 0 // triggerpower: 3-6
+EURUSD  M1 | 40000  (-0) | normal | Trades: 4925
+EURUSD  M1 | 40000  (-0) | normal | Trades: 3430
+EURUSD  M1 | 40000  (-0) | normal | Trades: 46
+EURUSD  M1 | 40000  (-0) | normal | Trades: 5
+weight: 2 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 352
+EURUSD  M1 | 40000  (-0) | normal | Trades: 46
+EURUSD  M1 | 40000  (-0) | normal | Trades: 55
+EURUSD  M1 | 40000  (-0) | normal | Trades: 4
+weight: 3 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1263
+EURUSD  M1 | 40000  (-0) | normal | Trades: 319
+EURUSD  M1 | 40000  (-0) | normal | Trades: 284
+EURUSD  M1 | 40000  (-0) | normal | Trades: 52
+weight: 4 // triggerpower: 5-9
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1015
+EURUSD  M1 | 40000  (-0) | normal | Trades: 284
+EURUSD  M1 | 40000  (-0) | normal | Trades: 281
+EURUSD  M1 | 40000  (-0) | normal | Trades: 52
+EURUSD  M1 | 40000  (-0) | normal | Trades: 4
+
+MACD_combo
+weight: 0 // triggerpower: 3-6
+EURUSD  M1 | 40000  (-0) | normal | Trades: 6235
+EURUSD  M1 | 40000  (-0) | normal | Trades: 3768
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2121
+EURUSD  M1 | 40000  (-0) | normal | Trades: 17
+weight: 2 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 682
+EURUSD  M1 | 40000  (-0) | normal | Trades: 140
+EURUSD  M1 | 40000  (-0) | normal | Trades: 17
+EURUSD  M1 | 40000  (-0) | normal | Trades: 5
+weight: 3 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1245
+EURUSD  M1 | 40000  (-0) | normal | Trades: 297
+EURUSD  M1 | 40000  (-0) | normal | Trades: 57
+EURUSD  M1 | 40000  (-0) | normal | Trades: 55
+weight: 4 // triggerpower: 5-9
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1071
+EURUSD  M1 | 40000  (-0) | normal | Trades: 277
+EURUSD  M1 | 40000  (-0) | normal | Trades: 55
+EURUSD  M1 | 40000  (-0) | normal | Trades: 55
+EURUSD  M1 | 40000  (-0) | normal | Trades: 5
+
+VWAP
+weight: 0 // triggerpower: 3-6
+EURUSD  M1 | 40000  (-0) | normal | Trades: 6562
+EURUSD  M1 | 40000  (-0) | normal | Trades: 4043
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2333
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1051
+weight: 2 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 454
+EURUSD  M1 | 40000  (-0) | normal | Trades: 66
+EURUSD  M1 | 40000  (-0) | normal | Trades: 7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1
+weight: 3 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1117
+EURUSD  M1 | 40000  (-0) | normal | Trades: 246
+EURUSD  M1 | 40000  (-0) | normal | Trades: 36
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2
+weight: 4 // triggerpower: 5-9
+EURUSD  M1 | 40000  (-0) | normal | Trades: 797
+EURUSD  M1 | 40000  (-0) | normal | Trades: 192
+EURUSD  M1 | 40000  (-0) | normal | Trades: 31
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1
+
+FIBO
+weight: 0 // triggerpower: 3-6
+EURUSD  M1 | 40000  (-0) | normal | Trades: 10665
+EURUSD  M1 | 40000  (-0) | normal | Trades: 7452
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2667
+EURUSD  M1 | 40000  (-0) | normal | Trades: 743
+weight: 2 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 7452
+EURUSD  M1 | 40000  (-0) | normal | Trades: 81
+EURUSD  M1 | 40000  (-0) | normal | Trades: 7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2
+weight: 3 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 518
+EURUSD  M1 | 40000  (-0) | normal | Trades: 145
+EURUSD  M1 | 40000  (-0) | normal | Trades: 18
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2
+weight: 4 // triggerpower: 5-9
+EURUSD  M1 | 40000  (-0) | normal | Trades: 415
+EURUSD  M1 | 40000  (-0) | normal | Trades: 73
+EURUSD  M1 | 40000  (-0) | normal | Trades: 13
+EURUSD  M1 | 40000  (-0) | normal | Trades: 0
+EURUSD  M1 | 40000  (-0) | normal | Trades: 0
+
+CAMA4
+weight: 0 // triggerpower: 3-6
+EURUSD  M1 | 40000  (-0) | normal | Trades: 4783
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2727
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1246
+EURUSD  M1 | 40000  (-0) | normal | Trades: 343
+weight: 2 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2727
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1246
+EURUSD  M1 | 40000  (-0) | normal | Trades: 3
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2
+weight: 3 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 478
+EURUSD  M1 | 40000  (-0) | normal | Trades: 67
+EURUSD  M1 | 40000  (-0) | normal | Trades: 41
+EURUSD  M1 | 40000  (-0) | normal | Trades: 7
+weight: 4 // triggerpower: 5-9
+EURUSD  M1 | 40000  (-0) | normal | Trades: 235
+EURUSD  M1 | 40000  (-0) | normal | Trades: 187
+EURUSD  M1 | 40000  (-0) | normal | Trades: 41
+EURUSD  M1 | 40000  (-0) | normal | Trades: 5
+EURUSD  M1 | 40000  (-0) | normal | Trades: 0
+
+RSI
+weight: 0 // triggerpower: 3-6
+EURUSD  M1 | 40000  (-0) | normal | Trades: 7314
+EURUSD  M1 | 40000  (-0) | normal | Trades: 5853
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2159
+EURUSD  M1 | 40000  (-0) | normal | Trades: 690
+weight: 2 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 5853
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2159
+EURUSD  M1 | 40000  (-0) | normal | Trades: 690
+EURUSD  M1 | 40000  (-0) | normal | Trades: 5
+weight: 3 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 667
+EURUSD  M1 | 40000  (-0) | normal | Trades: 147
+EURUSD  M1 | 40000  (-0) | normal | Trades: 21
+EURUSD  M1 | 40000  (-0) | normal | Trades: 6
+weight: 4 // triggerpower: 5-9
+EURUSD  M1 | 40000  (-0) | normal | Trades: 353
+EURUSD  M1 | 40000  (-0) | normal | Trades: 60
+EURUSD  M1 | 40000  (-0) | normal | Trades: 94
+EURUSD  M1 | 40000  (-0) | normal | Trades: 31
+EURUSD  M1 | 40000  (-0) | normal | Trades: 5
+
+CCI
+weight: 0 // triggerpower: 3-6
+EURUSD  M1 | 40000  (-0) | normal | Trades: 6440
+EURUSD  M1 | 40000  (-0) | normal | Trades: 3018
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2903
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1248
+weight: 2 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 5469
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2903
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1248
+EURUSD  M1 | 40000  (-0) | normal | Trades: 470
+weight: 3 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 198
+EURUSD  M1 | 40000  (-0) | normal | Trades: 21
+EURUSD  M1 | 40000  (-0) | normal | Trades: 3
+EURUSD  M1 | 40000  (-0) | normal | Trades: 0
+weight: 4 // triggerpower: 5-9
+EURUSD  M1 | 40000  (-0) | normal | Trades: 858
+EURUSD  M1 | 40000  (-0) | normal | Trades: 232
+EURUSD  M1 | 40000  (-0) | normal | Trades: 40
+EURUSD  M1 | 40000  (-0) | normal | Trades: 196
+EURUSD  M1 | 40000  (-0) | normal | Trades: 38
+
+BB-out
+weight: 0 // triggerpower: 3-6
+EURUSD  M1 | 40000  (-0) | normal | Trades: 7302
+EURUSD  M1 | 40000  (-0) | normal | Trades: 4215
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2263
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2329
+weight: 2 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 6475
+EURUSD  M1 | 40000  (-0) | normal | Trades: 4120
+EURUSD  M1 | 40000  (-0) | normal | Trades: 2329
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1489
+weight: 3 // triggerpower: 4-7
+EURUSD  M1 | 40000  (-0) | normal | Trades: 6475
+EURUSD  M1 | 40000  (-0) | normal | Trades: 60
+EURUSD  M1 | 40000  (-0) | normal | Trades: 5
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1
+weight: 4 // triggerpower: 5-9
+EURUSD  M1 | 40000  (-0) | normal | Trades: 223
+EURUSD  M1 | 40000  (-0) | normal | Trades: 37
+EURUSD  M1 | 40000  (-0) | normal | Trades: 4
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1
+EURUSD  M1 | 40000  (-0) | normal | Trades: 1
+-----------------------------------
